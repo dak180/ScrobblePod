@@ -67,6 +67,5 @@
 @synthesize playCount;
 @synthesize uniqueIdentifier;
 @synthesize isExtra;
-@synthesize unixPlayedDate;
 
 @end

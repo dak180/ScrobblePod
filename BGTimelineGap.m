@@ -13,7 +13,6 @@
 
 @synthesize startTime;
 @synthesize endTime;
-@synthesize duration;
 
 -(int)duration {
 	return self.endTime - self.startTime;
