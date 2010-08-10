@@ -315,6 +315,11 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B5103FD70DB5877F00F2403A /* QuartzCore.framework */,
+				B53F9C030D67F09000CCC8F9 /* ScriptingBridge.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
 				B584EC3C0C23541600AC24C7 /* IOKit.framework */,
 				B5CEBABF0C21367500F025F0 /* ApplicationServices.framework */,
 				B5F362130BE40210004DB2EF /* Security.framework */,
@@ -329,12 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				B56C42870EB845CB00D8B6C2 /* Sparkle.framework */,
-				B5103FD70DB5877F00F2403A /* QuartzCore.framework */,
-				B53F9C030D67F09000CCC8F9 /* ScriptingBridge.framework */,
 				B552E9F10BE69AF6000DE45D /* Growl.framework */,
-				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
-				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
-				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
