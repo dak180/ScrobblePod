@@ -786,7 +786,7 @@ nil] ];
 -(IBAction)manualScrobble:(id)sender {
 	NSCalendarDate *lastScrobbled = [NSCalendarDate dateWithString:[[NSUserDefaults standardUserDefaults] valueForKey:BGPrefLastScrobbled] calendarFormat:DATE_FORMAT_STRING];
 	[NSApp activateIgnoringOtherApps:YES];
-	int shouldForceScrobble = NSRunAlertPanel(@"Scrobble songs before syncing your iPod?", @"Songs played on your iPod after %@ will not be scrobbled when the iPod is next connected." , @"Scrobble Anyway", @"Cancel", nil,[lastScrobbled relativeDateDescription], nil);
+	int shouldForceScrobble = NSRunAlertPanel(@"Scrobble songs before syncing your iPod?", @"Songs played on your iPod after %@ will not be scrobbled when the iPod is next connected." , @"Scrobble Anyway", @"Cancel", nil, [lastScrobbled relativeDateDescription], nil);
 	if (shouldForceScrobble == NSAlertDefaultReturn) [self detachScrobbleThreadWithoutConsideration:YES];
 }
 
