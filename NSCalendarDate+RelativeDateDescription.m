@@ -44,7 +44,7 @@
 		[relativeDateDescription appendString:@" on "];
 		[relativeDateDescription appendString:[self descriptionWithCalendarFormat:@"%A %B %d"]];	
 	}
-	return relativeDateDescription;
+	return [relativeDateDescription autorelease];
 }
 
 -(BOOL)dateIsInToday {
