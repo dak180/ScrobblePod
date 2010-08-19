@@ -73,7 +73,7 @@
 		NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 		NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
 		
-		NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 		[request setURL:postURL];
 		[request setHTTPMethod:@"POST"];
 		[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
@@ -87,6 +87,7 @@
 		NSError *postingError = nil;
 		NSHTTPURLResponse *response = nil;
 		NSData *scrobbleResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
+		[request release];
 		
 		if (response) {
 			NSLog(@"STATUS CODE: %ld",(long)[response statusCode]);
