@@ -817,9 +817,11 @@ nil] ];
 	if ([defaults boolForKey:BGPrefShouldDoMultiPlay]) {
 		BGMultipleSongPlayManager *multiPlayManager = [[BGMultipleSongPlayManager alloc] init];
 		allRecentTracks = [multiPlayManager completeSongListForRecentTracks:recentTracksSimple sinceDate:applescriptInputDateString];
+		[allRecentTracks retain];
 		[multiPlayManager release];
 	} else {
 		allRecentTracks = recentTracksSimple;
+		recentTracksSimple = nil;
 	}
 	
 	[recentTracksSimple autorelease];
@@ -893,6 +895,8 @@ nil] ];
 		
 	}
 	
+	[allRecentTracks release];
+
 	[self performSelectorOnMainThread:@selector(setIsScrobblingWithNumber:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:YES];// setIsScrobbling:NO];
 	[self performSelectorOnMainThread:@selector(detachNowPlayingThread) withObject:nil waitUntilDone:YES];
 	
