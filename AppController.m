@@ -142,7 +142,7 @@ nil] ];
 
 	[[iTunesWatcher sharedManager] setDelegate:self];
 	
-	[[iPodWatcher alloc] init];
+	myiPodWatcher = [[iPodWatcher alloc] init];
 	
 	NSNotificationCenter *workspaceNotificationCenter = [[NSWorkspace sharedWorkspace] notificationCenter];
     [workspaceNotificationCenter addObserver:self selector:@selector(workspaceDidLaunchApplication:) name:NSWorkspaceDidLaunchApplicationNotification object:nil];

@@ -10,6 +10,7 @@
 #import "BGLastFmAuthenticationManager.h"
 #import "BGLastFmWebServiceParameterList.h"
 #import <Sparkle/SUUpdater.h>
+#import "iPodWatcher.h"
 
 @interface AppController : NSObject <TunesWatcherDelegate> {
 	NSStatusItem *statusItem;
@@ -52,6 +53,7 @@
 	FileWatcher *xmlWatcher;
 	
 	NSMutableArray *apiQueue;
+	iPodWatcher *myiPodWatcher;
 }
 
 -(NSString *)pathForCachedDatabase;
