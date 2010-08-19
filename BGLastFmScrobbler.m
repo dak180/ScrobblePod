@@ -52,8 +52,9 @@
 			
 			NSCalendarDate *playedDate = [playedDate_Original copy];
 			[playedDate setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-			playedDate = [playedDate dateByAddingYears:0 months:0 days:0 hours:0 minutes:0 seconds:(trackLength*-1)];
-			NSString *playedDateUTC = [NSString stringWithFormat:@"%d",(int)[playedDate timeIntervalSince1970]];
+			NSCalendarDate *bumpedPlayedDate = [playedDate dateByAddingYears:0 months:0 days:0 hours:0 minutes:0 seconds:(trackLength*-1)];
+			[playedDate release];
+			NSString *playedDateUTC = [NSString stringWithFormat:@"%d",(int)[bumpedPlayedDate timeIntervalSince1970]];
 			
 			[postString appendString:[NSString stringWithFormat:@"&a[%d]=%@",efficientPostIndex,[[currentTrackDetails artist] urlEncodedString]]]; //artist
 			[postString appendString:[NSString stringWithFormat:@"&t[%d]=%@",efficientPostIndex,[[currentTrackDetails title] urlEncodedString]]]; // track
