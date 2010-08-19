@@ -17,7 +17,11 @@
 	OSStatus	err = LIAECopyLoginItems( (CFArrayRef*) &itemsList );	// Take advantage of toll-free bridging.
 	if( err != noErr )
 	{
-		NSLog(@"Couldn't list login items error %ld", err);
+#if __LP64__
+		NSLog(@"Couldn't add login item error %i", err);
+#else
+		NSLog(@"Couldn't add login item error %ld", err);
+#endif
 		return nil;
 	}
 	
@@ -28,8 +32,13 @@
 {
 	OSStatus err = LIAEAddURLAtEnd( (CFURLRef) url, hide );	// CFURLRef is toll-free bridged to NSURL.
 	
-	if( err != noErr )
+	if( err != noErr ) {
+#if __LP64__
+		NSLog(@"Couldn't add login item error %i", err);
+#else
 		NSLog(@"Couldn't add login item error %ld", err);
+#endif
+	}
 	
 	return( err == noErr );
 }
@@ -39,8 +48,13 @@
 {
 	OSStatus err = LIAERemove( idx );
 	
-	if( err != noErr )
-		NSLog(@"Couldn't remove login intem error %ld", err);
+	if( err != noErr ) {
+#if __LP64__
+		NSLog(@"Couldn't add login item error %i", err);
+#else
+		NSLog(@"Couldn't add login item error %ld", err);
+#endif
+	}
 	
 	return( err == noErr );
 }
