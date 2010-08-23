@@ -4,7 +4,6 @@
 #import "iPodWatcher.h"
 #import <Security/Security.h>
 #import <QuartzCore/CoreAnimation.h>
-#import "UKLoginItemRegistry.h"
 #import "HubStrings.h"
 #import "HubNotifications.h"
 
@@ -30,7 +29,8 @@
 	[historyIconTableColumn setDataCell:theCell];
 	[theCell release];
 	
-	[startAtLogin setState:([UKLoginItemRegistry indexForLoginItemWithPath:[[NSBundle mainBundle] bundlePath]]+1)];
+	// TODO: implement login items query here.
+	// [startAtLogin setState:([UKLoginItemRegistry indexForLoginItemWithPath:[[NSBundle mainBundle] bundlePath]]+1)];
 	
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self selector:@selector(loginProcessing) name:APIHUB_WebServiceAuthorizationProcessing object:nil];
@@ -136,9 +136,11 @@
 
 -(IBAction)setLoginStart:(id)sender {
 	if ([sender state]==NSOnState) {
-		[UKLoginItemRegistry addLoginItemWithPath:[[NSBundle mainBundle] bundlePath] hideIt:NO];
+		// TODO fix up login items here.
+//		[UKLoginItemRegistry addLoginItemWithPath:[[NSBundle mainBundle] bundlePath] hideIt:NO];
 	} else {
-		[UKLoginItemRegistry removeLoginItemWithPath:[[NSBundle mainBundle] bundlePath]];
+		// TODO fix up login items here.
+//		[UKLoginItemRegistry removeLoginItemWithPath:[[NSBundle mainBundle] bundlePath]];
 	}
 }
 
