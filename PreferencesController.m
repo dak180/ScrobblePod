@@ -27,7 +27,7 @@
 	[self.window setShowsToolbarButton:NO];
 	
 	NSImageCell *theCell = [[NSImageCell alloc] init];
-		[historyIconTableColumn setDataCell:theCell];
+	[historyIconTableColumn setDataCell:theCell];
 	[theCell release];
 	
 	[startAtLogin setState:([UKLoginItemRegistry indexForLoginItemWithPath:[[NSBundle mainBundle] bundlePath]]+1)];
@@ -93,7 +93,7 @@
 	if (self.window.contentView != inputView) {
 		NSRect windowRect = self.window.frame;
 		
-		float newHeight = inputView.frame.size.height;		
+		float newHeight = inputView.frame.size.height;
 		int difference = newHeight - [self.window.contentView frame].size.height;
 		windowRect.origin.y -= difference;
 		windowRect.size.height += difference;
