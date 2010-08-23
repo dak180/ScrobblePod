@@ -29,8 +29,17 @@
 	[historyIconTableColumn setDataCell:theCell];
 	[theCell release];
 	
-	// TODO: implement login items query here.
-	// [startAtLogin setState:([UKLoginItemRegistry indexForLoginItemWithPath:[[NSBundle mainBundle] bundlePath]]+1)];
+	// set the button state for whether we open at login:
+	NSString * appPath = [[NSBundle mainBundle] bundlePath];
+
+	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+	if ([self loginItemExistsWithLoginItemReference:loginItems ForPath:appPath]) {
+		[startAtLogin setState:NSOnState];
+	} else {
+		[startAtLogin setState:NSOffState];
+	}
+
+	CFRelease(loginItems);
 	
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self selector:@selector(loginProcessing) name:APIHUB_WebServiceAuthorizationProcessing object:nil];
@@ -135,12 +144,52 @@
 }
 
 -(IBAction)setLoginStart:(id)sender {
-	if ([sender state]==NSOnState) {
-		// TODO fix up login items here.
-//		[UKLoginItemRegistry addLoginItemWithPath:[[NSBundle mainBundle] bundlePath] hideIt:NO];
+	NSString * appPath = [[NSBundle mainBundle] bundlePath];
+
+	// This will retrieve the path for the application
+	// For example, /Applications/test.app
+	CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:appPath];
+	
+	
+	// Create a reference to the shared file list.
+	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL,
+															kLSSharedFileListSessionLoginItems, NULL);
+
+	if ([sender state] == NSOnState) {
+		// add.
+		
+		if (loginItems) {
+			//Insert an item to the list.
+			LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(loginItems,
+																		 kLSSharedFileListItemLast, NULL, NULL,
+																		 url, NULL, NULL);
+			if (item){
+				CFRelease(item);
+			}
+		}
+		CFRelease(loginItems);
 	} else {
-		// TODO fix up login items here.
-//		[UKLoginItemRegistry removeLoginItemWithPath:[[NSBundle mainBundle] bundlePath]];
+		// remove.
+		
+		if (loginItems) {
+			UInt32 seedValue;
+			//Retrieve the list of Login Items and cast them to
+			// a NSArray so that it will be easier to iterate.
+			NSArray  *loginItemsArray = (NSArray *)LSSharedFileListCopySnapshot(loginItems, &seedValue);
+			int i;
+			for(i = 0 ; i < [loginItemsArray count]; i++){
+				LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)[loginItemsArray
+																			objectAtIndex:i];
+				//Resolve the item with URL
+				if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &url, NULL) == noErr) {
+					NSString * urlPath = [(NSURL*)url path];
+					if ([urlPath compare:appPath] == NSOrderedSame){
+						LSSharedFileListItemRemove(loginItems,itemRef);
+					}
+				}
+			}
+			[loginItemsArray release];
+		}
 	}
 }
 
@@ -196,5 +245,32 @@
 	[defaults setObject:newArray forKey:@"ActivityHistory"];
 	[newArray release];
 }
+
+#pragma mark LoginItems
+- (BOOL)loginItemExistsWithLoginItemReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(NSString *)appPath {
+	BOOL found = NO;  
+	UInt32 seedValue;
+	CFURLRef thePath;
+	
+	// We're going to grab the contents of the shared file list (LSSharedFileListItemRef objects)
+	// and pop it in an array so we can iterate through it to find our item.
+	CFArrayRef loginItemsArray = LSSharedFileListCopySnapshot(theLoginItemsRefs, &seedValue);
+	for (id item in (NSArray *)loginItemsArray) {
+		LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
+		if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &thePath, NULL) == noErr) {
+			if ([[(NSURL *)thePath path] hasPrefix:appPath]) {
+				found = YES;
+				break;
+			}
+		}
+		// Docs for LSSharedFileListItemResolve say we're responsible
+		// for releasing the CFURLRef that is returned
+		CFRelease(thePath);
+	}
+	CFRelease(loginItemsArray);
+	
+	return found;
+}
+
 
 @end

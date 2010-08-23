@@ -53,4 +53,7 @@
 
 #pragma mark Pane:History - Actions
 -(void)addHistoryWithSuccess:(BOOL)wasSuccess andDate:(NSDate *)aDate andDescription:(NSString *)aDescription;
+
+#pragma mark LoginItems
+- (BOOL)loginItemExistsWithLoginItemReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(NSString *)appPath;
 @end
