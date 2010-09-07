@@ -11,7 +11,7 @@
 #import <QuartzCore/CoreAnimation.h>
 
 
-@interface BGPointWindow : NSWindow {
+@interface BGPointWindow : NSWindow <NSWindowDelegate> {
 	BOOL shouldClose;
 	IBOutlet NSMenu *theMenu;
 }
