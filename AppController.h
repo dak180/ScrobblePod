@@ -83,7 +83,6 @@
 
 #pragma mark XML Notifications
 -(NSString *)fullXmlPath;
--(IBAction)quit:(id)sender;
 
 #pragma mark Main Scrobbling Methods
 -(IBAction)manualScrobble:(id)sender;

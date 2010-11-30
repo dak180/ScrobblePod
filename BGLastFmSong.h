@@ -19,6 +19,7 @@
 	int length;
 	int extraPlays;
 	int playCount;
+	int unixPlayedDate;
 	NSString *uniqueIdentifier;
 	BOOL isExtra;
 }

@@ -114,8 +114,10 @@ nil] ];
 		[statusItem retain];
 	}
 	
-	[currentSongMenuItem setView:containerView];
-	[containerView addSubview:infoView];
+	[currentSongMenuItem setView:infoView];
+	// A combination of containerView and infoView was making those ugly dark stripes on the sides of the menu.
+	//[currentSongMenuItem setView:containerView];
+	//[containerView addSubview:infoView];
 	
 	if (![self cacheFileExists]) {
 		[self primeSongPlayCache];
@@ -267,10 +269,6 @@ nil] ];
 		[welcomeWindow orderFront:self];
 }
 
--(IBAction)quit:(id)sender {
-	[NSApp terminate:self];
-}
-
 -(void)applicationWillTerminate:(NSNotification *)aNotification {
 	if (statusItem) [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
 
@@ -331,8 +329,21 @@ nil] ];
 	}
 	
 	[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:[NSData dataWithData:[growlImage TIFFRepresentation]] andIdentifier:@"SP_Track"];
-
-	NSString *songTitleString = [NSString stringWithFormat:@"%@: %@ ",anArtist,aName];
+	NSString *songTitleString;
+	
+	if (anArtist == nil && aName == nil) {
+		songTitleString = [NSString stringWithFormat:@"Unnamed Track"];
+	}
+	else if (aName == nil) {
+		songTitleString = [NSString stringWithFormat:@"%@ ",anArtist];
+	}
+	else if (anArtist == nil) {
+		songTitleString = [NSString stringWithFormat:@"%@ ",aName];
+	}
+	else {
+		songTitleString = [NSString stringWithFormat:@"%@: %@ ",anArtist, aName];
+	}
+	
 	[infoView setStringValue:songTitleString isActive:YES];
 
 	[self detachNowPlayingThread];

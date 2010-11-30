@@ -12,7 +12,6 @@
 #import "Defines.h"
 #import "NSString+UrlEncoding.h"
 
-
 @implementation BGLastFmScrobbler
 
 -(id)init {
@@ -84,7 +83,7 @@
 		
 		[postString release];
 
-		NSError *postingError;
+		NSError *postingError = [[NSError alloc] init];
 		NSHTTPURLResponse *response = nil;
 		NSData *scrobbleResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 		
@@ -104,6 +103,7 @@
 			[theResponse setWasSuccessful:NO];
 		}
 		
+		[postingError release];
 		songIndex = songIndex + efficientPostIndex;
 
 	}

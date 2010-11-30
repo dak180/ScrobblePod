@@ -13,10 +13,10 @@
 
 @implementation BGTrackCollector
 -(NSMutableArray *)collectTracksFromXMLFile:(NSString *)xmlPath withCutoffDate:(NSDate *)cutoffDate includingPodcasts:(BOOL)includePodcasts includingVideo:(BOOL)includeVideo ignoringComment:(NSString *)ignoreString ignoringGenre:(NSString *)genreString withMinimumDuration:(int)minimumDuration {
-
+	
 	double oldPriority = [NSThread threadPriority];
 	[NSThread setThreadPriority:0.0];
-
+	
 	if (!xmlPath || ![[NSFileManager defaultManager] fileExistsAtPath:xmlPath]) {
 		NSLog(@"Supplied XML path does not exist - Using default XML path");
 		xmlPath = [@"~/Music/iTunes/iTunes Music Library.xml" stringByExpandingTildeInPath];
@@ -117,7 +117,6 @@
 	//itunesLibrary
 	
 	[NSThread setThreadPriority:oldPriority];
-
 	return resultSongArray;
 }
 @end

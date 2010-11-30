@@ -47,7 +47,7 @@
 	}
 	NSSize imageSize = [imageToUse size];
 	NSRect imageRect = NSMakeRect(0, 0, imageSize.width, imageSize.height);
-	[imageToUse drawAtPoint:NSMakePoint(5,3) fromRect:imageRect operation:NSCompositeSourceOver fraction:1.0f];
+	[imageToUse drawAtPoint:NSMakePoint(6,3) fromRect:imageRect operation:NSCompositeSourceOver fraction:1.0f];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {

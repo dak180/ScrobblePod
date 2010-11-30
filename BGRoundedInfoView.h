@@ -1,7 +1,6 @@
 /* BGRoundedInfoView */
 
 #import <Cocoa/Cocoa.h>
-#import "CTGradient.h"
 @class AppController;
 
 @interface BGRoundedInfoView : NSView
@@ -22,7 +21,7 @@
 	NSMutableArray *iconSet;
 	NSDictionary *attributesDictionary;
 	NSString *stringValue;
-	CTGradient *gradientFill;
+	//CTGradient *gradientFill;
 	float currentScrollOffset;
 	int hoveredIcon;
 	int pressedIcon;
