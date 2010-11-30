@@ -6,7 +6,7 @@
 #pragma mark Fixed Values
 
 #define LeftPadding 38//18+30
-#define RightPadding 30
+#define RightPadding 29 //Changed from 30 because blue backround's right side was 1px away from rounded rect's border
 #define LineWidth 0.5
 
 #define BlueAmount 2
@@ -59,7 +59,7 @@
 
 		// Create Objects Needed Later On
 		[self createTextAttributesDictionary];
-		gradientFill = [[CTGradient unifiedNormalGradient] retain];
+		//gradientFill = [[CTGradient unifiedNormalGradient] retain];
 		[self setStringValue:@"BGRoundedView: Please set string"];
 		[self createIconSet];		
 		
@@ -72,7 +72,7 @@
 
 -(void)dealloc {
 	[self setStringValue:nil];
-	[gradientFill release];
+	//[gradientFill release];
 	[attributesDictionary release];
 	[backgroundImage release];
 	[blueTimer release];
@@ -132,7 +132,7 @@
 		
 		currentBlueOffset = drawingBounds.origin.x + drawingBounds.size.width - blueLimit_Off;
 		
-		attributesDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSFont fontWithName:@"Helvetica Neue" size:11],myShadow,[NSColor blackColor],nil]
+		attributesDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSFont fontWithName:@"Lucida Grande" size:11],myShadow,[NSColor blackColor],nil]
 																								forKeys:[NSArray arrayWithObjects:NSFontAttributeName,NSShadowAttributeName,NSForegroundColorAttributeName,nil]];
 
 		[myShadow release];			
@@ -420,10 +420,9 @@
 
 		if (self.active) {
 			NSImage *arrowImage = (self.blueIsClosed ? [NSImage imageNamed:@"BlueArrow_Left"] : [NSImage imageNamed:@"BlueArrow_Right"]);
-			[arrowImage compositeToPoint:NSMakePoint(drawingBounds.origin.x+drawingBounds.size.width-(blueLimit_Off/2)-(arrowImage.size.width/2),(drawHeight/2)-(arrowImage.size.height/2)) operation:NSCompositeSourceAtop];
+			[arrowImage drawAtPoint:NSMakePoint(drawingBounds.origin.x+drawingBounds.size.width-(blueLimit_Off/2)-(arrowImage.size.width/2),(drawHeight/2)-(arrowImage.size.height/2)+1) fromRect:NSMakeRect(0, 0, arrowImage.size.width, arrowImage.size.height) operation:NSCompositeSourceAtop fraction:1];
 		
 			float lastDrawPoint = drawingBounds.origin.x + drawingBounds.size.width - blueLimit_On+7.0;
-//			[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone];
 			float opacityValue = self.currentLoveHateIconOpacity/10.0;
 			if (opacityValue>0.0) { // Fixes strange (but possibly useful) functionality where fraction:0.0 = fraction:1.0
 				int i;
@@ -447,10 +446,9 @@
 					} else {
 						currentIcon = [[iconSet objectAtIndex:i] objectForKey:@"image"];
 					}
-					
-					[currentIcon compositeToPoint:NSMakePoint(lastDrawPoint,3) operation:NSCompositeSourceOver fraction:opacityValue];
-
-					lastDrawPoint += currentIcon.size.width + 4.0;
+					[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationNone];
+					[currentIcon drawAtPoint:NSMakePoint(lastDrawPoint,3) fromRect:NSMakeRect(0, 0, currentIcon.size.width, currentIcon.size.height) operation:NSCompositeSourceOver fraction:opacityValue];
+					lastDrawPoint += currentIcon.size.width + 4;
 					if (wasCopied) [currentIcon release];
 				}
 			}
@@ -470,64 +468,64 @@
 }
 
 -(void)generateBackgroundImage {
-		if (backgroundImage!=nil) [backgroundImage release];
-		float drawWidth = self.bounds.size.width;
-		backgroundImage = [[NSImage alloc] initWithSize:NSMakeSize(drawWidth, drawHeight)];
-		
-		NSRect roundedFrame;
-		roundedFrame.origin.x = 37;
-		roundedFrame.origin.y = 0;
-		roundedFrame.origin.y += LineWidth;
-		roundedFrame.size.height = drawHeight;
-		roundedFrame.size.width = drawWidth-roundedFrame.origin.x-30;
-		roundedFrame.size.height -= LineWidth*2;
-		roundedFrame.size.width -= LineWidth*2;
-		
-		NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundRectInRect:roundedFrame radius:drawHeight-0.5];
-		
-		NSImage *shineImage = [[NSImage alloc] initWithSize:NSMakeSize(drawWidth,shineHeight)];
-		
-		[shineImage lockFocus];
-			[[NSColor whiteColor] set];
-			[NSBezierPath fillRect:NSMakeRect(0,0,drawWidth,drawHeight)];
-		[shineImage unlockFocus];
+	if (backgroundImage!=nil) [backgroundImage release];
+	float drawWidth = self.bounds.size.width;
+	backgroundImage = [[NSImage alloc] initWithSize:NSMakeSize(drawWidth, drawHeight)];
+	
+	NSRect roundedFrame;
+	roundedFrame.origin.x = 37;
+	roundedFrame.origin.y = 0;
+	roundedFrame.origin.y += LineWidth;
+	roundedFrame.size.height = drawHeight;
+	roundedFrame.size.width = drawWidth-roundedFrame.origin.x-30;
+	roundedFrame.size.height -= LineWidth*2;
+	roundedFrame.size.width -= LineWidth*2;
+	
+	NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundRectInRect:roundedFrame radius:drawHeight-0.5];
+	NSBezierPath *shinePath = [NSBezierPath bezierPathWithTopHalfOfRoundRectInRect:roundedFrame radius:drawHeight-0.5];
 
-		float blueHeight = drawHeight-1;
+	NSImage *shineImage = [[NSImage alloc] initWithSize:NSMakeSize(drawWidth-30,roundedFrame.size.height)];
+	
+	[shineImage lockFocus];
+		[[NSColor whiteColor] set];
+		[shinePath fill]; 
+	[shineImage unlockFocus];
 
-		float currentBlueWidth;
-		currentBlueWidth = (drawingBounds.origin.x + drawingBounds.size.width) - currentBlueOffset;
+	float blueHeight = drawHeight-1;
 
-		NSImage *blueImage;
-		blueImage = [[NSImage alloc] initWithSize:NSMakeSize(currentBlueWidth,blueHeight)];
-		[blueImage lockFocus];
-			[[NSColor colorWithCalibratedRed:(131.0/255.0) green:(175.0/255.0) blue:(234.0/255.0) alpha:1.0] set];
-			[NSBezierPath fillRect:NSMakeRect(1,1,currentBlueWidth,blueHeight)];
-		[blueImage unlockFocus];
+	float currentBlueWidth;
+	currentBlueWidth = (drawingBounds.origin.x + drawingBounds.size.width) - currentBlueOffset;
+
+	NSImage *blueImage;
+	blueImage = [[NSImage alloc] initWithSize:NSMakeSize(currentBlueWidth,blueHeight)];
+	[blueImage lockFocus];
+		[[NSColor colorWithCalibratedRed:(131.0/255.0) green:(175.0/255.0) blue:(234.0/255.0) alpha:1.0] set];
+		[NSBezierPath fillRect:NSMakeRect(1,1,currentBlueWidth,blueHeight)];
+	[blueImage unlockFocus];
+	[backgroundImage lockFocus];
 		
-		[backgroundImage lockFocus];
-				
-			// Draw Background, Blue, Shine
-			[gradientFill fillBezierPath:roundedPath angle:90];
-			if (self.active) [blueImage drawAtPoint:NSMakePoint(currentBlueOffset,0) fromRect:NSZeroRect operation:NSCompositeSourceAtop fraction:0.9];
-			[self.statusImage drawAtPoint:NSMakePoint(19,(drawHeight/2) - (self.statusImage.size.height/2)) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
-			[shineImage drawAtPoint:NSMakePoint(0,shineHeight) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:0.4];
-			
-			// Stroke Entire Capsule
-			[[NSColor colorWithCalibratedWhite:0.0 alpha:1.0] set];
-			[roundedPath setLineWidth:LineWidth];
-			[roundedPath stroke];
-			
-			// Draw 1px vertical blue divider
-			if (self.active) {
-				[[NSColor colorWithCalibratedWhite:0.5 alpha:1.0] set];
-				NSBezierPath *onePixelVericalLine = [NSBezierPath bezierPathWithRect:NSMakeRect(currentBlueOffset, 1,1,drawHeight-2)];
-				[onePixelVericalLine fill];
-			}
+		NSGradient *backgroundGradient = [[[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:0.75 green:0.75 blue:0.75 alpha:1.00] endingColor:[NSColor colorWithCalibratedRed:0.90 green:0.90 blue:0.90 alpha:1.00]] autorelease];
+		[backgroundGradient drawInBezierPath:roundedPath angle:90];
 
-		[backgroundImage unlockFocus];
+		if (self.active) [blueImage drawAtPoint:NSMakePoint(currentBlueOffset,0) fromRect:NSZeroRect operation:NSCompositeSourceAtop fraction:0.9];
+		[self.statusImage drawAtPoint:NSMakePoint(19,(drawHeight/2) - (self.statusImage.size.height/2)) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+		[shineImage drawAtPoint:NSMakePoint(0,0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:0.4];
 		
-		[shineImage release];
-		[blueImage release];
+		// Stroke Entire Capsule
+		[[NSColor colorWithCalibratedWhite:0.0 alpha:1.0] set];
+		[roundedPath setLineWidth:LineWidth];
+		[roundedPath stroke];
+		
+		// Draw 1px vertical blue divider
+		if (self.active) {
+			[[NSColor colorWithCalibratedWhite:0.5 alpha:1.0] set];
+			NSBezierPath *onePixelVericalLine = [NSBezierPath bezierPathWithRect:NSMakeRect(currentBlueOffset, 1,1,drawHeight-2)];
+			[onePixelVericalLine fill];
+		}
+
+	[backgroundImage unlockFocus];
+	[shineImage release];
+	[blueImage release];
 }
 
 @synthesize stringImage;

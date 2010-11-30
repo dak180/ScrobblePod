@@ -17,8 +17,7 @@
 	if (!postBool || (postBool && [parameterList parameterForKey:@"sk"]!=nil && [parameterList parameterForKey:@"sk"].length>0)) {
 		NSString *postString = [NSString stringWithFormat:@"%@%@",
 			[parameterList concatenatedParametersString],
-			(needAuthentication ? [NSString stringWithFormat:@"&api_sig=%@", [parameterList methodSignature]] : @"" )
-		];
+			(needAuthentication ? [NSString stringWithFormat:@"&api_sig=%@", [parameterList methodSignature]] : @"" )];
 		NSURL *postURL;
 		if (postBool) {
 			postURL = [NSURL URLWithString:@"http://ws.audioscrobbler.com/2.0/"];
@@ -41,20 +40,21 @@
 		[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
 		[request setTimeoutInterval:10.00];// timeout scrobble posting after 20 seconds
 
-		NSError *postingError;
+		NSError *postingError = [[NSError alloc] init];
 		NSHTTPURLResponse *response = nil;
 		NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 		
 		[request release];
 		
 		int responseStatusCode = [response statusCode];
-		
+				
 		if (responseData!=nil && [postingError code]!=-1001 && (responseStatusCode==200 || responseStatusCode==403) ) {
 			responseObject = [[BGLastFmWebServiceResponse alloc] initWithData:responseData];
 			callWasSent = YES;
 		} else {
 			NSLog(@"Got HTTP Status Code %d and did not continue.",responseStatusCode);
 		}
+		[postingError release];
 	} else {
 		NSLog(@"Could not complete API POST request: no session key provided");
 	}

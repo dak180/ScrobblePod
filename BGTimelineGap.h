@@ -12,6 +12,7 @@
 @interface BGTimelineGap : NSObject {
 	int startTime;
 	int endTime;
+	int duration;
 }
 
 @property (assign) int startTime;
