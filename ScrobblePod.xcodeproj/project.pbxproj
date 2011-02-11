@@ -72,7 +72,6 @@
 		B58579F80E0A0E1300CD4A14 /* Tag.tif in Resources */ = {isa = PBXBuildFile; fileRef = B58579F40E0A0E1300CD4A14 /* Tag.tif */; };
 		B586489D0DF7B15400BCCC63 /* Account.png in Resources */ = {isa = PBXBuildFile; fileRef = B586489C0DF7B15400BCCC63 /* Account.png */; };
 		B589BCC60D6158D9008911C3 /* BGRoundedInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B589BCC10D6158D9008911C3 /* BGRoundedInfoView.m */; };
-		B589BCC70D6158D9008911C3 /* CTGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = B589BCC30D6158D9008911C3 /* CTGradient.m */; };
 		B589BCC80D6158D9008911C3 /* NSBezierPath+RoundedRect.m in Sources */ = {isa = PBXBuildFile; fileRef = B589BCC50D6158D9008911C3 /* NSBezierPath+RoundedRect.m */; };
 		B5903C810DBEBBDD0051A0E4 /* BGPointWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = B5903C7E0DBEBBDD0051A0E4 /* BGPointWindow.m */; };
 		B5903C820DBEBBDD0051A0E4 /* RoundPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5903C800DBEBBDD0051A0E4 /* RoundPointView.m */; };
@@ -219,8 +218,6 @@
 		B586489C0DF7B15400BCCC63 /* Account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Account.png; sourceTree = "<group>"; };
 		B589BCC00D6158D9008911C3 /* BGRoundedInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGRoundedInfoView.h; sourceTree = "<group>"; };
 		B589BCC10D6158D9008911C3 /* BGRoundedInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGRoundedInfoView.m; sourceTree = "<group>"; };
-		B589BCC20D6158D9008911C3 /* CTGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTGradient.h; sourceTree = "<group>"; };
-		B589BCC30D6158D9008911C3 /* CTGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTGradient.m; sourceTree = "<group>"; };
 		B589BCC40D6158D9008911C3 /* NSBezierPath+RoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+RoundedRect.h"; sourceTree = "<group>"; };
 		B589BCC50D6158D9008911C3 /* NSBezierPath+RoundedRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+RoundedRect.m"; sourceTree = "<group>"; };
 		B5903C7D0DBEBBDD0051A0E4 /* BGPointWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGPointWindow.h; sourceTree = "<group>"; };
@@ -593,8 +590,6 @@
 				B5CCE5C80BDCB6160086E373 /* WhitePopUpButton.m */,
 				B589BCC00D6158D9008911C3 /* BGRoundedInfoView.h */,
 				B589BCC10D6158D9008911C3 /* BGRoundedInfoView.m */,
-				B589BCC20D6158D9008911C3 /* CTGradient.h */,
-				B589BCC30D6158D9008911C3 /* CTGradient.m */,
 				B589BCC40D6158D9008911C3 /* NSBezierPath+RoundedRect.h */,
 				B589BCC50D6158D9008911C3 /* NSBezierPath+RoundedRect.m */,
 			);
@@ -684,6 +679,9 @@
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ScrobblePod" */;
 			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* ScrobblePod */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -767,7 +765,6 @@
 				B5EAFDEA0D47152900863484 /* BGTrackCollector.m in Sources */,
 				B5EFC0D60D5C532C003C8C21 /* BGLastFMPasswordChecker.m in Sources */,
 				B589BCC60D6158D9008911C3 /* BGRoundedInfoView.m in Sources */,
-				B589BCC70D6158D9008911C3 /* CTGradient.m in Sources */,
 				B589BCC80D6158D9008911C3 /* NSBezierPath+RoundedRect.m in Sources */,
 				B5DB31260D6BE7360084DC5B /* UKFileWatcher.m in Sources */,
 				B5DB31270D6BE7360084DC5B /* UKFNSubscribeFileWatcher.m in Sources */,
@@ -873,7 +870,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ScrobblePod;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -920,7 +917,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = ScrobblePod;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -930,8 +927,9 @@
 			buildSettings = {
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Debug;
 		};
@@ -940,8 +938,9 @@
 			buildSettings = {
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Release;
 		};

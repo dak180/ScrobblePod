@@ -7,7 +7,6 @@
 //
 
 #import "RoundPointView.h"
-#import "CTGradient.h"
 
 @implementation RoundPointView
 
@@ -45,7 +44,10 @@
 
 	[bezierPath closePath];
 	
-	[[CTGradient unifiedNormalGradient] fillBezierPath:bezierPath angle:90.0];
+    NSGradient *backgroundGradient = [[[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:0.75 green:0.75 blue:0.75 alpha:1.00] endingColor:[NSColor colorWithCalibratedRed:0.90 green:0.90 blue:0.90 alpha:1.00]] autorelease];
+    [backgroundGradient drawInBezierPath:bezierPath angle:90];
+    
+//	[[CTGradient unifiedNormalGradient] fillBezierPath:bezierPath angle:90.0];
 	[[NSColor darkGrayColor] set];
 	[bezierPath setFlatness:0.1];
 	[bezierPath stroke];

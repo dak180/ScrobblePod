@@ -15,5 +15,5 @@
 	The corner radius will be trimmed to not exceed half of the lesser rectangle dimension.
 */
 + (NSBezierPath*)bezierPathWithRoundRectInRect:(NSRect)aRect radius:(float)radius;
-
++ (NSBezierPath*)bezierPathWithTopHalfOfRoundRectInRect:(NSRect)aRect radius:(float)radius;
 @end
