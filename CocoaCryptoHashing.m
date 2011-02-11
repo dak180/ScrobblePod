@@ -69,7 +69,9 @@
 	MD5([self bytes],[self length],digest);
 	for(i=0;i<16;i++) sprintf(finaldigest+i*2,"%02x",digest[i]);
 	
-	return [NSString stringWithCString:finaldigest length:32];
+    // I guessed it should be UTF8
+	//return [NSString stringWithCString:finaldigest length:32];
+    return [NSString stringWithCString: finaldigest encoding: NSUTF8StringEncoding];
 }
 
 - (NSData *)md5Hash
@@ -89,8 +91,8 @@
 	
 	SHA1([self bytes],[self length],digest);
 	for(i=0;i<20;i++) sprintf(finaldigest+i*2,"%02x",digest[i]);
-	
-	return [NSString stringWithCString:finaldigest length:40];
+	// UTF8 Here, too. Replacing deprecated stringWithCString:length:
+    return [NSString stringWithCString: finaldigest encoding: NSUTF8StringEncoding];
 }
 
 - (NSData *)sha1Hash

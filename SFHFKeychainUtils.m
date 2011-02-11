@@ -39,7 +39,8 @@
     );
 
 	if (findResult == noErr) {
-		NSString *returnString = [NSString stringWithCString: password length: passwordLength];
+        // I guessed it should be UTF8
+		NSString *returnString = [NSString stringWithCString: password encoding: NSUTF8StringEncoding];
 		SecKeychainItemFreeContent(NULL, password);
 		return returnString;
 	}

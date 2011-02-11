@@ -89,7 +89,8 @@
 
 -(void)pollXMLFile:(NSTimer *)timer {
 	NSLog(@"Polling XML File... now!");
-	NSDictionary *fileAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[self fullXmlPath] traverseLink:YES];
+//	NSDictionary *fileAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[self fullXmlPath] traverseLink:YES];
+    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[self fullXmlPath] error:NULL];
 	NSDate *newModDate = [fileAttributes objectForKey:NSFileModificationDate];
 	if (newModDate) {
 		if ([lastModificationDate laterDate:newModDate]==newModDate) {
