@@ -30,16 +30,13 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 	[rssConnection release];
     [wantedTracks release];
 	[currentSong release];
-	// URL Cache trick
-	NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
-	[NSURLCache setSharedURLCache:sharedCache];
-	[sharedCache release];
 
 	NSLog(@"BGTrackCollector deallocated!");
     [super dealloc];
 }
 
 -(NSMutableArray *)collectTracksFromXMLFile:(NSString *)xmlPath withCutoffDate:(NSDate *)cutoffDate includingPodcasts:(BOOL)includePodcasts includingVideo:(BOOL)includeVideo ignoringComment:(NSString *)ignoreString ignoringGenre:(NSString *)genreString withMinimumDuration:(int)minimumDuration {
+		
 	double oldPriority = [NSThread threadPriority];
 	[NSThread setThreadPriority:0.0];
 	
@@ -76,7 +73,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     context = xmlCreatePushParserCtxt(&simpleSAXHandlerStruct, self, NULL, 0, NULL);
 	
 	
-	NSLog(@"%@", [cutoffDate descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S +0000" timeZone:nil locale:nil]);
+//	NSLog(@"%@", [cutoffDate descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S +0000" timeZone:nil locale:nil]);
     self.cutoffDateInSeconds = (double) [[NSDate dateWithString:[cutoffDate descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S +0000" timeZone:nil locale:nil]] timeIntervalSinceDate:[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"]];
 	self.scrobblePodcasts = includePodcasts;
 	self.scrobbleVideo = includeVideo;
@@ -91,6 +88,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         } while (!done);
     }
+	
 
 	
 //	for (BGLastFmSong *song in wantedTracks)
@@ -140,7 +138,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 // Called when a chunk of data has been downloaded.
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     // Process the downloaded chunk of data.
-	
+	[[NSURLCache sharedURLCache] setMemoryCapacity:0];
+
 
     xmlParseChunk(context, (const char *)[data bytes], (int) [data length], 0);
 	

@@ -45,6 +45,11 @@
 }
 
 -(void)awakeFromNib {
+	
+	// URL Cache trick
+	NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+	[NSURLCache setSharedURLCache:sharedCache];
+	[sharedCache release];
 
 	[self setIsScrobbling:NO];
 	[self setIsPostingNP:NO];
