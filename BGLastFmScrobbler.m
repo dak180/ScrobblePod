@@ -34,25 +34,28 @@
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:BGPrefWantMultiPost]) multiLimitPref = 1;
 	
 	while ( songIndex<[songList count] && [theResponse wasSuccessful]) {
-
+		
 		NSMutableString *postString = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"s=%@",theSessionKey]]; //session		
 		int efficientPostIndex = 0;
-
+		
 		NSCalendarDate *playedDate_Original;
-
+		
 		while ( songIndex+efficientPostIndex<[songList count] && efficientPostIndex<multiLimitPref ) {
-
+			
 			int totalIndex = songIndex+efficientPostIndex;
-
+			
 			BGLastFmSong *currentTrackDetails = [songList objectAtIndex:totalIndex];
-
+			
 			int trackLength = [currentTrackDetails length];
-
+			
 			playedDate_Original = currentTrackDetails.lastPlayed;
 			
 			NSCalendarDate *playedDate = [playedDate_Original copy];
+		//	[playedDate setTimeZone:[NSTimeZone systemTimeZone]];
 			[playedDate setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-			playedDate = [playedDate dateByAddingYears:0 months:0 days:0 hours:0 minutes:0 seconds:(trackLength*-1)];
+			NSLog(@"Played Date: %@", playedDate);
+			// Temporary fix while I refactor the whole time / date / time zone situation
+			playedDate = [playedDate dateByAddingYears:0 months:0 days:0 hours:-2 minutes:0 seconds:(trackLength*-1)];
 			NSString *playedDateUTC = [NSString stringWithFormat:@"%d",(int)[playedDate timeIntervalSince1970]];
 			
 			[postString appendString:[NSString stringWithFormat:@"&a[%d]=%@",efficientPostIndex,[[currentTrackDetails artist] urlEncodedString]]]; //artist
@@ -64,7 +67,7 @@
 			[postString appendString:[NSString stringWithFormat:@"&b[%d]=%@",efficientPostIndex,[[currentTrackDetails album] urlEncodedString]]]; //album
 			[postString appendString:[NSString stringWithFormat:@"&n[%d]=",efficientPostIndex]]; //tracknumber
 			[postString appendString:[NSString stringWithFormat:@"&m[%d]=",efficientPostIndex]]; //musicbrainz
-
+			
 			efficientPostIndex++;
 			
 		}
@@ -82,7 +85,7 @@
 		[request setHTTPBody:postData];
 		
 		[postString release];
-
+		
 		NSError *postingError = [[NSError alloc] init];
 		NSHTTPURLResponse *response = nil;
 		NSData *scrobbleResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
@@ -105,7 +108,7 @@
 		
 		[postingError release];
 		songIndex = songIndex + efficientPostIndex;
-
+		
 	}
 	return theResponse;
 }
