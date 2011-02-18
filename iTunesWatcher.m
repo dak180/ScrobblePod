@@ -254,7 +254,7 @@ song is being played from a shared library.
 }
 
 -(NSImage *)artworkForCurrentTrack {
-	if (self.iTunesIsPlaying && currentIdentifier != nil) {
+/*	if (self.iTunesIsPlaying && currentIdentifier != nil) {
 		iTunesApplication *iTunes = [SBApplication applicationWithBundleIdentifier:ITUNES_BUNDLE_IDENTIFIER];
 		iTunesTrack *currentTrack = [iTunes currentTrack];
 		if (self.iTunesIsPlaying) {
@@ -262,7 +262,7 @@ song is being played from a shared library.
 				NSArray *artworkArray = [currentTrack artworks];
 				if ([artworkArray count]>0) return (NSImage *)[[artworkArray objectAtIndex:0] data];
 		}
-	}
+	}*/
 	return [NSImage imageNamed:@"iTunesSmall"];
 }
 

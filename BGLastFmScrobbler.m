@@ -53,7 +53,7 @@
 			NSCalendarDate *playedDate = [playedDate_Original copy];
 		//	[playedDate setTimeZone:[NSTimeZone systemTimeZone]];
 			[playedDate setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-			NSLog(@"Played Date: %@", playedDate);
+		//	NSLog(@"Played Date: %@", playedDate);
 			// Temporary fix while I refactor the whole time / date / time zone situation
 			playedDate = [playedDate dateByAddingYears:0 months:0 days:0 hours:-2 minutes:0 seconds:(trackLength*-1)];
 			NSString *playedDateUTC = [NSString stringWithFormat:@"%d",(int)[playedDate timeIntervalSince1970]];

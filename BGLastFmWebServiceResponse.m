@@ -29,7 +29,8 @@
 }
 
 -(void)dealloc {
-	self.responseDocument = nil;
+	//self.responseDocument = nil;
+	[[self responseDocument] release];
 	[super dealloc];
 }
 

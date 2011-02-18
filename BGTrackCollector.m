@@ -24,16 +24,20 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 @implementation BGTrackCollector
 
-@synthesize  rssConnection, done, parsingASong, storingCharacters, currentSong, sillyCounter, countOfParsedSongs, characterBuffer, parseFormatter, downloadAndParsePool, currentKeyString, cutoffDateInSeconds, wantedTracks, isValidTrack, scrobblePodcasts, scrobbleVideo, longerThan, commentToIgnore, genreToIgnore, parsingTracks;
+@synthesize  rssConnection, done, parsingASong, storingCharacters, currentSong, sillyCounter, countOfParsedSongs, characterBuffer, downloadAndParsePool, currentKeyString, cutoffDateInSeconds, wantedTracks, isValidTrack, scrobblePodcasts, scrobbleVideo, longerThan, commentToIgnore, genreToIgnore, parsingTracks;
 
 - (void)dealloc {
     [wantedTracks release];
+	NSLog(@"BGTrackCollector deallocated!");
     [super dealloc];
 }
 
 -(NSMutableArray *)collectTracksFromXMLFile:(NSString *)xmlPath withCutoffDate:(NSDate *)cutoffDate includingPodcasts:(BOOL)includePodcasts includingVideo:(BOOL)includeVideo ignoringComment:(NSString *)ignoreString ignoringGenre:(NSString *)genreString withMinimumDuration:(int)minimumDuration {
-    
+	double oldPriority = [NSThread threadPriority];
+	[NSThread setThreadPriority:0.0];
 	
+//	NSTimeInterval startTimeReference = [NSDate timeIntervalSinceReferenceDate];
+
 	
     if (!xmlPath || ![[NSFileManager defaultManager] fileExistsAtPath:xmlPath]) {
 		NSLog(@"Supplied XML path does not exist - Using default XML path");
@@ -43,18 +47,12 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 	self.currentKeyString = [NSString string];
     NSURL *url = [NSURL fileURLWithPath:xmlPath];
-    NSLog(@"URL is: %@", url);
+//    NSLog(@"URL is: %@", url);
 	
 	
     
     self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
     done = NO;
-    self.parseFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [parseFormatter setDateStyle:NSDateFormatterLongStyle];
-    [parseFormatter setTimeStyle:NSDateFormatterNoStyle];
-    // necessary because iTunes RSS feed is not localized, so if the device region has been set to other than US
-    // the date formatter must be set to US locale in order to parse the dates
-    [parseFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"US"] autorelease]];
     self.characterBuffer = [NSMutableData data];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     NSURLRequest *theRequest = [NSURLRequest requestWithURL:url];
@@ -75,7 +73,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 	self.longerThan = minimumDuration;
 	self.commentToIgnore = ignoreString;
 	self.genreToIgnore = genreString;
-	self.currentSong = [[BGLastFmSong alloc] init];
+//	self.currentSong = [[[BGLastFmSong alloc] init] autorelease];
 	//	NSLog(@"%f", self.cutoffDateInSeconds);
     self.wantedTracks = [NSMutableArray array];
     if (rssConnection != nil) {
@@ -83,27 +81,38 @@ static xmlSAXHandler simpleSAXHandlerStruct;
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         } while (!done);
     }
+
 	
-	for (BGLastFmSong *song in wantedTracks)
-	{
+//	for (BGLastFmSong *song in wantedTracks)
+//	{
 		//	NSLog(@"%@", [song description]);
-	}
+//	}
 	
 	NSSortDescriptor *d = [[[NSSortDescriptor alloc] initWithKey:@"lastPlayed" ascending: YES] autorelease];
 	[wantedTracks sortUsingDescriptors:[NSArray arrayWithObject: d]];	
 	
-	NSLog(@"Wanted Tracks Count: %lu", [wantedTracks count]);
-	NSLog(@"Parsed Songs: %lu", countOfParsedSongs);
+//	NSLog(@"Wanted Tracks Count: %u", [wantedTracks count]);
+//	NSLog(@"Parsed Songs: %u", countOfParsedSongs);
     // Release resources used only in this thread.
     xmlFreeParserCtxt(context);
+	
+	self.commentToIgnore = nil;
+	self.genreToIgnore = nil;
     self.characterBuffer = nil;
-    self.parseFormatter = nil;
     self.rssConnection = nil;
     self.currentSong = nil;
-    
+    self.currentKeyString = nil;
+	
     [downloadAndParsePool release];
     self.downloadAndParsePool = nil;
+	
+	
+//	NSTimeInterval duration = [NSDate timeIntervalSinceReferenceDate] - startTimeReference;	
+//	NSLog(@"%f", duration);
+
     
+	[NSThread setThreadPriority:oldPriority];
+	
     return wantedTracks;
 }
 
@@ -227,7 +236,9 @@ static void startElementSAX(void * ctx, const xmlChar * fullname, const xmlChar 
 // This callback is invoked when the parse reaches the end of a node.
 static void	endElementSAX (void * ctx, const xmlChar * name) {
     BGTrackCollector *parser = (BGTrackCollector *)ctx;
-    NSString *temporaryString = [parser currentString];
+	NSString *temporaryString = [[NSString alloc] initWithData:parser.characterBuffer encoding:NSUTF8StringEncoding];
+    [parser.characterBuffer setLength:0];
+//    NSString *temporaryString = [parser currentString];
 	if (!strncmp((const char *)name, kName_Key, kLength_Key)) 
     {
         parser.storingCharacters = NO;
@@ -298,9 +309,9 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			if ([temporaryString doubleValue] > parser.cutoffDateInSeconds)
 			{
 				parser.isValidTrack = YES;
-					parser.currentSong.lastPlayed = [[[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"] dateByAddingTimeInterval:[temporaryString doubleValue]] dateWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+				parser.currentSong.lastPlayed = [[[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"] dateByAddingTimeInterval:[temporaryString doubleValue]] dateWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 				
-				NSLog(@"%@",[[[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"] dateByAddingTimeInterval:[temporaryString doubleValue]] dateWithCalendarFormat:nil timeZone:[NSTimeZone timeZoneWithName:@"UTC"]]);
+			//	NSLog(@"%@",[[[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"] dateByAddingTimeInterval:[temporaryString doubleValue]] dateWithCalendarFormat:nil timeZone:[NSTimeZone timeZoneWithName:@"UTC"]]);
 			}
 		}
 		
@@ -351,14 +362,14 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 	else if (!strncmp((const char *)name, kName_Date, kLength_Date)  && parser.parsingTracks)
 	{
 		parser.storingCharacters = NO;
-	/*	if ([parser.currentKeyString isEqualToString:kKey_PlayDateUTC] && parser.isValidTrack == YES)
-		{
-			//		NSLog(@"%@", temporaryString);
-			NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-			parser.currentSong.lastPlayed = [NSCalendarDate dateWithString:[[dateFormatter dateFromString:temporaryString] descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:nil locale:nil] calendarFormat:@"%Y-%m-%d %H:%M:%S"];
-			[dateFormatter release];
-		} */
+		/*	if ([parser.currentKeyString isEqualToString:kKey_PlayDateUTC] && parser.isValidTrack == YES)
+		 {
+		 //		NSLog(@"%@", temporaryString);
+		 NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+		 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+		 parser.currentSong.lastPlayed = [NSCalendarDate dateWithString:[[dateFormatter dateFromString:temporaryString] descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:nil locale:nil] calendarFormat:@"%Y-%m-%d %H:%M:%S"];
+		 [dateFormatter release];
+		 } */
 		parser.currentKeyString = emptyString;
 	}
 	else if (!strncmp((const char *)name, kName_Dict, kLength_Dict)  && parser.parsingTracks)
@@ -370,12 +381,13 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
         if (parser.parsingASong && parser.parsingTracks == YES)
             parser.parsingASong = NO;
 		
-		if (parser.isValidTrack == YES && parser.parsingTracks == YES) {
+		if (parser.isValidTrack == YES && parser.parsingTracks == YES && parser.currentSong.lastPlayed != NULL) {
 			//[parser finishedCurrentSong];
 			//	NSLog(@"Valid song!");
 			//	NSLog(@"%@", (parser.isValidTrack ? @"VALID" : @"NOT VALID"));
 			//	NSLog(@"%@", parser.currentSong.title);
 			[parser.wantedTracks addObject:parser.currentSong];
+
 		}
 		//[[parser currentSong] release];
 		parser.currentKeyString = emptyString;
@@ -383,6 +395,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 	else {
 		parser.storingCharacters = NO;
 	}
+	[temporaryString release];
 }
 
 /*

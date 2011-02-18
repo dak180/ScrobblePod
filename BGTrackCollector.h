@@ -44,7 +44,6 @@
     NSUInteger sillyCounter;
     NSUInteger countOfParsedSongs;
     NSAutoreleasePool *downloadAndParsePool;
-    NSDateFormatter *parseFormatter;
 	
 }
 
@@ -70,7 +69,6 @@
 @property (nonatomic, retain) NSMutableArray *wantedTracks;
 @property (nonatomic, retain) BGLastFmSong *currentSong;
 @property (nonatomic, retain) NSURLConnection *rssConnection;
-@property (nonatomic, retain) NSDateFormatter *parseFormatter;
 // The autorelease pool property is assign because autorelease pools cannot be retained.
 @property (nonatomic, assign) NSAutoreleasePool *downloadAndParsePool;
 

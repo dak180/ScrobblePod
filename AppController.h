@@ -70,6 +70,7 @@
 -(IBAction)showAboutPanel:(id)sender;
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
 - (void)applicationWillTerminate:(NSNotification *)aNotification;
+-(IBAction)quit:(id)sender;
 -(void)doFirstRun;
 
 #pragma mark ScrobblePod Status

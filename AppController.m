@@ -145,7 +145,7 @@ nil] ];
 	
 	 xmlWatcher = [[FileWatcher alloc] init];
 	 [xmlWatcher startWatchingXMLFile];
-	 NSLog(@"XML Path: %@",[xmlWatcher fullXmlPath]);
+//	 NSLog(@"XML Path: %@",[xmlWatcher fullXmlPath]);
 	 
 	 apiQueue = [NSMutableArray new];
 }
@@ -207,7 +207,6 @@ nil] ];
 	}
 	
 	[primedCache writeToFile:[self pathForCachedDatabase] atomically:YES]; // DISABLE TEMPORARILY SO THAT WE ACTUALLY HAVE SOME EXTRA PLAYS
-	
 	[primedCache release];
 }
 
@@ -269,6 +268,11 @@ nil] ];
 		[welcomeWindow orderFront:self];
 }
 
+-(IBAction)quit:(id)sender;
+{
+	[NSApp terminate:self];
+}
+
 -(void)applicationWillTerminate:(NSNotification *)aNotification {
 	if (statusItem) [[NSStatusBar systemStatusBar] removeStatusItem:statusItem];
 
@@ -321,6 +325,9 @@ nil] ];
 }
 
 -(void)iTunesWatcherDidDetectStartOfNewSongWithName:(NSString *)aName artist:(NSString *)anArtist artwork:(NSImage *)anArtwork {
+	
+	
+	
 	NSImage *growlImage;
 	if (anArtwork) {
 		growlImage = anArtwork;
@@ -328,7 +335,16 @@ nil] ];
 		growlImage = [NSImage imageNamed:@"iTunesSmall"];
 	}
 	
-	[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:[NSData dataWithData:[growlImage TIFFRepresentation]] andIdentifier:@"SP_Track"];
+	// Turns out [NSData dataWithData:[growlImage TIFFRepresentation]] is super-hungry for memory. With every new track it chewed up 2-3 MB of memory
+	/*[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:[NSData dataWithData:[growlImage TIFFRepresentation]] andIdentifier:@"SP_Track"]; */
+	//New growl code 
+	/*
+	NSData *tiffImage = [[NSData alloc] init];
+	tiffImage = [NSData dataWithData:[growlImage TIFFRepresentation]];
+	[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:tiffImage andIdentifier:@"SP_Track"];
+	[tiffImage release]; */
+	
+	
 	NSString *songTitleString;
 	
 	if (anArtist == nil && aName == nil) {
@@ -784,7 +800,6 @@ nil] ];
 	BGTrackCollector *trackCollector = [[BGTrackCollector alloc] init];
 		NSArray *recentTracksSimple = [trackCollector collectTracksFromXMLFile:self.fullXmlPath withCutoffDate:applescriptInputDateString includingPodcasts:(![defaults boolForKey:BGPrefShouldIgnorePodcasts]) includingVideo:(![defaults boolForKey:BGPrefShouldIgnoreVideo]) ignoringComment:([defaults boolForKey:BGPrefShouldIgnoreComments] ? [defaults stringForKey:BGPrefIgnoreCommentString] : nil) ignoringGenre:([defaults boolForKey:BGPrefShouldIgnoreGenre] ? [defaults stringForKey:BGPrefIgnoreGenreString] : nil) withMinimumDuration:[defaults integerForKey:BGPrefIgnoreShortLength]];//![defaults boolForKey:BGPrefShouldIgnorePodcasts]
 	[trackCollector release];
-	
 	NSLog(@"Assigning song list to variable");
 	NSArray *allRecentTracks;
 	// Calculate extra plays, and insert them into recent songs array
@@ -881,10 +896,10 @@ nil] ];
 }
 
 -(void)detachNowPlayingThread {
-	NSLog(@"Detaching now playing thread");
+//	NSLog(@"Detaching now playing thread");
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (!isPostingNP && [defaults boolForKey:BGPrefWantNowPlaying]) {
-		NSLog(@"Getting current song details");
+	//	NSLog(@"Getting current song details");
 		iTunesWatcher *tunesWatcher = [iTunesWatcher sharedManager];
 		[tunesWatcher manuallyRetrieveCurrentSongInfo];
 		BGLastFmSong *currentPlayingSong = tunesWatcher.currentSong;
@@ -904,7 +919,7 @@ nil] ];
 	//////////////////////////////////////////////////////////
 	
 	[self setIsPostingNP:YES];
-	NSLog(@"Performing now playing code");
+//	NSLog(@"Performing now playing code");
 	if (nowPlayingSong) {
 		int notifyAttempts = 0;
 		while (notifyAttempts < 2) {
