@@ -27,7 +27,14 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 @synthesize  rssConnection, done, parsingASong, storingCharacters, currentSong, sillyCounter, countOfParsedSongs, characterBuffer, downloadAndParsePool, currentKeyString, cutoffDateInSeconds, wantedTracks, isValidTrack, scrobblePodcasts, scrobbleVideo, longerThan, commentToIgnore, genreToIgnore, parsingTracks;
 
 - (void)dealloc {
+	[rssConnection release];
     [wantedTracks release];
+	[currentSong release];
+	// URL Cache trick
+	NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+	[NSURLCache setSharedURLCache:sharedCache];
+	[sharedCache release];
+
 	NSLog(@"BGTrackCollector deallocated!");
     [super dealloc];
 }
@@ -44,7 +51,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 		xmlPath = [@"~/Music/iTunes/iTunes Music Library.xml" stringByExpandingTildeInPath];
 	}
     
-    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+   // [[NSURLCache sharedURLCache] removeAllCachedResponses];
 	self.currentKeyString = [NSString string];
     NSURL *url = [NSURL fileURLWithPath:xmlPath];
 //    NSLog(@"URL is: %@", url);
@@ -52,12 +59,15 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 	
     
     self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
+
+	
     done = NO;
     self.characterBuffer = [NSMutableData data];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     NSURLRequest *theRequest = [NSURLRequest requestWithURL:url];
     // create the connection with the request and start loading the data
     rssConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+	
     // This creates a context for "push" parsing in which chunks of data that are not "well balanced" can be passed
     // to the context for streaming parsing. The handler structure defined above will be used for all the parsing. 
     // The second argument, self, will be passed as user data to each of the SAX handlers. The last three arguments
@@ -113,6 +123,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     
 	[NSThread setThreadPriority:oldPriority];
 	
+	
     return wantedTracks;
 }
 
@@ -129,12 +140,21 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 // Called when a chunk of data has been downloaded.
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     // Process the downloaded chunk of data.
+	
+
     xmlParseChunk(context, (const char *)[data bytes], (int) [data length], 0);
+	
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     // Signal the context that parsing is complete by passing "1" as the last parameter.
     // Set the condition which ends the run loop.
+	
+	// URL Cache trick
+	NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+	[NSURLCache setSharedURLCache:sharedCache];
+	[sharedCache release];
+
 }
 
 - (void)chunky;
@@ -154,15 +174,18 @@ static const NSUInteger kAutoreleasePoolPurgeFrequency = 10;
     // setting the local reference to nil ensures that the local reference will be released
 	//	[wantedTracks addObject:currentSong];
 	//  self.currentSong = nil;
-    countOfParsedSongs++;
+	
+	//[[parser currentSong] release];
+	
+  //  countOfParsedSongs++;
     // Periodically purge the autorelease pool. The frequency of this action may need to be tuned according to the 
     // size of the objects being parsed. The goal is to keep the autorelease pool from growing too large, but 
     // taking this action too frequently would be wasteful and reduce performance.
-    if (countOfParsedSongs == kAutoreleasePoolPurgeFrequency) {
+ /*   if (countOfParsedSongs == kAutoreleasePoolPurgeFrequency) {
         [downloadAndParsePool release];
         self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
         countOfParsedSongs = 0;
-    }
+    } */
 }
 
 /*
@@ -389,7 +412,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			[parser.wantedTracks addObject:parser.currentSong];
 
 		}
-		//[[parser currentSong] release];
+		//[parser finishedCurrentSong];
 		parser.currentKeyString = emptyString;
     }
 	else {
