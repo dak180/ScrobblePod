@@ -20,7 +20,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 @implementation BGTrackCollector
 
-@synthesize  rssConnection, done, parsingASong, storingCharacters, currentSong, sillyCounter, countOfParsedSongs, characterBuffer, downloadAndParsePool, currentKeyString, cutoffDateInSeconds, wantedTracks, isValidTrack, scrobblePodcasts, scrobbleVideo, longerThan, commentToIgnore, genreToIgnore, parsingTracks;
+@synthesize rssConnection, done, parsingASong, storingCharacters, currentSong, sillyCounter, countOfParsedSongs, characterBuffer, downloadAndParsePool, currentKeyString, cutoffDateInSeconds, wantedTracks, isValidTrack, scrobblePodcasts, scrobbleVideo, longerThan, commentToIgnore, genreToIgnore, parsingTracks;
 
 - (void)dealloc {
 	[rssConnection release];
@@ -31,6 +31,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 {
 	double oldPriority = [NSThread threadPriority];
 	[NSThread setThreadPriority:0.0];
+	self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
 //	NSTimeInterval startTimeReference = [NSDate timeIntervalSinceReferenceDate];
 
     if (!xmlPath || ![[NSFileManager defaultManager] fileExistsAtPath:xmlPath]) {
@@ -41,14 +42,13 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 	self.currentKeyString = [NSString string];
     NSURL *url = [NSURL fileURLWithPath:xmlPath];
-    self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
     done = NO;
     self.characterBuffer = [NSMutableData data];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     NSURLRequest *theRequest = [NSURLRequest requestWithURL:url];
     rssConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     context = xmlCreatePushParserCtxt(&simpleSAXHandlerStruct, self, NULL, 0, NULL);
-    self.cutoffDateInSeconds = (double) [[NSDate dateWithString:[cutoffDate descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S +0000" timeZone:nil locale:nil]] timeIntervalSinceDate:[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"]];
+	self.cutoffDateInSeconds = 3061159200.0 + [cutoffDate timeIntervalSinceReferenceDate];
 	self.scrobblePodcasts = includePodcasts;
 	self.scrobbleVideo = includeVideo;
 	self.longerThan = minimumDuration;
@@ -73,7 +73,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     self.rssConnection = nil;
     self.currentSong = nil;
     self.currentKeyString = nil;
-    [downloadAndParsePool release];
+    [downloadAndParsePool drain];
     self.downloadAndParsePool = nil;
 //	NSTimeInterval duration = [NSDate timeIntervalSinceReferenceDate] - startTimeReference;	
 //	NSLog(@"%f", duration);
@@ -104,7 +104,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 #pragma mark Parsing support methods
 
-static const NSUInteger kAutoreleasePoolPurgeFrequency = 10;
+static const NSUInteger kAutoreleasePoolPurgeFrequency = 50;
 
 - (void)finishedCurrentSong {
     // [self performSelectorOnMainThread:@selector(parsedSong:) withObject:currentSong waitUntilDone:NO];
@@ -119,10 +119,11 @@ static const NSUInteger kAutoreleasePoolPurgeFrequency = 10;
     // Periodically purge the autorelease pool. The frequency of this action may need to be tuned according to the 
     // size of the objects being parsed. The goal is to keep the autorelease pool from growing too large, but 
     // taking this action too frequently would be wasteful and reduce performance.
-//    if (countOfParsedSongs == kAutoreleasePoolPurgeFrequency) {
-  //      [downloadAndParsePool drain];
-    //    countOfParsedSongs = 0;
-   // }
+ /*   if (countOfParsedSongs == kAutoreleasePoolPurgeFrequency) {
+		[self.downloadAndParsePool drain];
+		self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
+		countOfParsedSongs = 0;
+    }*/
 }
 - (void)appendCharacters:(const char *)charactersFound length:(NSInteger)length {
     [characterBuffer appendBytes:charactersFound length:length];
@@ -244,7 +245,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			if ([temporaryString doubleValue] > parser.cutoffDateInSeconds)
 			{
 				parser.isValidTrack = YES;
-				parser.currentSong.lastPlayed = [[[NSDate dateWithString:@"1904-01-01 00-00-00 +0000"] dateByAddingTimeInterval:[temporaryString doubleValue]] dateWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+				parser.currentSong.lastPlayed = [[NSDate dateWithTimeIntervalSinceReferenceDate:([temporaryString doubleValue] - 3061159200.0)] dateWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:[NSTimeZone systemTimeZone]];
 			}
 		}
 		
@@ -316,7 +317,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			[parser.wantedTracks addObject:parser.currentSong];
 
 		}
-		[parser finishedCurrentSong];
+	//	[parser finishedCurrentSong];
 		parser.currentKeyString = emptyString;
     }
 	else {
