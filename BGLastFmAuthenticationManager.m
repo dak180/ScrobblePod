@@ -69,7 +69,7 @@
 	if (wsSessionKey != nil) {
 		BGLastFmSubmissionHandshaker *submissionFetcher = [[BGLastFmSubmissionHandshaker alloc] init];
 		BGLastFmSubmissionHandshakeResponse *response = [submissionFetcher performSubmissionHandshakeForUser:self.username withWebServiceSessionKey:self.webServiceSessionKey];
-
+		[submissionFetcher release];
 		NSString *submissionSessionKey = response.sessionKey;
 		if (submissionSessionKey != nil) {
 			NSLog(@"Got Submission Key: %@",submissionSessionKey);
