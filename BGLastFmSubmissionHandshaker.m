@@ -27,13 +27,13 @@
 	[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
 	[request setTimeoutInterval:10.00];// timeout scrobble posting after 20 seconds
 
-	NSError *postingError = [[NSError alloc] init];
+	NSError *postingError = nil;
 	NSHTTPURLResponse *response = nil;
 	NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 	[request release];
 	BGLastFmSubmissionHandshakeResponse *responseObject;
 	
-	if (responseData!=nil && [postingError code]!=-1001 && [response statusCode]==200) {
+	if (responseData != nil && (!postingError || (postingError && [postingError code] != -1001) ) && [response statusCode] == 200) {
 		responseObject = [[BGLastFmSubmissionHandshakeResponse alloc] initWithData:responseData];
 		NSLog(@"SUB");
 		[[NSNotificationCenter defaultCenter] postNotificationName:APIHUB_WebServiceAuthorizationCompleted object:nil];
