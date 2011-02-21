@@ -102,7 +102,12 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
                                 kNilOptions, &subscription );
     if( err != noErr )
     {
-        NSLog( @"UKFNSubscribeFileWatcher addPath: %@ failed due to error ID=%ld.", path, err );
+        #if __LP64__
+			NSLog(@"UKFNSubscribeFileWatcher addPath: %@ failed due to error ID=%d.", path, err);
+		#else
+			NSLog(@"UKFNSubscribeFileWatcher addPath: %@ failed due to error ID=%ld.", path, err);
+		#endif
+
         return;
     }
     
@@ -196,6 +201,12 @@ void    UKFileSubscriptionProc( FNMessage message, OptionBits flags, void *refco
     
     if( message == kFNDirectoryModifiedMessage )    // No others exist as of 10.4
         [obj sendDelegateMessage: message forSubscription: subscription];
-    else
-        NSLog( @"UKFileSubscriptionProc: Unknown message %d", message );
+    else 
+	{
+		#if __LP64__
+			NSLog(@"UKFileSubscriptionProc: Unknown message %d", message);
+		#else
+			NSLog(@"UKFileSubscriptionProc: Unknown message %ld", message);
+		#endif
+	}
 }

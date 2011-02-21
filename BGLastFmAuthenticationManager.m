@@ -44,7 +44,11 @@
 			[self fetchNewSubmissionSessionKeyUsingWebServiceSessionKey];
 		}
 	} else {
-		NSLog(@"Invalid Token Received: %@ (length is %d)",newToken,newToken.length);
+		#if __LP64__
+			NSLog(@"Invalid Token Received: %@ (length is %ld)", newToken,newToken.length);
+		#else
+		NSLog(@"Invalid Token Received: %@ (length is %d)", newToken,newToken.length);
+		#endif
 	}
 }
 
