@@ -108,25 +108,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 static const NSUInteger kAutoreleasePoolPurgeFrequency = 50;
 
-- (void)finishedCurrentSong {
-    // [self performSelectorOnMainThread:@selector(parsedSong:) withObject:currentSong waitUntilDone:NO];
-    // performSelectorOnMainThread: will retain the object until the selector has been performed
-    // setting the local reference to nil ensures that the local reference will be released
-	//	[wantedTracks addObject:currentSong];
-	//  self.currentSong = nil;
-	
-	//[[parser currentSong] release];
-	
- //   countOfParsedSongs++;
-    // Periodically purge the autorelease pool. The frequency of this action may need to be tuned according to the 
-    // size of the objects being parsed. The goal is to keep the autorelease pool from growing too large, but 
-    // taking this action too frequently would be wasteful and reduce performance.
- /*   if (countOfParsedSongs == kAutoreleasePoolPurgeFrequency) {
-		[self.downloadAndParsePool drain];
-		self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
-		countOfParsedSongs = 0;
-    }*/
-}
 - (void)appendCharacters:(const char *)charactersFound length:(NSInteger)length {
     [characterBuffer appendBytes:charactersFound length:length];
 }
