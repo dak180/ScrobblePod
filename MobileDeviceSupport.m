@@ -163,7 +163,7 @@ static void CFHandleCallback(CFNotificationCenterRef center, void *observer, CFS
     }
     
     } @catch(NSException *e) {}
-    [pool release];
+    [pool drain];
 }
 
 static void DeviceNotificationCallback_(struct AMDeviceCallbackInfo *info)
@@ -246,7 +246,7 @@ static void DeviceNotificationCallback_(struct AMDeviceCallbackInfo *info)
     }
     
     } @catch(NSException *e) {}
-    [pool release];
+    [pool drain];
 }
 
 static BOOL IsMassStorageDevice(io_object_t entry)

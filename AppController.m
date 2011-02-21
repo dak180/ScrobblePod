@@ -438,7 +438,7 @@ nil] ];
 	[commonTagsLoadingIndicator stopAnimation:self];
 	[commonTagsLoadingView setHidden:YES];
 	isLoadingCommonTags = NO;
-	[pool release];
+	[pool drain];
 }
 
 -(NSArray *)popularTagsForCurrentSong {
@@ -902,7 +902,7 @@ nil] ];
 	[NSURLCache setSharedURLCache:sharedCache];
 	[sharedCache release];
 	
-	[pool release];
+	[pool drain];
 }
 
 -(void)playScrobblingSound {
@@ -985,7 +985,7 @@ nil] ];
 	//////////////////////////////////////////////////////////
 	
 	[self setIsPostingNP:NO];
-	[pool release];
+	[pool drain];
 }
 
 @end

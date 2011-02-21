@@ -218,7 +218,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[currentLoginContainer setHidden:NO];
 	[authSpinner startAnimation:self];
-	[pool release];
+	[pool drain];
 }
 
 -(void)loginComplete {
