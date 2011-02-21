@@ -145,7 +145,7 @@
 
 -(IBAction)setLoginStart:(id)sender;
 {
-	NSString * appPath = [[NSBundle mainBundle] bundlePath];
+	NSString *appPath = [[NSBundle mainBundle] bundlePath];
 	// This will retrieve the path for the application
 	// For example, /Applications/test.app
 	CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:appPath];

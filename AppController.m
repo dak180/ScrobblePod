@@ -330,25 +330,22 @@ nil] ];
 }
 
 -(void)iTunesWatcherDidDetectStartOfNewSongWithName:(NSString *)aName artist:(NSString *)anArtist artwork:(NSImage *)anArtwork {
-	
-	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	NSImage *growlImage;
+	
 	if (anArtwork) {
 		growlImage = anArtwork;
 	} else {
 		growlImage = [NSImage imageNamed:@"iTunesSmall"];
 	}
 	
-	// Turns out [NSData dataWithData:[growlImage TIFFRepresentation]] is super-hungry for memory. With every new track it chewed up 2-3 MB of memory
-	/*[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:[NSData dataWithData:[growlImage TIFFRepresentation]] andIdentifier:@"SP_Track"]; */
-	//New growl code 
-	/*
-	NSData *tiffImage = [[NSData alloc] init];
-	tiffImage = [NSData dataWithData:[growlImage TIFFRepresentation]];
-	[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:tiffImage andIdentifier:@"SP_Track"];
-	[tiffImage release]; */
+	NSData *tiffImage = [NSData dataWithData:[growlImage TIFFRepresentation]];
 	
+	[[GrowlHub sharedManager] postGrowlNotificationWithName:SP_Growl_TrackChanged andTitle:aName andDescription:anArtist andImage:tiffImage andIdentifier:@"SP_Track"];
+	
+	tiffImage = nil;
+	growlImage = nil;
 	
 	NSString *songTitleString;
 	
@@ -356,13 +353,13 @@ nil] ];
 		songTitleString = [NSString stringWithFormat:@"Unnamed Track"];
 	}
 	else if (aName == nil) {
-		songTitleString = [NSString stringWithFormat:@"%@ ",anArtist];
+		songTitleString = [NSString stringWithFormat:@"%@ ", anArtist];
 	}
 	else if (anArtist == nil) {
-		songTitleString = [NSString stringWithFormat:@"%@ ",aName];
+		songTitleString = [NSString stringWithFormat:@"%@ ", aName];
 	}
 	else {
-		songTitleString = [NSString stringWithFormat:@"%@: %@ ",anArtist, aName];
+		songTitleString = [NSString stringWithFormat:@"%@: %@ ", anArtist, aName];
 	}
 	
 	[infoView setStringValue:songTitleString isActive:YES];
@@ -370,6 +367,7 @@ nil] ];
 	[self detachNowPlayingThread];
 	
 	if ([arrowWindow isVisible]) [self updateTagLabel:self];
+	[pool drain];
 }
 
 -(void)iTunesWatcherDidDetectSongStopped {
@@ -962,7 +960,7 @@ nil] ];
 				NSData *npResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&postingError];
 				
 				[request release];
-						
+
 				if (npResponseData!=nil && postingError==nil) {
 					NSString *npResponseString = [[NSString alloc] initWithData:npResponseData encoding:NSUTF8StringEncoding];
 					

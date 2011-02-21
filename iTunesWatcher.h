@@ -23,7 +23,6 @@
 	int currentSongStarted;
 	int durationPlayed;
 	BOOL currentSongAlreadyScrobbled;
-	
 	BOOL iTunesIsPlaying;
 }
 

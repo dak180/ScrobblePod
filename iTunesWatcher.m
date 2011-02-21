@@ -119,7 +119,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 }
 
 -(void)newSongStarted:(NSDictionary *)newSongDetails {
-	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	self.iTunesIsPlaying = YES;
 	NSString *newIdentifier = [[newSongDetails objectForKey:@"PersistentID"] stringValue];
 	NSLog(@"Got new song Persistent ID: %@",newIdentifier);
@@ -167,6 +167,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 	self.currentSongStarted = [self currentUnixDate];
 	
 	[self updateDelegateWithCurrentSong];
+	[pool drain];
 }
 
 -(int)currentUnixDate {
@@ -254,15 +255,15 @@ song is being played from a shared library.
 }
 
 -(NSImage *)artworkForCurrentTrack {
-/*	if (self.iTunesIsPlaying && currentIdentifier != nil) {
+	if (self.iTunesIsPlaying && currentIdentifier != nil) {
 		iTunesApplication *iTunes = [SBApplication applicationWithBundleIdentifier:ITUNES_BUNDLE_IDENTIFIER];
 		iTunesTrack *currentTrack = [iTunes currentTrack];
 		if (self.iTunesIsPlaying) {
-				iTunesIsPlaying = YES;
-				NSArray *artworkArray = [currentTrack artworks];
-				if ([artworkArray count]>0) return (NSImage *)[[artworkArray objectAtIndex:0] data];
+			iTunesIsPlaying = YES;
+			NSArray *artworkArray = [currentTrack artworks];
+			if ([artworkArray count] > 0) return (NSImage *)[[artworkArray objectAtIndex:0] data];
 		}
-	}*/
+	}
 	return [NSImage imageNamed:@"iTunesSmall"];
 }
 
