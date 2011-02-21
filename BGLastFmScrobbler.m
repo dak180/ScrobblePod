@@ -82,7 +82,6 @@
 		[request setHTTPBody:postData];
 		
 		[postString release];
-<<<<<<< HEAD
 		
 		NSError *postingError = [[NSError alloc] init];
 		NSHTTPURLResponse *response = nil;
@@ -90,20 +89,8 @@
 		
 		NSLog(@"STATUS CODE: %d", [response statusCode]);
 		NSLog(@"ERROR CODE: %d",[postingError code]);
-=======
-
-		NSError *postingError = nil;
-		NSHTTPURLResponse *response = nil;
-		NSData *scrobbleResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 		
-		if (response) {
-			NSLog(@"STATUS CODE: %ld",(long)[response statusCode]);
-		} else if (postingError) {
-			NSLog(@"ERROR CODE: %ld",(long)[postingError code]);
-		}
->>>>>>> 1640d14... 1. Init to nil.
-		
-		if (scrobbleResponseData != nil/* && [postingError code]!=-1001 && [response statusCode]==200*/) {
+		if (scrobbleResponseData!=nil/* && [postingError code]!=-1001 && [response statusCode]==200*/) {
 			NSString *scrobbleResponseString = [[NSString alloc] initWithData:scrobbleResponseData encoding:NSUTF8StringEncoding];
 			if (theResponse) [theResponse release];
 			theResponse = [[BGLastFmScrobbleResponse alloc] initWithScrobbleResponseString:scrobbleResponseString];
