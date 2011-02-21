@@ -138,7 +138,7 @@ nil] ];
 	[defaultNotificationCenter addObserver:self selector:@selector(xmlFileChanged:) name:XMLChangedNotification object:nil];
 	[defaultNotificationCenter addObserver:self selector:@selector(amdsSyncCompleted:) name:AMDSSyncComplete object:nil];
 
-	 authManager = [[BGLastFmAuthenticationManager alloc] initWithDelegate:self];
+	authManager = [[BGLastFmAuthenticationManager alloc] initWithDelegate:self];
 
 	[[iTunesWatcher sharedManager] setDelegate:self];
 	
@@ -803,7 +803,13 @@ nil] ];
 
 	NSLog(@"Collecting previously played tracks");	
 	BGTrackCollector *trackCollector = [[BGTrackCollector alloc] init];
-		NSArray *recentTracksSimple = [trackCollector collectTracksFromXMLFile:self.fullXmlPath withCutoffDate:applescriptInputDateString includingPodcasts:(![defaults boolForKey:BGPrefShouldIgnorePodcasts]) includingVideo:(![defaults boolForKey:BGPrefShouldIgnoreVideo]) ignoringComment:([defaults boolForKey:BGPrefShouldIgnoreComments] ? [defaults stringForKey:BGPrefIgnoreCommentString] : nil) ignoringGenre:([defaults boolForKey:BGPrefShouldIgnoreGenre] ? [defaults stringForKey:BGPrefIgnoreGenreString] : nil) withMinimumDuration:[defaults integerForKey:BGPrefIgnoreShortLength]];//![defaults boolForKey:BGPrefShouldIgnorePodcasts]
+	NSArray *recentTracksSimple = [trackCollector collectTracksFromXMLFile:self.fullXmlPath
+	                                                        withCutoffDate:applescriptInputDateString
+	                                                     includingPodcasts:(![defaults boolForKey:BGPrefShouldIgnorePodcasts])
+	                                                        includingVideo:(![defaults boolForKey:BGPrefShouldIgnoreVideo])
+	                                                       ignoringComment:([defaults boolForKey:BGPrefShouldIgnoreComments] ? [defaults stringForKey:BGPrefIgnoreCommentString] : nil)
+	                                                         ignoringGenre:([defaults boolForKey:BGPrefShouldIgnoreGenre] ? [defaults stringForKey:BGPrefIgnoreGenreString] : nil)
+	                                                   withMinimumDuration:[defaults integerForKey:BGPrefIgnoreShortLength]];//![defaults boolForKey:BGPrefShouldIgnorePodcasts]
 	[trackCollector release];
 	NSLog(@"Assigning song list to variable");
 	NSArray *allRecentTracks;
