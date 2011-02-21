@@ -73,6 +73,5 @@
 @property (nonatomic, assign) NSAutoreleasePool *downloadAndParsePool;
 
 -(NSMutableArray *)collectTracksFromXMLFile:(NSString *)xmlPath withCutoffDate:(NSDate *)cutoffDate includingPodcasts:(BOOL)includePodcasts includingVideo:(BOOL)includeVideo ignoringComment:(NSString *)ignoreString ignoringGenre:(NSString *)genreString withMinimumDuration:(int)minimumDuration;
-- (void)finishedCurrentSong;
 - (NSString *)currentString;
 @end

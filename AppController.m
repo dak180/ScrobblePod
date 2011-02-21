@@ -837,6 +837,7 @@ nil] ];
 								
 				BGLastFmScrobbler *theScrobbler = [[BGLastFmScrobbler alloc] init];
 				BGLastFmScrobbleResponse *scrobbleResponse = [theScrobbler performScrobbleWithSongs:allRecentTracks andSessionKey:theSessionKey toURL:[NSURL URLWithString:thePostAddress]];
+				[scrobbleResponse retain];
 
 				if (!scrobbleResponse.wasSuccessful) {
 					if (scrobbleResponse.responseType==SCROBBLE_RESPONSE_BADAUTH) {
