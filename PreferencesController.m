@@ -189,6 +189,7 @@
 						LSSharedFileListItemRemove(loginItems,itemRef);
 					}
 				}
+				CFRelease(itemRef);
 			}
 			[loginItemsArray release];
 			CFRelease(loginItems);
