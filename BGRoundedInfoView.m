@@ -519,8 +519,8 @@
 		// Draw 1px vertical blue divider
 		if (self.active) {
 			[[NSColor colorWithCalibratedWhite:0.5 alpha:1.0] set];
-			NSBezierPath *onePixelVericalLine = [NSBezierPath bezierPathWithRect:NSMakeRect(currentBlueOffset, 1,1,drawHeight-2)];
-			[onePixelVericalLine fill];
+			NSBezierPath *onePixelVerticalLine = [NSBezierPath bezierPathWithRect:NSMakeRect(currentBlueOffset, 1,1,drawHeight-2)];
+			[onePixelVerticalLine fill];
 		}
 
 	[backgroundImage unlockFocus];
