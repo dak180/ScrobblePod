@@ -48,6 +48,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSURLRequest *theRequest = [NSURLRequest requestWithURL:url];
     rssConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     context = xmlCreatePushParserCtxt(&simpleSAXHandlerStruct, self, NULL, 0, NULL);
+	// http://cl.ly/1K2P0k1L2C1U0e0L0o1D
+	// First number is a time interval from 01.01.1904 to 01.01.2001
 	self.cutoffDateInSeconds = 3061159200.0 + [cutoffDate timeIntervalSinceReferenceDate];
 	self.scrobblePodcasts = includePodcasts;
 	self.scrobbleVideo = includeVideo;
