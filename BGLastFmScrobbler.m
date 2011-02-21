@@ -52,7 +52,6 @@
 			
 			NSCalendarDate *playedDate = [playedDate_Original copy];
 			[playedDate setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-		//	NSLog(@"Played Date: %@", playedDate);
 			playedDate = [playedDate dateByAddingYears:0 months:0 days:0 hours:0 minutes:0 seconds:(trackLength*-1)];
 			NSString *playedDateUTC = [NSString stringWithFormat:@"%d",(int)[playedDate timeIntervalSince1970]];
 			
@@ -79,19 +78,32 @@
 		[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
 		[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 		[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
-		[request setTimeoutInterval:10.00];// timeout scrobble posting after 20 seconds
+		[request setTimeoutInterval:10.00];
 		[request setHTTPBody:postData];
 		
 		[postString release];
+<<<<<<< HEAD
 		
 		NSError *postingError = [[NSError alloc] init];
 		NSHTTPURLResponse *response = nil;
 		NSData *scrobbleResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 		
-		NSLog(@"STATUS CODE: %ld", (long)[response statusCode]);
-		NSLog(@"ERROR CODE: %ld",(long)[postingError code]);
+		NSLog(@"STATUS CODE: %d", [response statusCode]);
+		NSLog(@"ERROR CODE: %d",[postingError code]);
+=======
+
+		NSError *postingError = nil;
+		NSHTTPURLResponse *response = nil;
+		NSData *scrobbleResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 		
-		if (scrobbleResponseData!=nil/* && [postingError code]!=-1001 && [response statusCode]==200*/) {
+		if (response) {
+			NSLog(@"STATUS CODE: %ld",(long)[response statusCode]);
+		} else if (postingError) {
+			NSLog(@"ERROR CODE: %ld",(long)[postingError code]);
+		}
+>>>>>>> 1640d14... 1. Init to nil.
+		
+		if (scrobbleResponseData != nil/* && [postingError code]!=-1001 && [response statusCode]==200*/) {
 			NSString *scrobbleResponseString = [[NSString alloc] initWithData:scrobbleResponseData encoding:NSUTF8StringEncoding];
 			if (theResponse) [theResponse release];
 			theResponse = [[BGLastFmScrobbleResponse alloc] initWithScrobbleResponseString:scrobbleResponseString];
