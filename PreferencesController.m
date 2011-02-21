@@ -30,7 +30,7 @@
 	[theCell release];
 	
 	// set the button state for whether we open at login:
-	NSString * appPath = [[NSBundle mainBundle] bundlePath];
+	NSString *appPath = [[NSBundle mainBundle] bundlePath];
 
 	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
 	if ([self loginItemExistsWithLoginItemReference:loginItems ForPath:appPath]) {
@@ -247,6 +247,7 @@
 }
 
 #pragma mark LoginItems
+
 - (BOOL)loginItemExistsWithLoginItemReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(NSString *)appPath {
 	BOOL found = NO;  
 	UInt32 seedValue;
@@ -255,6 +256,8 @@
 	// We're going to grab the contents of the shared file list (LSSharedFileListItemRef objects)
 	// and pop it in an array so we can iterate through it to find our item.
 	CFArrayRef loginItemsArray = LSSharedFileListCopySnapshot(theLoginItemsRefs, &seedValue);
+	// Otherwise it was causing a crash
+	CFRetain(loginItemsArray);
 	for (id item in (NSArray *)loginItemsArray) {
 		LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
 		if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &thePath, NULL) == noErr) {
