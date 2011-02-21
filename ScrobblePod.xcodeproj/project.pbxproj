@@ -81,7 +81,6 @@
 		B599338D0E06501B005A84C8 /* rec_off.png in Resources */ = {isa = PBXBuildFile; fileRef = B599338A0E06501B005A84C8 /* rec_off.png */; };
 		B599338E0E06501B005A84C8 /* rec_on.png in Resources */ = {isa = PBXBuildFile; fileRef = B599338B0E06501B005A84C8 /* rec_on.png */; };
 		B5A2A8EA0E6A2589007591F5 /* FileWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A2A8E90E6A2589007591F5 /* FileWatcher.m */; };
-		B5BB72A00BFC55C500190196 /* UKLoginItemRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BB729E0BFC55C500190196 /* UKLoginItemRegistry.m */; };
 		B5BD7C820BBCDC6300EA5B29 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BD7C810BBCDC6300EA5B29 /* AppController.m */; };
 		B5BD7CF10BBD0DA800EA5B29 /* bubbles.aif in Resources */ = {isa = PBXBuildFile; fileRef = B5BD7CF00BBD0DA800EA5B29 /* bubbles.aif */; };
 		B5CA13960D7235C10059C730 /* History.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B5CA13950D7235C10059C730 /* History.tiff */; };
@@ -91,7 +90,6 @@
 		B5CCE5D50BDCB6160086E373 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CCE5C50BDCB6160086E373 /* PreferencesController.m */; };
 		B5CCE5D80BDCB6160086E373 /* WhitePopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CCE5C80BDCB6160086E373 /* WhitePopUpButton.m */; };
 		B5CCE61B0BDCB8220086E373 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = B5CCE6190BDCB8220086E373 /* Preferences.nib */; };
-		B5CEA7940BFD9E75000C0500 /* LoginItemsAE.c in Sources */ = {isa = PBXBuildFile; fileRef = B5CEA7930BFD9E75000C0500 /* LoginItemsAE.c */; };
 		B5CEBAC00C21367500F025F0 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5CEBABF0C21367500F025F0 /* ApplicationServices.framework */; };
 		B5CFA3550DC0040F00F96D31 /* BGAudioScrobblerXmlRpcPost.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CFA3540DC0040F00F96D31 /* BGAudioScrobblerXmlRpcPost.m */; };
 		B5CFA35B0DC00B5D00F96D31 /* BGAudioScrobblerXmlRpcParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CFA35A0DC00B5D00F96D31 /* BGAudioScrobblerXmlRpcParameter.m */; };
@@ -233,8 +231,6 @@
 		B599338B0E06501B005A84C8 /* rec_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rec_on.png; sourceTree = "<group>"; };
 		B5A2A8E80E6A2589007591F5 /* FileWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileWatcher.h; sourceTree = "<group>"; };
 		B5A2A8E90E6A2589007591F5 /* FileWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileWatcher.m; sourceTree = "<group>"; };
-		B5BB729D0BFC55C500190196 /* UKLoginItemRegistry.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UKLoginItemRegistry.h; sourceTree = "<group>"; };
-		B5BB729E0BFC55C500190196 /* UKLoginItemRegistry.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = UKLoginItemRegistry.m; sourceTree = "<group>"; };
 		B5BD7C800BBCDC6300EA5B29 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		B5BD7C810BBCDC6300EA5B29 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		B5BD7CF00BBD0DA800EA5B29 /* bubbles.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = bubbles.aif; sourceTree = "<group>"; };
@@ -250,8 +246,6 @@
 		B5CCE5C70BDCB6160086E373 /* WhitePopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WhitePopUpButton.h; sourceTree = "<group>"; };
 		B5CCE5C80BDCB6160086E373 /* WhitePopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WhitePopUpButton.m; sourceTree = "<group>"; };
 		B5CCE61A0BDCB8220086E373 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
-		B5CEA78C0BFD9E48000C0500 /* LoginItemsAE.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LoginItemsAE.h; sourceTree = "<group>"; };
-		B5CEA7930BFD9E75000C0500 /* LoginItemsAE.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = LoginItemsAE.c; sourceTree = "<group>"; };
 		B5CEBABF0C21367500F025F0 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		B5CFA3530DC0040F00F96D31 /* BGAudioScrobblerXmlRpcPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BGAudioScrobblerXmlRpcPost.h; sourceTree = "<group>"; };
 		B5CFA3540DC0040F00F96D31 /* BGAudioScrobblerXmlRpcPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BGAudioScrobblerXmlRpcPost.m; sourceTree = "<group>"; };
@@ -631,10 +625,6 @@
 				B5F504340EB7AD340035AF28 /* MobileDeviceSupport.h */,
 				B5F504350EB7AD340035AF28 /* MobileDeviceSupport.m */,
 				B5DB312B0D6BE73A0084DC5B /* UKKQueue */,
-				B5CEA7930BFD9E75000C0500 /* LoginItemsAE.c */,
-				B5CEA78C0BFD9E48000C0500 /* LoginItemsAE.h */,
-				B5BB729D0BFC55C500190196 /* UKLoginItemRegistry.h */,
-				B5BB729E0BFC55C500190196 /* UKLoginItemRegistry.m */,
 				B5CCE5BE0BDCB6160086E373 /* NSCalendarDate+RelativeDateDescription.h */,
 				B5CCE5BF0BDCB6160086E373 /* NSCalendarDate+RelativeDateDescription.m */,
 				B57A1A5A0BD6C6900085E05B /* CocoaCryptoHashing.h */,
@@ -760,8 +750,6 @@
 				B5CCE5D50BDCB6160086E373 /* PreferencesController.m in Sources */,
 				B5CCE5D80BDCB6160086E373 /* WhitePopUpButton.m in Sources */,
 				B5F361F30BE3FF19004DB2EF /* SFHFKeychainUtils.m in Sources */,
-				B5BB72A00BFC55C500190196 /* UKLoginItemRegistry.m in Sources */,
-				B5CEA7940BFD9E75000C0500 /* LoginItemsAE.c in Sources */,
 				B52CE4FD0C5AB16F007090A7 /* BGLastFmHandshakeResponse.m in Sources */,
 				B52CE4FF0C5AB16F007090A7 /* BGLastFmHandshaker.m in Sources */,
 				B52CE5060C5AB17A007090A7 /* BGLastFmScrobbleResponse.m in Sources */,
