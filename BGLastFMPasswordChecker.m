@@ -31,6 +31,7 @@
 	if (passwordResponseData!=nil && passwordAccessError==nil) {
 		NSString *passwordResponseString = [[NSString alloc] initWithData:passwordResponseData encoding:NSUTF8StringEncoding];
 		if ([passwordResponseString rangeOfString:@"OK"].length == 0) credentialsAreValid = NO;
+		[passwordResponseString release];
 	}
 
 	return credentialsAreValid;
