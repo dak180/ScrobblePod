@@ -25,10 +25,7 @@ enum {
     kDeviceNotificationDisconnected = 2,
 };
 
-// XXX: AMDevice.productID may be two 16 bit ints instead 1 32bit int,
-// as the numbers appear shifted up by 16 bits on PPC
 enum {
-#if BYTE_ORDER == LITTLE_ENDIAN
     kProduct_iPodTouch = 4753,
 	kProduct_iPodTouch2G = 4755,
 	kProduct_iPodTouch3G = 4761,
@@ -39,18 +36,6 @@ enum {
 	kProduct_iPad = 4762,
 	kProduct_iPhone4 = 4759,
 	kProduct_iPhone4CDMA = 4764,
-#elif BYTE_ORDER == BIG_ENDIAN
-    kProduct_iPodTouch = 4753 << 16,
-	kProduct_iPodTouch2G = 4755 << 16,
-	kProduct_iPodTouch3G = 4761 << 16,
-	kProduct_iPodTouch4G = 4766 << 16,
-	kProduct_iPhone = 4752 << 16,
-    kProduct_iPhone3G = 4754 << 16,
-	kProduct_iPhone3GS = 4756 << 16,
-	kProduct_iPad = 4762 << 16,
-	kProduct_iPhone4 = 4759 << 16,
-	kProduct_iPhone4CDMA = 4764 << 16,
-#endif
 };
 
 struct AMDevice
