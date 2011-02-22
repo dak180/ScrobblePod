@@ -29,23 +29,45 @@ enum {
 // as the numbers appear shifted up by 16 bits on PPC
 enum {
 #if BYTE_ORDER == LITTLE_ENDIAN
-    kProduct_iPhone = 4752,
     kProduct_iPodTouch = 4753,
+	kProduct_iPodTouch2G = 4755,
+	kProduct_iPodTouch3G = 4761,
+	kProduct_iPodTouch4G = 4766,
+	kProduct_iPhone = 4752,
     kProduct_iPhone3G = 4754,
+	kProduct_iPhone3GS = 4756,
+	kProduct_iPad = 4762,
+	kProduct_iPhone4 = 4759,
+	kProduct_iPhone4CDMA = 4764,
 #elif BYTE_ORDER == BIG_ENDIAN
-    kProduct_iPhone = 4752 << 16,
     kProduct_iPodTouch = 4753 << 16,
+	kProduct_iPodTouch2G = 4755 << 16,
+	kProduct_iPodTouch3G = 4761 << 16,
+	kProduct_iPodTouch4G = 4766 << 16,
+	kProduct_iPhone = 4752 << 16,
     kProduct_iPhone3G = 4754 << 16,
+	kProduct_iPhone3GS = 4756 << 16,
+	kProduct_iPad = 4762 << 16,
+	kProduct_iPhone4 = 4759 << 16,
+	kProduct_iPhone4CDMA = 4764 << 16,
 #endif
 };
 
-struct AMDevice {
-    unsigned char uuid[16];
-    unsigned int deviceID;
-    unsigned int productID;
-    char *serial;
-    unsigned char unknown[20];
-}  __attribute__ ((packed));
+struct AMDevice
+{
+	// Thanks to iFunbox.dev
+	unsigned int unknown_header[2];
+	unsigned int unknown0[4];
+	unsigned int deviceID;
+	unsigned int unknown5;
+	unsigned int productID;
+	char *serial;
+	unsigned int lockdown_conn;
+	unsigned char unknown3[8];
+	unsigned char unknown4[6*16+1];
+	unsigned char padding[8];
+	unsigned char safe_extending[256];
+} __attribute__ ((packed));
 
 struct AMDeviceCallbackInfo {
     struct AMDevice *device; // device description
@@ -178,9 +200,16 @@ static void DeviceNotificationCallback_(struct AMDeviceCallbackInfo *info)
         connectedDevices = [[NSMutableDictionary alloc] init];
     
     NSDictionary *productNameMap = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"iPhone", [NSNumber numberWithUnsignedInt:kProduct_iPhone],
-        @"iPod Touch", [NSNumber numberWithUnsignedInt:kProduct_iPodTouch],
+		@"iPod Touch", [NSNumber numberWithUnsignedInt:kProduct_iPodTouch],
+		@"iPod Touch 2G", [NSNumber numberWithUnsignedInt:kProduct_iPodTouch2G],
+		@"iPod Touch 3G", [NSNumber numberWithUnsignedInt:kProduct_iPodTouch3G],
+		@"iPod Touch 4G", [NSNumber numberWithUnsignedInt:kProduct_iPodTouch4G],
+		@"iPhone", [NSNumber numberWithUnsignedInt:kProduct_iPhone],							
         @"iPhone 3G", [NSNumber numberWithUnsignedInt:kProduct_iPhone3G],
+		@"iPhone 3GS", [NSNumber numberWithUnsignedInt:kProduct_iPhone3GS],
+		@"iPhone 4", [NSNumber numberWithUnsignedInt:kProduct_iPhone4],
+		@"iPhone 4", [NSNumber numberWithUnsignedInt:kProduct_iPhone4CDMA],
+		@"iPad", [NSNumber numberWithUnsignedInt:kProduct_iPad],
         nil];
     
     NSString *deviceName;
