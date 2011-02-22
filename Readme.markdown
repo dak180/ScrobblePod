@@ -2,10 +2,10 @@
 
 Lightweight and simple scrobbler for Mac OS X.
 
-## Version History
+### Version History
 
-### 0.6.0.7
-22 February 2008
+#### 0.6.0.7
+22 February 2011
 
 * Uses less memory with small and, especially, large iTunes libraries
 * Fixed memory problems with continuous scrobbling
