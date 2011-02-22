@@ -69,30 +69,30 @@ static iPodWatcher *sharedPodWatcher = nil;
 	return self;
 }
 
-#pragma mark iPhone Methods
+#pragma mark iOS Methods
 
 -(void)amdsDidConnect:(NSNotification*)note {
-	NSLog(@"Mobile Device Connected: %@", [[note userInfo] objectForKey:@"product"]);
+	NSLog(@"iOS Device Connected: %@", [[note userInfo] objectForKey:@"product"]);
 	// [self updateLastSyncDateWithNotification:YES];
 }
 
 -(void)amdsDidSync:(NSNotification*)note {
-	NSLog(@"Mobile Device Sync Finished");
+	NSLog(@"iOS Device Sync Finished");
 	[self updateLastSyncDateWithNotification:YES];
 	[[NSNotificationCenter defaultCenter] postNotificationName:AMDSSyncComplete object:nil];
 }
 
 -(void)amdsDidFail:(NSNotification*)note {
-    NSLog(@"iPhone Detection Initialization error occured");
+    NSLog(@"iOS Device Detection Initialization Error");
 }
 
 -(void)applyForMobileDeviceNotifications {
 	char *path = "/System/Library/PrivateFrameworks/MobileDevice.framework/MobileDevice";
 	int err;
 	if (0 != (err = IntializeMobileDeviceSupport(path, NULL))) {
-		NSLog(@"iPhone Detection Initialization error occured");
+		NSLog(@"iOS Device Detection Initialization Error");
 	} else {		
-		NSLog(@"iPhone/iPod Touch Detection Enabled");
+		NSLog(@"iOS Device Detection Enabled");
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidConnect:) name:@"org.bergstrand.amds.connect" object:nil];
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidSync:) name:@"org.bergstrand.amds.syncDidFinish" object:nil];
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidFail:) name:@"org.bergstrand.amds.intializeDidFail" object:nil];
