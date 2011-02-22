@@ -11,6 +11,7 @@
 #import "Defines.h"
 #import <libxml/tree.h>
 #import <libxml/parser.h>
+#import "NSString+Contains.h"
 
 static void startElementSAX (void * ctx, const xmlChar * fullname, const xmlChar ** atts);
 static void	endElementSAX (void * ctx, const xmlChar * name);
@@ -260,7 +261,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		}
 		else if ([parser.currentKeyString isEqualToString:kKey_Comment])
 		{
-			if ([temporaryString isEqualToString:[parser commentToIgnore]])
+			if ([temporaryString containsString:[parser commentToIgnore]])
 			{
 				parser.isValidTrack = NO;
 			}
