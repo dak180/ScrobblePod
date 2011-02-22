@@ -166,7 +166,7 @@
 				CFRelease(item);
 			}
 		}
-		CFRelease(loginItems);
+		if (loginItems) CFRelease(loginItems);
 	} else {
 		// remove.
 		
@@ -192,7 +192,7 @@
 			}
 			[loginItemsArray release];
 		}
-		CFRelease(loginItems);
+		if (loginItems) CFRelease(loginItems);
 	}
 }
 
