@@ -671,6 +671,15 @@
 						<reference key="NSOnImage" ref="319136240"/>
 						<reference key="NSMixedImage" ref="275635023"/>
 					</object>
+					<object class="NSMenuItem" id="547090198">
+						<reference key="NSMenu" ref="945263863"/>
+						<bool key="NSIsHidden">YES</bool>
+						<string key="NSTitle">Check for Update...</string>
+						<string key="NSKeyEquiv"/>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="319136240"/>
+						<reference key="NSMixedImage" ref="275635023"/>
+					</object>
 					<object class="NSMenuItem" id="922233356">
 						<reference key="NSMenu" ref="945263863"/>
 						<string key="NSTitle">About ScrobblePod</string>
@@ -1536,7 +1545,7 @@
 				<object class="NSView" key="NSWindowView" id="237215938">
 					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
-					<string key="NSFrameSize">{190, 83}</string>
+					<string key="NSFrame">{{7, 11}, {190, 83}}</string>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMaxSize">{1e+13, 1e+13}</string>
@@ -1909,7 +1918,7 @@ eW91ciBpUG9kLg</string>
 							</object>
 						</object>
 					</array>
-					<string key="NSFrameSize">{513, 330}</string>
+					<string key="NSFrame">{{7, 11}, {513, 330}}</string>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMaxSize">{1e+13, 1e+13}</string>
@@ -2196,14 +2205,6 @@ eW91ciBpUG9kLg</string>
 					<int key="connectionID">368</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">showAboutPanel:</string>
-						<reference key="source" ref="839179592"/>
-						<reference key="destination" ref="922233356"/>
-					</object>
-					<int key="connectionID">433</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">containerView</string>
 						<reference key="source" ref="839179592"/>
@@ -2482,6 +2483,22 @@ eW91ciBpUG9kLg</string>
 						<reference key="destination" ref="1059958872"/>
 					</object>
 					<int key="connectionID">1322</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">checkForUpdates:</string>
+						<reference key="source" ref="1059958872"/>
+						<reference key="destination" ref="922233356"/>
+					</object>
+					<int key="connectionID">1350</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">checkForUpdates:</string>
+						<reference key="source" ref="1059958872"/>
+						<reference key="destination" ref="547090198"/>
+					</object>
+					<int key="connectionID">1351</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2935,6 +2952,7 @@ eW91ciBpUG9kLg</string>
 							<reference ref="865053629"/>
 							<reference ref="202764429"/>
 							<reference ref="352832504"/>
+							<reference ref="547090198"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Menu (Menu)</string>
@@ -3423,6 +3441,11 @@ eW91ciBpUG9kLg</string>
 						<reference key="object" ref="338271297"/>
 						<reference key="parent" ref="867886655"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1349</int>
+						<reference key="object" ref="547090198"/>
+						<reference key="parent" ref="945263863"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -3489,6 +3512,7 @@ eW91ciBpUG9kLg</string>
 				<string key="1346.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1347.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1348.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="1349.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="143.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="YES" key="143.ImportedFromIB2"/>
 				<string key="144.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3680,7 +3704,7 @@ eW91ciBpUG9kLg</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1348</int>
+			<int key="maxID">1351</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
