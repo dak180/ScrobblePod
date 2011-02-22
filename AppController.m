@@ -393,7 +393,7 @@ nil] ];
 			} else if (selectedTag==2) {
 				properString = currentSong.album;
 			}
-			tagLabel.stringValue = [NSString stringWithFormat:@"Tags for: \"%@\"",properString];
+			tagLabel.stringValue = [NSString stringWithFormat:@"Tags for: \"%@\"", properString];
 			
 			[NSThread detachNewThreadSelector:@selector(populateCommonTags) toTarget:self withObject:nil];
 			[arrowWindow setShouldClose:YES];
