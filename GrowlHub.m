@@ -14,22 +14,14 @@ static GrowlHub *sharedGrowlHub = nil;
 @implementation GrowlHub
 
 +(GrowlHub *)sharedManager {
-	@synchronized(self) {
-		if (sharedGrowlHub == nil) {
-			[[self alloc] init]; // assignment not done here
-		}
-	}
-	return sharedGrowlHub;
+	if (sharedGrowlHub == nil) {
+        sharedGrowlHub = [[super allocWithZone:NULL] init];
+    }
+    return sharedGrowlHub;
 }
 
 +(id)allocWithZone:(NSZone *)zone {
-	@synchronized(self) {
-		if (sharedGrowlHub == nil) {
-			sharedGrowlHub = [super allocWithZone:zone];
-			return sharedGrowlHub;  // assignment and return on first allocation
-		}
-	}
-	return nil; //on subsequent allocation attempts return nil
+	return [[self sharedManager] retain];
 }
 
 -(id)copyWithZone:(NSZone *)zone {
@@ -41,7 +33,7 @@ static GrowlHub *sharedGrowlHub = nil;
 }
 
 - (unsigned)retainCount {
-	return UINT_MAX;  //denotes an object that cannot be released
+	return NSUIntegerMax;  //denotes an object that cannot be released
 }
  
 -(void)release {

@@ -16,22 +16,14 @@
 static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 
 +(BGScrobbleDecisionManager *)sharedManager {
-	@synchronized(self) {
-		if (sharedDecisionManager == nil) {
-			[[self alloc] init]; // assignment not done here
-		}
-	}
-	return sharedDecisionManager;
+	if (sharedDecisionManager == nil) {
+        sharedDecisionManager = [[super allocWithZone:NULL] init];
+    }
+    return sharedDecisionManager;
 }
 
 +(id)allocWithZone:(NSZone *)zone {
-	@synchronized(self) {
-		if (sharedDecisionManager == nil) {
-			sharedDecisionManager = [super allocWithZone:zone];
-			return sharedDecisionManager;  // assignment and return on first allocation
-		}
-	}
-	return nil; //on subsequent allocation attempts return nil
+	return [[self sharedManager] retain];
 }
 
 -(id)copyWithZone:(NSZone *)zone {
@@ -43,7 +35,7 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 }
 
 - (unsigned)retainCount {
-	return UINT_MAX;  //denotes an object that cannot be released
+	return NSUIntegerMax;  //denotes an object that cannot be released
 }
  
 -(void)release {

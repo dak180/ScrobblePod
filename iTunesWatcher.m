@@ -18,22 +18,14 @@ static iTunesWatcher *sharedTunesManager = nil;
 @implementation iTunesWatcher
 
 +(iTunesWatcher *)sharedManager {
-	@synchronized(self) {
-		if (sharedTunesManager == nil) {
-			[[self alloc] init]; // assignment not done here
-		}
-	}
-	return sharedTunesManager;
+	if (sharedTunesManager == nil) {
+        sharedTunesManager = [[super allocWithZone:NULL] init];
+    }
+    return sharedTunesManager;
 }
 
 +(id)allocWithZone:(NSZone *)zone {
-	@synchronized(self) {
-		if (sharedTunesManager == nil) {
-			sharedTunesManager = [super allocWithZone:zone];
-			return sharedTunesManager;  // assignment and return on first allocation
-		}
-	}
-	return nil; //on subsequent allocation attempts return nil
+	return [[self sharedManager] retain];
 }
 
 -(id)copyWithZone:(NSZone *)zone {
@@ -45,13 +37,13 @@ static iTunesWatcher *sharedTunesManager = nil;
 }
 
 - (unsigned)retainCount {
-	return UINT_MAX;  //denotes an object that cannot be released
+	return NSUIntegerMax;  //denotes an object that cannot be released
 }
- 
+
 -(void)release {
 	//do nothing
 }
- 
+
 -(id)autorelease {
 	return self;
 }
