@@ -160,7 +160,6 @@ static void startElementSAX(void * ctx, const xmlChar * fullname, const xmlChar 
     {
         parser.storingCharacters = YES;
     }
-    
 }
 
 static void	endElementSAX (void * ctx, const xmlChar * name) {
@@ -188,13 +187,13 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			parser.isValidTrack = YES;
 			parser.parsingASong = YES;
 			parser.currentKeyString = temporaryString;
-			parser.countOfParsedSongs++;
+		//	parser.countOfParsedSongs++;
         }
 		else if (([temporaryString isEqualToString:kKey_Name] || [temporaryString isEqualToString:kKey_Artist] || [temporaryString isEqualToString:kKey_Album] || [temporaryString isEqualToString:kKey_Comment] || [temporaryString isEqualToString:kKey_Genre] || [temporaryString isEqualToString:kKey_PlayDate] || [temporaryString isEqualToString:kKey_PlayDateUTC] || [temporaryString isEqualToString:kKey_Length] || [temporaryString isEqualToString:kKey_PlayCount] || [temporaryString isEqualToString:kKey_Comment] || [temporaryString isEqualToString:kKey_Podcast] || [temporaryString isEqualToString:kKey_Video])  && parser.parsingTracks)
 		{
 			parser.currentKeyString = temporaryString;
 		}
-	} 
+	}
 	else if (!strncmp((const char *)name, kName_True, kLength_True) && parser.parsingTracks)
     {
 		parser.storingCharacters = NO;
@@ -208,7 +207,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		}
 		parser.currentKeyString = emptyString;
     }
-	else if (!strncmp((const char *)name, kName_Integer, kLength_Integer) && ![parser.currentKeyString isEqualToString:emptyString]  && parser.parsingTracks == YES)
+	else if (!strncmp((const char *)name, kName_Integer, kLength_Integer) && parser.storingCharacters && parser.parsingTracks)
 	{
 		parser.storingCharacters = NO;
 		if ([parser.currentKeyString isEqualToString:kKey_TrackID])
@@ -236,7 +235,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		//	NSLog(@"%@", (parser.isValidTrack ? @"VALID" : @"NOT VALID"));
 		parser.currentKeyString = emptyString;
 	}
-	else if (!strncmp((const char *)name, kName_String, kLength_String) && ![parser.currentKeyString isEqualToString:emptyString]  && parser.parsingTracks)
+	else if (!strncmp((const char *)name, kName_String, kLength_String) && ![parser.currentKeyString isEqualToString:emptyString]  && parser.parsingTracks  && parser.storingCharacters)
 	{
 		parser.storingCharacters = NO;
 		if ([parser.currentKeyString isEqual:kKey_Name])
@@ -276,7 +275,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		parser.currentKeyString = emptyString;
 
 	}
-	else if (!strncmp((const char *)name, kName_Date, kLength_Date)  && parser.parsingTracks)
+	else if (!strncmp((const char *)name, kName_Date, kLength_Date)  && parser.parsingTracks && parser.storingCharacters)
 	{
 		parser.storingCharacters = NO;
 		parser.currentKeyString = emptyString;
