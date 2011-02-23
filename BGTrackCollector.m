@@ -185,7 +185,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			BGLastFmSong *newSong = [[BGLastFmSong alloc] init];
 			parser.currentSong = newSong;
 			[newSong release];
-			parser.isValidTrack = NO;
+			parser.isValidTrack = YES;
 			parser.parsingASong = YES;
 			parser.currentKeyString = temporaryString;
 			parser.countOfParsedSongs++;
@@ -198,13 +198,13 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 	else if (!strncmp((const char *)name, kName_True, kLength_True) && parser.parsingTracks)
     {
 		parser.storingCharacters = NO;
-		if ([parser.currentKeyString isEqualToString:kKey_Podcast] && parser.scrobblePodcasts == YES)
+		if ([parser.currentKeyString isEqualToString:kKey_Podcast] && parser.scrobblePodcasts == NO)
 		{
-			parser.isValidTrack = YES;
+			parser.isValidTrack = NO;
 		}
-		else if ([parser.currentKeyString isEqualToString:kKey_Video] && parser.scrobbleVideo == YES)
+		else if ([parser.currentKeyString isEqualToString:kKey_Video] && parser.scrobbleVideo == NO)
 		{
-			parser.isValidTrack = YES;
+			parser.isValidTrack = NO;
 		}
 		parser.currentKeyString = emptyString;
     }
@@ -226,11 +226,11 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		}
 		else if ([parser.currentKeyString isEqualToString:kKey_PlayDate])
 		{
-			if ([temporaryString doubleValue] > parser.cutoffDateInSeconds)
+			if ([temporaryString doubleValue] < parser.cutoffDateInSeconds)
 			{
-				parser.isValidTrack = YES;
-				parser.currentSong.lastPlayed = [[NSDate dateWithTimeIntervalSinceReferenceDate:([temporaryString doubleValue] - 3061159200.0)] dateWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:[NSTimeZone systemTimeZone]];
+				parser.isValidTrack = NO;
 			}
+			parser.currentSong.lastPlayed = [[NSDate dateWithTimeIntervalSinceReferenceDate:([temporaryString doubleValue] - 3061159200.0)] dateWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:[NSTimeZone systemTimeZone]];
 		}
 		
 		//	NSLog(@"%@", (parser.isValidTrack ? @"VALID" : @"NOT VALID"));
@@ -274,26 +274,16 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		{
 		}
 		parser.currentKeyString = emptyString;
+
 	}
 	else if (!strncmp((const char *)name, kName_Date, kLength_Date)  && parser.parsingTracks)
 	{
 		parser.storingCharacters = NO;
-		/*	if ([parser.currentKeyString isEqualToString:kKey_PlayDateUTC] && parser.isValidTrack == YES)
-		 {
-		 //		NSLog(@"%@", temporaryString);
-		 NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-		 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-		 parser.currentSong.lastPlayed = [NSCalendarDate dateWithString:[[dateFormatter dateFromString:temporaryString] descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S" timeZone:nil locale:nil] calendarFormat:@"%Y-%m-%d %H:%M:%S"];
-		 [dateFormatter release];
-		 } */
 		parser.currentKeyString = emptyString;
 	}
 	else if (!strncmp((const char *)name, kName_Dict, kLength_Dict)  && parser.parsingTracks)
     {
-		//	NSLog(@"C: %.0f", parser.cutoffDateInSeconds);
-		//NSLog(@"Song description: %@", [[parser currentSong] description]);
-		//	NSLog(@"-----------------------");
-		//	parser.storingCharacters = NO;
+		parser.storingCharacters = NO;
         if (parser.parsingASong && parser.parsingTracks == YES)
             parser.parsingASong = NO;
 		
@@ -301,11 +291,11 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			[parser.wantedTracks addObject:parser.currentSong];
 
 		}
-	//	[parser finishedCurrentSong];
 		parser.currentKeyString = emptyString;
     }
 	else {
 		parser.storingCharacters = NO;
+		parser.currentKeyString = emptyString;	
 	}
 	[temporaryString release];
 }
