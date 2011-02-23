@@ -19,6 +19,16 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 
 ## Version History
 
+### 0.6.1
+#### 23 February 2011
+
+* Fixed comment exclusions
+* iOS device detection
+
+[Download][0.6.1]
+
+[0.6.1]: http://mmrr.fi/scrobblepod/download/0.6.1
+
 ### 0.6.0.7
 #### 22 February 2011
 
@@ -26,7 +36,3 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 * Fixed memory problems with continuous scrobbling
 * Visual improvements
 * Various enhancements and bug fixes
-
-[Download][0.6.0.7]
-
-[0.6.0.7]: http://mmrr.fi/scrobblepod/download/0.6.0.7

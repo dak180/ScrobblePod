@@ -2,8 +2,8 @@
 //  BGTrackCollector.m
 //  ScrobblePod
 //
-//  Created by Ben on 13/01/08.
-//  Copyright 2008 Ben Gummer. All rights reserved.
+//  Created by Ben Gummer on 13/01/08.
+//	Edited by Anton Sotkov on 15/02/11.
 //
 
 #import "BGTrackCollector.h"
