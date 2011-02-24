@@ -252,7 +252,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		}
 		else if ([parser.currentKeyString isEqualToString:kKey_Genre])
 		{
-			if ([temporaryString isEqualToString:[parser genreToIgnore]])
+			if ((parser.genreToIgnore != nil) && [temporaryString isEqualToString:[parser genreToIgnore]])
 			{
 				parser.isValidTrack = NO;
 			}
@@ -260,7 +260,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		}
 		else if ([parser.currentKeyString isEqualToString:kKey_Comment])
 		{
-			if ([temporaryString containsString:[parser commentToIgnore]])
+			if ((parser.commentToIgnore != nil) && [temporaryString containsString:[parser commentToIgnore]])
 			{
 				parser.isValidTrack = NO;
 			}
