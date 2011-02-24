@@ -28,6 +28,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 #import "NSString+UrlEncoding.h"
+#import "NSString+Contains.h"
 
 //#import "BGConnectionCaller.h"
 
@@ -914,30 +915,31 @@ nil] ];
 }
 
 -(void)detachNowPlayingThread {
-//	NSLog(@"Detaching now playing thread");
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if (!isPostingNP && [defaults boolForKey:BGPrefWantNowPlaying]) {
-	//	NSLog(@"Getting current song details");
-		iTunesWatcher *tunesWatcher = [iTunesWatcher sharedManager];
-		[tunesWatcher manuallyRetrieveCurrentSongInfo];
-		BGLastFmSong *currentPlayingSong = tunesWatcher.currentSong;
-		NSString *ignoreString = [[NSUserDefaults standardUserDefaults] stringForKey:BGPrefIgnoreCommentString];
-		if (currentPlayingSong.comment && ignoreString!=nil && [ignoreString length]>0 && [currentPlayingSong.comment rangeOfString:ignoreString].length==0) {
-			NSLog(@"Posting song details to Last.fm Now Playing service");
-			[NSThread detachNewThreadSelector:@selector(postNowPlayingNotificationForSong:) toTarget:self withObject:currentPlayingSong];
-		} else {
-			NSLog(@"Did not post Now Playing notification, as song was excluded");
-		}
-	}
+	
+	if (!isPostingNP && ![defaults boolForKey:BGPrefWantNowPlaying])
+		return;
+	
+	iTunesWatcher *tunesWatcher = [iTunesWatcher sharedManager];
+	[tunesWatcher manuallyRetrieveCurrentSongInfo];
+	BGLastFmSong *currentPlayingSong = tunesWatcher.currentSong;
+	NSString *commentToIgnore = [defaults stringForKey:BGPrefIgnoreCommentString];
+	NSString *genreToIgnore = [defaults stringForKey:BGPrefIgnoreGenreString];
+	
+	if ([defaults boolForKey:BGPrefShouldIgnoreComments] && currentPlayingSong.comment && commentToIgnore != nil && [commentToIgnore length] > 0 && [currentPlayingSong.comment containsString:commentToIgnore]) 
+		return;
+	else if ([defaults boolForKey:BGPrefShouldIgnoreGenre] && currentPlayingSong.genre && genreToIgnore != nil && [genreToIgnore length] > 0  && [currentPlayingSong.genre containsString:genreToIgnore]) 
+		return;
+	else if ([defaults boolForKey:BGPrefShouldIgnoreGenre] && currentPlayingSong.genre && genreToIgnore != nil && [genreToIgnore length] == 0 && [currentPlayingSong.genre isEqualToString:genreToIgnore]) 
+		return;
+		
+	[NSThread detachNewThreadSelector:@selector(postNowPlayingNotificationForSong:) toTarget:self withObject:currentPlayingSong];
 }
 
 -(void)postNowPlayingNotificationForSong:(BGLastFmSong *)nowPlayingSong {
 	NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
-
-	//////////////////////////////////////////////////////////
-	
+	NSLog(@"Posting now playing notification.");
 	[self setIsPostingNP:YES];
-//	NSLog(@"Performing now playing code");
 	if (nowPlayingSong) {
 		int notifyAttempts = 0;
 		while (notifyAttempts < 2) {

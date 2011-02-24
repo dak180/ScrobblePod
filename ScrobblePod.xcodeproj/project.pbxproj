@@ -534,8 +534,6 @@
 				B57AAB440EBD2B490035BBCC /* BGLastFmWebServiceResponse.m */,
 				B57AAB5D0EBD2BB80035BBCC /* HubNotifications.h */,
 				B57AAB5E0EBD2BB80035BBCC /* HubStrings.h */,
-				B57AAB5F0EBD2BB80035BBCC /* NSString+Contains.h */,
-				B57AAB600EBD2BB80035BBCC /* NSString+Contains.m */,
 			);
 			name = "Easy Logon";
 			sourceTree = "<group>";
@@ -635,6 +633,8 @@
 				B556CEDF0D90EC7200719B10 /* WorkingValueTransformer.m */,
 				B50EDB120D960C00000B1CF1 /* NSString+UrlEncoding.h */,
 				B50EDB130D960C00000B1CF1 /* NSString+UrlEncoding.m */,
+				B57AAB5F0EBD2BB80035BBCC /* NSString+Contains.h */,
+				B57AAB600EBD2BB80035BBCC /* NSString+Contains.m */,
 				B55B7B7D0DE53244004A6DFC /* NSDictionary+ExclusionTest.h */,
 				B55B7B7E0DE53244004A6DFC /* NSDictionary+ExclusionTest.m */,
 				B55B7AFC0DE513CF004A6DFC /* GrowlHub.h */,
