@@ -19,15 +19,22 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 
 ## Version History
 
+### 0.6.2
+#### 24 February 2011
+
+* Fixed a crash which happened when comment or genre exclusions were disabled
+* Posting Now Playing notifications only for songs which are not ignored
+* Songs with empty genre can now be ignored
+
+[Download][0.6.2]
+
+[0.6.2]: http://mmrr.fi/scrobblepod/download/0.6.2
+
 ### 0.6.1
 #### 23 February 2011
 
 * Fixed comment exclusions
 * iOS device detection
-
-[Download][0.6.1]
-
-[0.6.1]: http://mmrr.fi/scrobblepod/download/0.6.1
 
 ### 0.6.0.7
 #### 22 February 2011
