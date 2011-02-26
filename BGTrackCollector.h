@@ -38,7 +38,8 @@
     NSMutableData *characterBuffer;
     // A reference to the current song the parser is working with.
     BGLastFmSong *currentSong;
-	double cutoffDateInSeconds;
+	NSDateFormatter *playDateFormatter;
+	NSDate *cutOffDate;
     // The number of parsed songs is tracked so that the autorelease pool for the parsing thread can be periodically
     // emptied to keep the memory footprint under control.
     NSUInteger sillyCounter;
@@ -64,11 +65,12 @@
 
 @property NSUInteger countOfParsedSongs;
 @property NSUInteger sillyCounter;
-@property double cutoffDateInSeconds;
 @property (nonatomic, retain) NSString *currentKeyString;
 @property (nonatomic, retain) NSMutableArray *wantedTracks;
 @property (nonatomic, retain) BGLastFmSong *currentSong;
 @property (nonatomic, retain) NSURLConnection *rssConnection;
+@property (nonatomic, retain) NSDateFormatter *playDateFormatter;
+@property (nonatomic, retain) NSDate *cutOffDate;
 // The autorelease pool property is assign because autorelease pools cannot be retained.
 @property (nonatomic, assign) NSAutoreleasePool *downloadAndParsePool;
 
