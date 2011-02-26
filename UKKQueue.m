@@ -344,7 +344,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
     
     while( keepThreadRunning )
     {
-		NSAutoreleasePool*  pool = [[NSAutoreleasePool alloc] init];
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
 		NS_DURING
 			n = kevent( queueFD, NULL, 0, &ev, 1, &timeout );

@@ -48,7 +48,7 @@
 }
 
 -(void)postXMLChangeMessage {
-	NSLog(@"Detected XML Change");
+//	NSLog(@"Detected XML Change");
 	[[NSNotificationCenter defaultCenter] postNotificationName:XMLChangedNotification object:nil];
 }
 
