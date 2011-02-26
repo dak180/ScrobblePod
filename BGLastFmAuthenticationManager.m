@@ -66,20 +66,26 @@
 
 -(void)fetchNewSubmissionSessionKeyUsingWebServiceSessionKey {
 	NSString *wsSessionKey = self.webServiceSessionKey;
-	if (wsSessionKey != nil) {
-		BGLastFmSubmissionHandshaker *submissionFetcher = [[BGLastFmSubmissionHandshaker alloc] init];
-		BGLastFmSubmissionHandshakeResponse *response = [submissionFetcher performSubmissionHandshakeForUser:self.username withWebServiceSessionKey:self.webServiceSessionKey];
-		[submissionFetcher release];
-		NSString *submissionSessionKey = response.sessionKey;
-		if (submissionSessionKey != nil) {
-			NSLog(@"Got Submission Key: %@",submissionSessionKey);
-			[[NSUserDefaults standardUserDefaults] setObject:submissionSessionKey forKey:BGSubmissionSessionKey];
-			[[NSUserDefaults standardUserDefaults] setObject:response.nowPlayingURL forKey:BGNowPlayingSubmissionURL];
-			[[NSUserDefaults standardUserDefaults] setObject:response.postURL forKey:BGScrobblingSubmissionURL];
-			SEL theSelector = @selector(newSubmissionSessionKeyAcquired);
-			if ([delegate respondsToSelector:theSelector]) [delegate performSelector:theSelector];
-		}
-	}
+	
+	if (wsSessionKey == nil)
+		return;
+	
+	BGLastFmSubmissionHandshaker *submissionFetcher = [[BGLastFmSubmissionHandshaker alloc] init];
+	BGLastFmSubmissionHandshakeResponse *response = [submissionFetcher performSubmissionHandshakeForUser:self.username withWebServiceSessionKey:self.webServiceSessionKey];
+	[submissionFetcher release];
+	NSString *submissionSessionKey = response.sessionKey;
+	
+	if (submissionSessionKey == nil) 
+		return;
+	
+	NSLog(@"Got Submission Key: %@",submissionSessionKey);
+	[[NSUserDefaults standardUserDefaults] setObject:submissionSessionKey forKey:BGSubmissionSessionKey];
+	[[NSUserDefaults standardUserDefaults] setObject:response.nowPlayingURL forKey:BGNowPlayingSubmissionURL];
+	[[NSUserDefaults standardUserDefaults] setObject:response.postURL forKey:BGScrobblingSubmissionURL];
+	SEL theSelector = @selector(newSubmissionSessionKeyAcquired);
+	
+	if ([delegate respondsToSelector:theSelector]) 
+		[delegate performSelector:theSelector];
 }
 
 -(NSString *)webServiceSessionKey {

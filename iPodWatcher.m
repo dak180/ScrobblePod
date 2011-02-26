@@ -53,11 +53,11 @@ static iPodWatcher *sharedPodWatcher = nil;
 }
 
 -(id)init {
-	self = [super init];
-	if (self != nil) {
-		[self applyForiPodNotifications];
-		[self applyForMobileDeviceNotifications];
-	}
+	if (!(self = [super init])) 
+		return nil;
+
+	[self applyForiPodNotifications];
+	[self applyForMobileDeviceNotifications];
 	return self;
 }
 

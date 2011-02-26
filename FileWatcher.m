@@ -8,6 +8,7 @@
 -(id)init {
 	if (!(self = [super init]))
 		return nil;
+	
 	self.lastModificationDate = [NSDate date];
 	[self updateLocationFlag];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(xmlLocationChanged:) name:BGXmlLocationChangedNotification object:nil];
@@ -43,7 +44,7 @@
 	BOOL unmountable;
 	[[NSWorkspace sharedWorkspace] getFileSystemInfoForPath:[self fullXmlPath] isRemovable:&removable isWritable:&writable isUnmountable:&unmountable description:NULL type:NULL];
 	self.xmlFileIsLocal = (!removable && !unmountable);
-	NSLog(@"The XML file is %@stored on the startup drive. Removable=%d Unmountable=%d",(self.xmlFileIsLocal ? @"" : @"not "),removable,unmountable);
+	NSLog(@"The XML file is %@stored on the startup drive. Removable=%d Unmountable=%d", (self.xmlFileIsLocal ? @"" : @"not "), removable, unmountable);
 }
 
 -(void)postXMLChangeMessage {
@@ -52,12 +53,11 @@
 }
 
 -(void)startWatchingXMLFile {
-	NSLog(@"Starting to watch XML file");
 	if (self.xmlFileIsLocal) {
-		NSLog(@"Starting watching using Event-Based method");
+		NSLog(@"Starting to watch XML file using Event-Based method");
 		[self applyForXmlChangeNotification];
 	} else {
-		NSLog(@"Starting watching using Poll-Based method");
+		NSLog(@"Starting to watch XML file using Poll-Based method");
 		[self startPollTimer];
 	}
 }
@@ -87,7 +87,7 @@
 }
 
 -(void)pollXMLFile:(NSTimer *)timer {
-	NSLog(@"Polling XML File... now!");
+	NSLog(@"Polling XML File");
 //	NSDictionary *fileAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[self fullXmlPath] traverseLink:YES];
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[self fullXmlPath] error:NULL];
 	NSDate *newModDate = [fileAttributes objectForKey:NSFileModificationDate];

@@ -163,9 +163,9 @@ nil] ];
     [workspaceNotificationCenter addObserver:self selector:@selector(workspaceDidLaunchApplication:) name:NSWorkspaceDidLaunchApplicationNotification object:nil];
     [workspaceNotificationCenter addObserver:self selector:@selector(workspaceDidTerminateApplication:) name:NSWorkspaceDidTerminateApplicationNotification object:nil];
 	
-	 xmlWatcher = [[FileWatcher alloc] init];
-	 [xmlWatcher startWatchingXMLFile];
-//	 NSLog(@"XML Path: %@",[xmlWatcher fullXmlPath]);
+	xmlWatcher = [[FileWatcher alloc] init];
+	[xmlWatcher startWatchingXMLFile];
+//	NSLog(@"XML Path: %@",[xmlWatcher fullXmlPath]);
 	 
 	 apiQueue = [NSMutableArray new];
 }
@@ -209,7 +209,7 @@ nil] ];
 }
 
 -(void)newSubmissionSessionKeyAcquired {
-	[self detachNowPlayingThread];
+//	[self detachNowPlayingThread];
 	[self detachScrobbleThreadWithoutConsideration:NO];
 	[self popApiQueue];
 }
@@ -321,7 +321,7 @@ nil] ];
 }
 
 -(void)amdsSyncCompleted:(NSNotification *)notification {
-	NSLog(@"Mobile Device finished syncing... going to try to scrobble");
+	NSLog(@"Mobile Device finished syncing... Going to try to scrobble");
 	[self detachScrobbleThreadWithoutConsideration:NO];
 }
 
@@ -782,11 +782,16 @@ nil] ];
 #pragma mark Main Scrobbling Methods
 
 -(void)detachScrobbleThreadWithoutConsideration:(BOOL)passThrough {
-	if (!isScrobbling) {
-		BOOL shouldContinue = passThrough;
-		if (!passThrough) shouldContinue = [[BGScrobbleDecisionManager sharedManager] shouldScrobble];
-		if (shouldContinue) [NSThread detachNewThreadSelector:@selector(postScrobble) toTarget:self withObject:nil];
-	}
+	if (isScrobbling)
+		return;
+	
+	BOOL shouldContinue = passThrough;
+	
+	if (!passThrough) 
+		shouldContinue = [[BGScrobbleDecisionManager sharedManager] shouldScrobble];
+	
+	if (shouldContinue) 
+		[NSThread detachNewThreadSelector:@selector(postScrobble) toTarget:self withObject:nil];
 }
 
 -(IBAction)goToUserProfilePage:(id)sender {
@@ -946,7 +951,7 @@ nil] ];
 		return;
 	else if (tunesWatcher.currentSong == nil)
 		return;
-		
+	
 	[NSThread detachNewThreadSelector:@selector(postNowPlayingNotificationForSong:) toTarget:self withObject:currentPlayingSong];
 }
 
