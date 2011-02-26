@@ -1,7 +1,7 @@
 #pragma mark Preferences Keys
 
 	#define BGPrefFirstRunKey @"BGFirstRun"
-	#define BGPrefGMTLastScrobbledDate @"BGGMTLastScrobbledDate"
+	#define BGPrefLastScrobbledWithCorrectOffsetFromGMT @"BGLastScrobbledWithCorrectOffsetFromGMT"
 	#define BGPrefLastScrobbled @"LastScrobbled"
 	#define BGPrefShouldPlaySound @"PlaySound"
 	#define BGPrefWantMultiPost @"WantMultiPost"

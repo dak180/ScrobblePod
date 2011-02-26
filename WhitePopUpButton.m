@@ -13,10 +13,11 @@
 
 - (id)initWithFrame:(NSRect)frame
 {
-	if (self = [super initWithFrame:frame]) {
-		[self setButtonType:NSMomentaryChangeButton];
-		[self setBordered:NO];
-	}
+	if (!(self = [super initWithFrame:frame]))
+		return nil;
+	
+	[self setButtonType:NSMomentaryChangeButton];
+	[self setBordered:NO];
 	return self;
 }
 

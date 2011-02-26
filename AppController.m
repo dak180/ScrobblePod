@@ -91,7 +91,7 @@
 		[NSNumber numberWithBool:NO],BGPrefShouldUseAlbumArtist,
 		[NSNumber numberWithBool:NO],BGPrefShouldUseComposerInsteadOfArtist,
 		[NSNumber numberWithBool:NO],BGPrefShouldUseGroupingInTitle,
-		[NSNumber numberWithBool:NO],BGPrefGMTLastScrobbledDate,
+		[NSNumber numberWithBool:NO],BGPrefLastScrobbledWithCorrectOffsetFromGMT,
 		@"~/Music/iTunes/iTunes Music Library.xml",BGPrefXmlLocation,
 nil] ];
 
@@ -135,16 +135,16 @@ nil] ];
 	if ([NSCalendarDate dateWithString:storedDateString calendarFormat:DATE_FORMAT_STRING]==nil) 
 	{
 		[defaults setValue:[[NSCalendarDate calendarDate] descriptionWithCalendarFormat:DATE_FORMAT_STRING] forKey:BGPrefLastScrobbled];
-		[defaults setBool:YES forKey:BGPrefGMTLastScrobbledDate];
+		[defaults setBool:YES forKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT];
 	}
 	
 	// TODO: This fixes incorrect Last Scrobbled date, which could be set into the future or past because of a bug introduced in 0.6.0.7. The bug was fixed in 0.6.3 and this code should remain here at least till next major version.
-	if (![defaults boolForKey:BGPrefGMTLastScrobbledDate])
+	if (![defaults boolForKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT])
 	{
 		[defaults setValue:[[NSCalendarDate dateWithTimeIntervalSinceReferenceDate:([[NSCalendarDate dateWithString:storedDateString calendarFormat:DATE_FORMAT_STRING] timeIntervalSinceReferenceDate] - [[NSTimeZone localTimeZone] secondsFromGMT] + 7200.00)] descriptionWithCalendarFormat:DATE_FORMAT_STRING] forKey:BGPrefLastScrobbled];
-		NSLog(@"Setting Last Scrobbled Date to GMT.");
+		NSLog(@"Changing Last Scrobbled date to correct offset from GMT");
 		NSLog(@"Last Scrobbled: %@",[defaults objectForKey:BGPrefLastScrobbled]);
-		[defaults setBool:YES forKey:BGPrefGMTLastScrobbledDate];
+		[defaults setBool:YES forKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT];
 		[defaults synchronize];
 	}
 	
@@ -279,7 +279,7 @@ nil] ];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *overrideCalendarDate = [[[NSCalendarDate calendarDate] dateByAddingYears:0 months:0 days:0 hours:0 minutes:0 seconds:-60] descriptionWithCalendarFormat:DATE_FORMAT_STRING];
 	[defaults setValue:overrideCalendarDate forKey:BGPrefLastScrobbled];
-	[defaults setBool:YES forKey:BGPrefGMTLastScrobbledDate];
+	[defaults setBool:YES forKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT];
 	[defaults setBool:FALSE forKey:BGPrefFirstRunKey];
 	[NSApp activateIgnoringOtherApps:YES];
 	[welcomeWindow center];
@@ -943,6 +943,8 @@ nil] ];
 	else if ([defaults boolForKey:BGPrefShouldIgnoreGenre] && currentPlayingSong.genre && genreToIgnore != nil && [genreToIgnore length] > 0  && [currentPlayingSong.genre containsString:genreToIgnore]) 
 		return;
 	else if ([defaults boolForKey:BGPrefShouldIgnoreGenre] && currentPlayingSong.genre && genreToIgnore != nil && [genreToIgnore length] == 0 && [currentPlayingSong.genre isEqualToString:genreToIgnore]) 
+		return;
+	else if (tunesWatcher.currentSong == nil)
 		return;
 		
 	[NSThread detachNewThreadSelector:@selector(postNowPlayingNotificationForSong:) toTarget:self withObject:currentPlayingSong];

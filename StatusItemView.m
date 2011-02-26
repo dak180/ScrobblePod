@@ -25,9 +25,11 @@
 
 -(id)initWithStatusItem:(NSStatusItem *)item {
 	NSRect frame = NSMakeRect(0, 0, [item length], 21);
-	if ((self = [super initWithFrame:frame])) {
-		statusItem = item;
-	}
+	
+	if (!(self = [super initWithFrame:frame]))
+		return nil;
+	
+	statusItem = item;
 	return self;
 }
 

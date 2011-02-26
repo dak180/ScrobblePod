@@ -14,10 +14,9 @@
 @synthesize parameter;
 
 -(id)initWithParameter:(id)aParam {
-	self = [super init];
-	if (self != nil) {
-		self.parameter = aParam;
-	}
+	if (!(self = [super init]))
+		return nil;
+	self.parameter = aParam;
 	return self;
 }
 

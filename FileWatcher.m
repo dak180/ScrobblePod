@@ -6,12 +6,11 @@
 @implementation FileWatcher
 
 -(id)init {
-	self = [super init];
-	if (self != nil) {
-		self.lastModificationDate = [NSDate date];
-		[self updateLocationFlag];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(xmlLocationChanged:) name:BGXmlLocationChangedNotification object:nil];
-	}
+	if (!(self = [super init]))
+		return nil;
+	self.lastModificationDate = [NSDate date];
+	[self updateLocationFlag];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(xmlLocationChanged:) name:BGXmlLocationChangedNotification object:nil];
 	return self;
 }
 
@@ -105,18 +104,18 @@
 #pragma mark UKKQueue-Related Methods
 
 -(void)applyForXmlChangeNotification {
-	NSLog(@"Applying for KQueue Notification");
+	//NSLog(@"Applying for KQueue Notification");
 	[[UKKQueue sharedFileWatcher] setDelegate:self];
 	[[UKKQueue sharedFileWatcher] addPathToQueue:[self fullXmlPath] notifyingAbout:UKKQueueNotifyAboutDelete];
 }
 
 -(void)stopEventBasedMonitoring {
-	NSLog(@"Deregistering from KQueue Notification");
+	//NSLog(@"Deregistering from KQueue Notification");
 	[[UKKQueue sharedFileWatcher] removePathFromQueue:[self fullXmlPath]];
 }
 
 -(void)watcher:(id<UKFileWatcher>)watcher receivedNotification:(NSString *)notification forPath:(NSString *)path {
-	NSLog(@"Got KQueue Notification");
+	//NSLog(@"Got KQueue Notification");
 	[self postXMLChangeMessage];
 	[self stopEventBasedMonitoring];
 	[self applyForXmlChangeNotification];

@@ -13,7 +13,9 @@
 @synthesize shouldClose;
 
 -(id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag {
-	if (![super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:bufferingType defer:flag]) return nil;
+	if (!(self = [super initWithContentRect:contentRect styleMask:NSBorderlessWindowMask backing:bufferingType defer:flag])) 
+		return nil;
+	
 	[self setBackgroundColor:[NSColor clearColor]];
 	[self setOpaque:NO];
 	[self setLevel:NSStatusWindowLevel+1];

@@ -348,8 +348,8 @@ static xmlSAXHandler simpleSAXHandlerStruct = {
     NULL,                       /* cdataBlock */
     NULL,                       /* externalSubset */
     XML_SAX2_MAGIC,             //
-    NULL,
-    NULL,            /* startElementNs */
-    NULL,              /* endElementNs */
+    NULL,						
+    NULL,						/* startElementNs */
+    NULL,						/* endElementNs */
     NULL,                       /* serror */
 };
