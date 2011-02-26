@@ -82,7 +82,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     [downloadAndParsePool drain];
     self.downloadAndParsePool = nil;
 	NSTimeInterval duration = [NSDate timeIntervalSinceReferenceDate] - startTimeReference;	
-	NSLog(@"%f", duration);
+	NSLog(@"Collected previously played tracks in %f seconds", duration);
 	[NSThread setThreadPriority:oldPriority];
     return wantedTracks;
 }

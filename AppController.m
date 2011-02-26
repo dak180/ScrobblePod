@@ -812,7 +812,7 @@ nil] ];
 	NSLog(@"-- Last Scrobbled Date: %@",lastScrobbleDateString);
 	NSCalendarDate *applescriptInputDateString = [NSCalendarDate dateWithString:lastScrobbleDateString calendarFormat:DATE_FORMAT_STRING];// descriptionWithCalendarFormat:DATE_FORMAT_STRING];
 
-	NSLog(@"Collecting previously played tracks");	
+	NSLog(@"Started collecting previously played tracks.");	
 	BGTrackCollector *trackCollector = [[BGTrackCollector alloc] init];
 	NSArray *recentTracksSimple = [trackCollector collectTracksFromXMLFile:self.fullXmlPath
 	                                                        withCutoffDate:applescriptInputDateString
@@ -950,11 +950,12 @@ nil] ];
 
 -(void)postNowPlayingNotificationForSong:(BGLastFmSong *)nowPlayingSong {
 	NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
-	NSLog(@"Posting now playing notification.");
+	NSLog(@"Posting now playing notification");	
 	[self setIsPostingNP:YES];
 	if (nowPlayingSong) {
 		int notifyAttempts = 0;
-		while (notifyAttempts < 2) {
+		while (notifyAttempts < 2) 
+		{
 			NSString *theSessionKey  = authManager.submissionSessionKey;
 			NSString *thePostAddress = authManager.nowPlayingSubmissionURL;
 			if (theSessionKey && thePostAddress && theSessionKey.length>0 && thePostAddress.length>0) {
@@ -975,29 +976,26 @@ nil] ];
 				
 				[request release];
 
-				if (npResponseData!=nil && postingError==nil) {
+				if (npResponseData != nil && postingError == nil) 
+				{
 					NSString *npResponseString = [[NSString alloc] initWithData:npResponseData encoding:NSUTF8StringEncoding];
 					
-					if ([npResponseString rangeOfString:@"BADSESSION"].length>0) {
+					if ([npResponseString rangeOfString:@"BADSESSION"].length > 0) 
+					{
 						[authManager fetchNewSubmissionSessionKeyUsingWebServiceSessionKey];
 						notifyAttempts = 2;
-					} else if ([npResponseString rangeOfString:@"OK"].length>0) {
+					} else if ([npResponseString rangeOfString:@"OK"].length > 0) {
 						notifyAttempts = 2;
-					} else {
 					}
+					
 					[npResponseString release];
 				}
-								
-			} else {
-				NSLog(@"Now playing didn't work because not all values set:\n  Key:'%@'\n  URL:%@",theSessionKey,thePostAddress);
-			}//end if handshake worked
-	
+				
+			} else NSLog(@"Now playing didn't work because not all values set:\n  Key:'%@'\n  URL:%@", theSessionKey, thePostAddress);
+			
 			notifyAttempts++;
-		} //end while around handshake&notifying processes		
+		}	
 	}
-	
-	//////////////////////////////////////////////////////////
-	
 	[self setIsPostingNP:NO];
 	[pool drain];
 }
