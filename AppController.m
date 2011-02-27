@@ -828,7 +828,7 @@ nil] ];
 	                                                   withMinimumDuration:[defaults integerForKey:BGPrefIgnoreShortLength]];//![defaults boolForKey:BGPrefShouldIgnorePodcasts]
 	[trackCollector release];
 	NSLog(@"Assigning song list to variable");
-	NSArray *allRecentTracks;
+	NSArray *allRecentTracks = nil;
 	// Calculate extra plays, and insert them into recent songs array
 	if ([defaults boolForKey:BGPrefShouldDoMultiPlay]) {
 		BGMultipleSongPlayManager *multiPlayManager = [[BGMultipleSongPlayManager alloc] init];
@@ -839,9 +839,7 @@ nil] ];
 		allRecentTracks = recentTracksSimple;
 		recentTracksSimple = nil;
 	}
-	
-	[recentTracksSimple autorelease];
-	
+		
 	NSLog(@"Using multi-play: %@",([defaults boolForKey:BGPrefShouldDoMultiPlay] ? @"Yes" : @"No"));
 	NSLog(@"Got all recent tracks:\n%@",allRecentTracks);
 	

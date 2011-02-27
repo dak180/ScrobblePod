@@ -17,9 +17,6 @@
 	IBOutlet NSToolbarItem *generalPrefsToolbarItem;
 	IBOutlet NSToolbarItem *lastFmToolbarItem;
 	
-	#pragma mark General Prefs
-	IBOutlet NSButton *startAtLogin;
-	
 	#pragma mark Last.fm Login
 	IBOutlet NSBox *currentLoginContainer;
 	IBOutlet NSTextField *currentLogin;
@@ -29,7 +26,13 @@
 	IBOutlet NSArrayController *historyController;
 	IBOutlet NSTableView *historyTable;
 	IBOutlet NSTableColumn *historyIconTableColumn;
+	LSSharedFileListRef loginItemsListRef;
+	
+	BOOL launchOnLogin;
+	UInt32 seedValue;
 }
+
+@property BOOL launchOnLogin;
 
 #pragma mark WindowController Methods
 - (NSString *)windowNibName;
@@ -40,7 +43,6 @@
 -(void)setPreferencesView:(NSView *)inputView;
 
 #pragma mark Pane:General - Actions
--(IBAction)setLoginStart:(id)sender;
 -(IBAction)startChooseXML:(id)sender;
 -(IBAction)updateAutoDecision:(id)sender;
 
@@ -55,5 +57,7 @@
 -(void)addHistoryWithSuccess:(BOOL)wasSuccess andDate:(NSDate *)aDate andDescription:(NSString *)aDescription;
 
 #pragma mark LoginItems
-- (BOOL)loginItemExistsWithLoginItemReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(NSString *)appPath;
+- (void)addMainBundleToLoginItems;
+- (void)removeMainBundleFromLoginItems;
+
 @end

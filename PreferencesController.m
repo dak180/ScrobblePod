@@ -9,15 +9,34 @@
 
 #define maxItems 10 // Cutoff for history items
 
+static void loginItemsChanged(LSSharedFileListRef listRef, void *context);
+
 @implementation PreferencesController
+
+@synthesize launchOnLogin;
 
 #pragma mark WindowController Methods
 
 - (id) init {
 	self = [super initWithWindowNibName:@"Preferences"];
-	if (self != nil) {
-	}
+	if (!(self = [super initWithWindowNibName:@"Preferences"]))
+		return nil;
+	
+	loginItemsListRef = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+	seedValue = LSSharedFileListGetSeedValue(loginItemsListRef);
+	
+	if (loginItemsListRef)
+		LSSharedFileListAddObserver(loginItemsListRef, CFRunLoopGetMain(), kCFRunLoopCommonModes,loginItemsChanged, self);
+	
 	return self;
+}
+
+- (void) dealloc
+{
+	if (loginItemsListRef)
+		CFRelease(loginItemsListRef);
+
+	[super dealloc];
 }
 
 - (void)windowDidLoad {
@@ -28,19 +47,7 @@
 	NSImageCell *theCell = [[NSImageCell alloc] init];
 	[historyIconTableColumn setDataCell:theCell];
 	[theCell release];
-	
-	// set the button state for whether we open at login:
-	NSString *appPath = [[NSBundle mainBundle] bundlePath];
-
-	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
-	if ([self loginItemExistsWithLoginItemReference:loginItems ForPath:appPath]) {
-		[startAtLogin setState:NSOnState];
-	} else {
-		[startAtLogin setState:NSOffState];
-	}
-
-	CFRelease(loginItems);
-	
+		
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self selector:@selector(loginProcessing) name:APIHUB_WebServiceAuthorizationProcessing object:nil];
 	[notificationCenter addObserver:self selector:@selector(loginComplete) name:APIHUB_WebServiceAuthorizationCompleted  object:nil];
@@ -48,7 +55,7 @@
 	NSString *username = [[NSUserDefaults standardUserDefaults] stringForKey:@"Username"];
 	if (!username || username.length==0) [currentLoginContainer setHidden:YES];
 	self.window.contentView = generalPrefsView;
-//	[self setPreferencesView:generalPrefsView];	
+//	[self setPreferencesView:generalPrefsView];
 }
 
 - (NSString *)windowNibName {
@@ -143,59 +150,6 @@
 	}
 }
 
--(IBAction)setLoginStart:(id)sender;
-{
-	NSString *appPath = [[NSBundle mainBundle] bundlePath];
-	// This will retrieve the path for the application
-	// For example, /Applications/test.app
-	CFURLRef url = (CFURLRef)[NSURL fileURLWithPath:appPath];
-	// Create a reference to the shared file list.
-	LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
-
-	if ([sender state] == NSOnState) {
-		// add.
-		
-		if (loginItems) 
-		{
-			//Insert an item to the list.
-			LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(loginItems,
-																		 kLSSharedFileListItemLast, NULL, NULL,
-																		 url, NULL, NULL);
-			if (item)
-			{
-				CFRelease(item);
-			}
-		}
-		if (loginItems) CFRelease(loginItems);
-	} else {
-		// remove.
-		
-		if (loginItems) 
-		{
-			UInt32 seedValue;
-			//Retrieve the list of Login Items and cast them to
-			// a NSArray so that it will be easier to iterate.
-			NSArray *loginItemsArray = (NSArray *)LSSharedFileListCopySnapshot(loginItems, &seedValue);
-			int i;
-			for(i = 0 ; i < [loginItemsArray count]; i++){
-				LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)[loginItemsArray objectAtIndex:i];
-				//Resolve the item with URL
-				if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &url, NULL) == noErr) 
-				{
-					NSString *urlPath = [(NSURL*)url path];
-					
-					if ([urlPath compare:appPath] == NSOrderedSame)
-					{
-						LSSharedFileListItemRemove(loginItems,itemRef);
-					}
-				}
-			}
-			[loginItemsArray release];
-		}
-		if (loginItems) CFRelease(loginItems);
-	}
-}
-
 -(IBAction)updateAutoDecision:(id)sender {
 	[[NSNotificationCenter defaultCenter] postNotificationName:BGNotificationPodMounted object:nil];
 }
@@ -251,32 +205,95 @@
 
 #pragma mark LoginItems
 
-- (BOOL)loginItemExistsWithLoginItemReference:(LSSharedFileListRef)theLoginItemsRefs ForPath:(NSString *)appPath {
-	BOOL found = NO;  
-	UInt32 seedValue;
-	CFURLRef thePath;
-	
-	// We're going to grab the contents of the shared file list (LSSharedFileListItemRef objects)
-	// and pop it in an array so we can iterate through it to find our item.
-	CFArrayRef loginItemsArray = LSSharedFileListCopySnapshot(theLoginItemsRefs, &seedValue);
-	// Otherwise it was causing a crash
-	CFRetain(loginItemsArray);
-	for (id item in (NSArray *)loginItemsArray) {
-		LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
-		if (LSSharedFileListItemResolve(itemRef, 0, (CFURLRef*) &thePath, NULL) == noErr) {
-			if ([[(NSURL *)thePath path] hasPrefix:appPath]) {
-				found = YES;
-				break;
-			}
-		}
-		// Docs for LSSharedFileListItemResolve say we're responsible
-		// for releasing the CFURLRef that is returned
-		CFRelease(thePath);
-	}
-	CFRelease(loginItemsArray);
-	
-	return found;
+- (NSArray *)loginItems
+{
+    CFArrayRef snapshotRef = LSSharedFileListCopySnapshot(loginItemsListRef, &seedValue);
+    return [NSMakeCollectable(snapshotRef) autorelease];
 }
 
+- (LSSharedFileListItemRef)mainBundleLoginItemCopy
+{
+    NSArray *loginItems = [self loginItems];
+    NSURL *bundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+    
+    for (id item in loginItems) {
+        LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
+        CFURLRef itemURLRef;
+        
+        if (LSSharedFileListItemResolve(itemRef, 0, &itemURLRef, NULL) == noErr) {
+            NSURL *itemURL = (NSURL *)[NSMakeCollectable(itemURLRef) autorelease];
+            if ([itemURL isEqual:bundleURL]) {
+                CFRetain(item);
+                return (LSSharedFileListItemRef)item;
+            }
+        }
+    }
+    
+    return NULL;
+}
+
+- (void)addMainBundleToLoginItems;
+{
+    NSURL *bundleURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]];
+    NSDictionary *properties = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"com.apple.loginitem.HideOnLaunch"];
+    LSSharedFileListItemRef itemRef;
+    itemRef = LSSharedFileListInsertItemURL(loginItemsListRef, kLSSharedFileListItemLast, NULL, NULL, (CFURLRef)bundleURL, (CFDictionaryRef)properties, NULL);
+	
+    if (itemRef)
+		CFRelease(itemRef);
+}
+
+- (void)removeMainBundleFromLoginItems;
+{
+    LSSharedFileListItemRef itemRef = [self mainBundleLoginItemCopy];
+	
+    if (!itemRef)
+        return;
+    
+    LSSharedFileListItemRemove(loginItemsListRef, itemRef);
+    
+    CFRelease(itemRef);
+}
+
+- (BOOL)launchOnLogin;
+{
+    if (!loginItemsListRef)
+        return NO;
+	
+    LSSharedFileListItemRef itemRef = [self mainBundleLoginItemCopy];    
+    if (!itemRef)
+        return NO;
+    
+    CFRelease(itemRef);
+    return YES;
+}
+
+- (void)setLaunchOnLogin:(BOOL)value;
+{
+    if (!loginItemsListRef)
+        return;
+    
+    if (!value) {
+        [self removeMainBundleFromLoginItems];
+    } else {
+        [self addMainBundleToLoginItems];
+    }
+}
+
+- (UInt32)launchOnLoginSeedValue;
+{
+	return seedValue;
+}
 
 @end
+
+static void loginItemsChanged(LSSharedFileListRef listRef, void *context)
+{	
+    PreferencesController *controller = context;
+	
+	if ([controller launchOnLoginSeedValue] == LSSharedFileListGetSeedValue(listRef))
+		return;
+	
+    [controller willChangeValueForKey:@"launchOnLogin"];
+    [controller didChangeValueForKey:@"launchOnLogin"];
+}
