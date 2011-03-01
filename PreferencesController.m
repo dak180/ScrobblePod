@@ -65,7 +65,7 @@ static void loginItemsChanged(LSSharedFileListRef listRef, void *context);
 - (IBAction)showWindow:(id)sender {
 	[self.window setCollectionBehavior: NSWindowCollectionBehaviorCanJoinAllSpaces];
 	if (![self.window isVisible]) {
-		[prefToolbar setVisible:NO];
+	//	[prefToolbar setVisible:NO];
 		[self changeView:generalPrefsToolbarItem];
 	}
 	[super showWindow:self];
