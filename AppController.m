@@ -102,23 +102,25 @@ nil] ];
 	if ([defaults boolForKey:BGPrefWantStatusItem])  {
 		statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:23];//NSVariableStatusItemLength
 		[statusItem setEnabled:YES];
-//		[statusItem setHighlightMode:YES];
-//		[statusItem setMenu:statusMenu];
-//		[statusItem setImage:nil];
-//		[statusItem setToolTip:@"ScrobblePod"];
-//		[statusItem setTarget:self];
-//		[statusItem sendActionOn:NSLeftMouseDownMask];
-//		[statusItem setAction:@selector(showStatusMenu:)];
-
-		StatusItemView *tempView = [[StatusItemView alloc] initWithStatusItem:statusItem];
-			[tempView setImage:[NSImage imageNamed:(![defaults boolForKey:BGPrefWantOldIcon] ? @"MenuNote" : @"old_menu_icon")]];
-			[tempView setAlternateImage:(![defaults boolForKey:BGPrefWantOldIcon] ? [NSImage imageNamed:@"MenuNote_On"] : nil)];
-			[tempView setTarget:self];
-			[tempView setAction:@selector(showStatusMenu:)];
-
-			[statusItem setView:tempView];
-		[tempView release];
+		[statusItem setHighlightMode:YES];
+		[statusItem setMenu:statusMenu];
+		[statusItem setImage:[NSImage imageNamed:@"MenuNote"]];
+		[statusItem setAlternateImage:[NSImage imageNamed:@"MenuNote_On"]];
+		[statusItem setToolTip:@"ScrobblePod"];
+		[statusItem setTarget:self];
+		[statusItem sendActionOn:NSLeftMouseDownMask];
+		[statusItem setAction:@selector(showStatusMenu:)];
 		[statusItem retain];
+
+//		StatusItemView *tempView = [[StatusItemView alloc] initWithStatusItem:statusItem];
+//			[tempView setImage:[NSImage imageNamed:(![defaults boolForKey:BGPrefWantOldIcon] ? @"MenuNote" : @"old_menu_icon")]];
+//			[tempView setAlternateImage:(![defaults boolForKey:BGPrefWantOldIcon] ? [NSImage imageNamed:@"MenuNote_On"] : nil)];
+//			[tempView setTarget:self];
+//			[tempView setAction:@selector(showStatusMenu:)];
+//
+//			[statusItem setView:tempView];
+//		[tempView release];
+//		[statusItem retain];
 	}
 	
 	[currentSongMenuItem setView:infoView];
