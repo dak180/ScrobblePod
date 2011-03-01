@@ -33,14 +33,15 @@
 	int multiLimitPref = MultiPostMax;
 	if (![[NSUserDefaults standardUserDefaults] boolForKey:BGPrefWantMultiPost]) multiLimitPref = 1;
 	
-	while ( songIndex<[songList count] && [theResponse wasSuccessful]) {
-		
+	while (songIndex < [songList count] && [theResponse wasSuccessful]) 
+	{
 		NSMutableString *postString = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"s=%@",theSessionKey]]; //session		
 		int efficientPostIndex = 0;
 		
 		NSCalendarDate *playedDate_Original = nil;
 		
-		while ( songIndex+efficientPostIndex<[songList count] && efficientPostIndex<multiLimitPref ) {
+		while (songIndex+efficientPostIndex < [songList count] && efficientPostIndex < multiLimitPref) 
+		{
 			
 			int totalIndex = songIndex+efficientPostIndex;
 			

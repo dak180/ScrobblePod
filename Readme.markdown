@@ -23,7 +23,7 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 #### 27 February 2011
 
 * Fixed issues with incorrect scrobble time
-* Fixed issues with opening Preferences window which some users have experienced
+* Fixed issues with opening Preferences window that some users have experienced
 
 [Download][0.6.3]
 
