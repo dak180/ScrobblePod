@@ -40,7 +40,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 		xmlPath = [@"~/Music/iTunes/iTunes Music Library.xml" stringByExpandingTildeInPath];
 	}
     
-    [[NSURLCache sharedURLCache] removeAllCachedResponses];
 	self.currentKeyString = [NSString string];
     NSURL *url = [NSURL fileURLWithPath:xmlPath];
     done = NO;
