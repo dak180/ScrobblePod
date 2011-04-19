@@ -152,6 +152,7 @@ static NSString *kKey_PlayDateUTC = @"Play Date UTC";
 static NSString *kKey_Length = @"Total Time";
 static NSString *kKey_PlayCount = @"Play Count";
 static NSString *kKey_TrackID = @"Track ID";
+static NSString *kKey_PersistentID = @"Persistent ID";
 static NSString *kKey_Podcast = @"Podcast";
 static NSString *kKey_Video = @"Has Video";
 static NSString *emptyString = @"";
@@ -192,7 +193,7 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 			parser.currentKeyString = temporaryString;
 			//	parser.countOfParsedSongs++;
         }
-		else if (([temporaryString isEqualToString:kKey_Name] || [temporaryString isEqualToString:kKey_Artist] || [temporaryString isEqualToString:kKey_Album] || [temporaryString isEqualToString:kKey_Comment] || [temporaryString isEqualToString:kKey_Genre] || [temporaryString isEqualToString:kKey_PlayDate] || [temporaryString isEqualToString:kKey_PlayDateUTC] || [temporaryString isEqualToString:kKey_Length] || [temporaryString isEqualToString:kKey_PlayCount] || [temporaryString isEqualToString:kKey_Comment] || [temporaryString isEqualToString:kKey_Podcast] || [temporaryString isEqualToString:kKey_Video])  && parser.parsingTracks)
+		else if (([temporaryString isEqualToString:kKey_Name] || [temporaryString isEqualToString:kKey_Artist] || [temporaryString isEqualToString:kKey_Album] || [temporaryString isEqualToString:kKey_Comment] || [temporaryString isEqualToString:kKey_Genre] || [temporaryString isEqualToString:kKey_PlayDate] || [temporaryString isEqualToString:kKey_PlayDateUTC] || [temporaryString isEqualToString:kKey_Length] || [temporaryString isEqualToString:kKey_PlayCount] || [temporaryString isEqualToString:kKey_Comment] || [temporaryString isEqualToString:kKey_Podcast] || [temporaryString isEqualToString:kKey_Video] || [temporaryString isEqualToString:kKey_PersistentID])  && parser.parsingTracks)
 		{
 			parser.currentKeyString = temporaryString;
 		}
@@ -270,6 +271,10 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
 		else if ([parser.currentKeyString isEqualToString:kKey_Video])
 		{
 		}
+        else if ([parser.currentKeyString isEqualToString:kKey_PersistentID])
+		{
+            [[parser currentSong] setPersistentIdentifier: temporaryString];
+		}
 		parser.currentKeyString = emptyString;
 		
 	}
@@ -297,8 +302,10 @@ static void	endElementSAX (void * ctx, const xmlChar * name) {
         if (parser.parsingASong && parser.parsingTracks)
             parser.parsingASong = NO;
 		
-		if (parser.isValidTrack && parser.parsingTracks && parser.currentSong.lastPlayed != NULL)
+		if (parser.isValidTrack && parser.parsingTracks && parser.currentSong.lastPlayed != NULL) {
 			[parser.wantedTracks addObject:parser.currentSong];
+        }
+        
 
 		parser.currentKeyString = emptyString;
     }

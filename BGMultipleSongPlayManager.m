@@ -13,7 +13,7 @@
 
 -(NSArray *)completeSongListForRecentTracks:(NSArray *)recentTracks sinceDate:(NSCalendarDate *)theDate {
 	NSMutableDictionary *cachedDatabase = [[NSDictionary dictionaryWithContentsOfFile:[self pathForCachedDatabase]] mutableCopy];
-	if (!cachedDatabase) cachedDatabase = [[NSMutableDictionary alloc] initWithCapacity:0];
+	if (!cachedDatabase) cachedDatabase = [[NSMutableDictionary alloc] initWithCapacity:0]; // TODO: should BAIL if this is the case.
 	
 	int lastScrobbleTime = [theDate timeIntervalSinceReferenceDate];
 	
@@ -24,29 +24,31 @@
 	BGLastFmSong *currentSong;
 	for (currentSong in recentTracks) {
 	
-		NSString *currentUniqueIdentifier = currentSong.uniqueIdentifier;
+		NSString *currentPersistentIdentifier = currentSong.persistentIdentifier;
 		int currentPlayCount = currentSong.playCount;
-		int cachedPlayCount = [[cachedDatabase objectForKey:currentUniqueIdentifier] intValue];
+		int cachedPlayCount = [[cachedDatabase objectForKey:currentPersistentIdentifier] intValue];
 		
-		if (currentPlayCount && cachedPlayCount) {
-			//if (!cachedPlayCount) cachedPlayCount = 0;
+        if (currentPlayCount) {
+            if (!cachedPlayCount) cachedPlayCount = 0;
 			int difference = currentPlayCount - cachedPlayCount;
 			int extraPlays = difference - 1;
-			NSLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.uniqueIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
-			if (!cachedPlayCount) NSLog(@"WARNING: cachedPlayCount == nil; Error in calculation will likely occur");
-			if (cachedPlayCount && extraPlays > 0) { // we need the first statement, because if the cache does not yet have the count, the extraPlays = currentPlayCount-1
+			NSLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.persistentIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
+            if (extraPlays > 0) { // we need the first statement, because if the cache does not yet have the count, the extraPlays = currentPlayCount-1
 				currentSong.extraPlays = extraPlays;
 				NSLog(@"EXTRA PLAYS: '%@' = %d",currentSong.title,currentSong.extraPlays);
 			}
-		} else {
-			NSLog(@"WARNING: Play count entry (current or cached) was not found. Likely due to a previously unknown song being played.");
-		}
 		
-		if (currentPlayCount) {
-			if (!currentPlayCount) NSLog(@"WARNING: currentPlayCount = nil; will cause crash with setObject:forKey;");
-			if (!currentUniqueIdentifier) NSLog(@"WARNING: currentUniqueIdentifier = nil; will cause crash with setObject:forKey;");
-			[cachedDatabase setObject:[NSNumber numberWithInt:currentPlayCount] forKey:currentUniqueIdentifier];
+            if (!currentPersistentIdentifier) { 
+                NSLog(@"WARNING: currentPersistentIdentifier = nil; will cause crash with setObject:forKey;");
+            }
+            
+            // Crashing is not an option, is it?
+            if (currentPersistentIdentifier) [cachedDatabase setObject:[NSNumber numberWithInt:currentPlayCount] forKey:currentPersistentIdentifier];
+            
+		} else {
+			NSLog(@"ASDBSDFSDFGSDAEWO! The song's play count is empty. Is it 2012 or what?");
 		}
+
 			
 		// find extra plays
 		int completionTimeOfCurrentSong = currentSong.unixPlayedDate;
@@ -54,10 +56,10 @@
 
 		if ( startTimeOfCurrentSong-completionTimeOfPreviousSong > 25) {
 			BGTimelineGap *newGap = [[BGTimelineGap alloc] init];
-				newGap.startTime = completionTimeOfPreviousSong;
-				newGap.endTime = startTimeOfCurrentSong;
-				NSLog(@"FOUND GAP WITH DURATION: %d",newGap.duration);
-				[gapList addObject:newGap];
+			newGap.startTime = completionTimeOfPreviousSong;
+			newGap.endTime = startTimeOfCurrentSong;
+			NSLog(@"FOUND GAP WITH DURATION: %d",newGap.duration);
+			[gapList addObject:newGap];
 			[newGap release];
 		}
 		completionTimeOfPreviousSong = completionTimeOfCurrentSong;
@@ -97,6 +99,8 @@
 					int newSongCompletionTime = (chosenGapStartTime + currentSong.length);
 					NSCalendarDate *newSongCompletionDate = [[NSCalendarDate alloc] initWithTimeIntervalSinceReferenceDate:newSongCompletionTime];
 					BGLastFmSong *extraCopy = [currentSong copy];
+					// At this point, extraCopy has isExtra set to yes, but also has extraPlays and a playCount. I think the scrobble math is wrong elsewhere.
+					// i.e. if you play twice offline, we scrobble two objects 2 times, and overscrobble.
 						[extraCopy setLastPlayed:newSongCompletionDate];
 						[extraCopy setIsExtra:YES];
 						[newSongCompletionDate release];
@@ -105,9 +109,9 @@
 					
 					// update chosen gap to reflect its usage
 					chosenGap.startTime = newSongCompletionTime;
-					currentSong.extraPlays -= 1;
+					currentSong.extraPlays -= 1; // TODO: hack?
 				} else {
-					currentSong.extraPlays = 0;
+					currentSong.extraPlays = 0; // TODO: hack?
 				}
 			}
 		}
@@ -137,7 +141,8 @@
 	NSString *folder = @"~/Library/Application Support/ScrobblePod/";
 	folder = [folder stringByExpandingTildeInPath];
 
-	if ([fileManager fileExistsAtPath: folder] == NO) [fileManager createDirectoryAtPath: folder withIntermediateDirectories:YES attributes:nil error:NULL];
+	if ([fileManager fileExistsAtPath: folder] == NO) [fileManager createDirectoryAtPath: folder attributes: nil];
+	
 	NSString *fileName = @"PlayCountDB.xml";
 	return [folder stringByAppendingPathComponent: fileName]; 
 }

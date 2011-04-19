@@ -30,6 +30,7 @@
 	[genre release];
 	[lastPlayed release];
 	[uniqueIdentifier release];
+	[persistentIdentifier release];
 	[super dealloc];
 }
 
@@ -43,6 +44,7 @@
 																	 album:self.album];
 	copy.lastPlayed = self.lastPlayed;
 	copy.uniqueIdentifier = self.uniqueIdentifier;
+	copy.persistentIdentifier = self.persistentIdentifier;
 	copy.length = self.length;
 	copy.genre = self.genre;
 	copy.extraPlays = self.extraPlays;
@@ -66,6 +68,7 @@
 @synthesize extraPlays;
 @synthesize playCount;
 @synthesize uniqueIdentifier;
+@synthesize persistentIdentifier;
 @synthesize isExtra;
 
 @end
