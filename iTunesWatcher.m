@@ -181,8 +181,9 @@ static iTunesWatcher *sharedTunesManager = nil;
 
 -(void)forwardCurrentSong {
 	if (currentIdentifier && [self currentSongPlayedProperly] && self.currentSongAlreadyScrobbled==NO) {
-		//Add currentSong to queue
-		NSLog(@"Scrobbling current song: %@",currentSong.title);
+        // TODO: I don't think this added the song to the queue. If I want to implement scrobbling for half-played songs, this is the place to look. Would it be weird to scrobble half-played songs, but queue the rest? Probably.
+		// Add currentSong to queue
+		// NSLog(@"Adding current song to the scrobble queue: %@",currentSong.title);
 		self.currentSongAlreadyScrobbled = YES;
 	}
 }
