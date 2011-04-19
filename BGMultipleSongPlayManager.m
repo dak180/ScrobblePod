@@ -33,7 +33,7 @@
 			int difference = currentPlayCount - cachedPlayCount;
 			int extraPlays = difference - 1;
 			NSLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.persistentIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
-            if (extraPlays > 0) { // we need the first statement, because if the cache does not yet have the count, the extraPlays = currentPlayCount-1
+            if (extraPlays > 0) {
 				currentSong.extraPlays = extraPlays;
 				NSLog(@"EXTRA PLAYS: '%@' = %d",currentSong.title,currentSong.extraPlays);
 			}
