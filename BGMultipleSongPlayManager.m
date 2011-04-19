@@ -141,7 +141,7 @@
 	NSString *folder = @"~/Library/Application Support/ScrobblePod/";
 	folder = [folder stringByExpandingTildeInPath];
 
-	if ([fileManager fileExistsAtPath: folder] == NO) [fileManager createDirectoryAtPath: folder attributes: nil];
+	if ([fileManager fileExistsAtPath: folder] == NO) [fileManager createDirectoryAtPath:folder withIntermediateDirectories:YES attributes:nil error:nil];
 	
 	NSString *fileName = @"PlayCountDB.xml";
 	return [folder stringByAppendingPathComponent: fileName]; 

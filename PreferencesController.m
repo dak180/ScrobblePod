@@ -18,7 +18,6 @@ static void loginItemsChanged(LSSharedFileListRef listRef, void *context);
 #pragma mark WindowController Methods
 
 - (id) init {
-	self = [super initWithWindowNibName:@"Preferences"];
 	if (!(self = [super initWithWindowNibName:@"Preferences"]))
 		return nil;
 	

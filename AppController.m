@@ -403,7 +403,7 @@ nil] ];
 }
 
 -(IBAction)updateTagLabel:(id)sender {
-	NSString *properString;
+	NSString *properString = nil;
 	BGLastFmSong *currentSong = [[iTunesWatcher sharedManager] currentSong];
 	if (currentSong) {
 		if (!isLoadingCommonTags) {
@@ -918,8 +918,11 @@ nil] ];
 		} //end while around handshake&scrobble processes
 		
 	}
-	
-	[allRecentTracks release];
+    
+    if ([defaults boolForKey:BGPrefShouldDoMultiPlay]) {
+        // Clang complains, but I think it's wrong. This if statement could also fix the mysterious crash on thread 6.
+        [allRecentTracks release];
+    }
 
 	[self performSelectorOnMainThread:@selector(setIsScrobblingWithNumber:) withObject:[NSNumber numberWithBool:NO] waitUntilDone:YES];// setIsScrobbling:NO];
 	[self performSelectorOnMainThread:@selector(detachNowPlayingThread) withObject:nil waitUntilDone:YES];
