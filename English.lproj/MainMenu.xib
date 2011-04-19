@@ -759,7 +759,6 @@
 				<bool key="NSAvoidsEmptySelection">YES</bool>
 				<bool key="NSPreservesSelection">YES</bool>
 				<bool key="NSSelectsInsertedObjects">YES</bool>
-				<string key="NSTreeContentChildrenKey">children</string>
 			</object>
 			<object class="NSCustomView" id="23479283">
 				<reference key="NSNextResponder"/>
