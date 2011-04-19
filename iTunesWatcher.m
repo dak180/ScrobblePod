@@ -65,6 +65,8 @@ static iTunesWatcher *sharedTunesManager = nil;
 	[super dealloc];
 }
 
+// TODO: Atomicity apparently cannot work if one in the setter/getter pair is synthesized, and the other is defined. Figure it out.
+
 -(void)setDelegate:(id)aDelegate {
 	delegate = aDelegate;
 	[self updateDelegateWithCurrentSong];
@@ -84,7 +86,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 -(BOOL)itunesIsRunning {
 	NSEnumerator *e = [[[NSWorkspace sharedWorkspace] launchedApplications] objectEnumerator];
 	NSDictionary *proc;
-	while (proc = [e nextObject]) {
+	while ((proc = [e nextObject])) {
 		NSString *procName = [proc objectForKey:@"NSApplicationBundleIdentifier"];
 		if ([procName caseInsensitiveCompare:ITUNES_BUNDLE_IDENTIFIER] == NSOrderedSame) return YES;
 	}
@@ -94,6 +96,8 @@ static iTunesWatcher *sharedTunesManager = nil;
 -(BGLastFmSong *)currentSong {
 	return (iTunesIsPlaying ? currentSong : nil);
 }
+
+
 
 #pragma mark Notification Handlers
 
