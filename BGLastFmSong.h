@@ -21,6 +21,7 @@
 	int playCount;
 	int unixPlayedDate;
 	NSString *uniqueIdentifier;
+	NSString *persistentIdentifier;
 	BOOL isExtra;
 }
 
@@ -36,6 +37,7 @@
 @property (assign) int extraPlays;
 @property (assign) int playCount;
 @property (copy) NSString *uniqueIdentifier;
+@property (copy) NSString *persistentIdentifier;
 @property (assign) BOOL isExtra;
 
 @property (readonly) int unixPlayedDate;

@@ -2,6 +2,7 @@
 
 	#define BGPrefFirstRunKey @"BGFirstRun"
 	#define BGPrefLastScrobbledWithCorrectOffsetFromGMT @"BGLastScrobbledWithCorrectOffsetFromGMT"
+    #define BGPrefNewMultiplayDBFormat @"BGPrefNewMultiplayDBFormat"
 	#define BGPrefLastScrobbled @"LastScrobbled"
 	#define BGPrefShouldPlaySound @"PlaySound"
 	#define BGPrefWantMultiPost @"WantMultiPost"

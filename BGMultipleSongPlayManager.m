@@ -24,15 +24,15 @@
 	BGLastFmSong *currentSong;
 	for (currentSong in recentTracks) {
 	
-		NSString *currentUniqueIdentifier = currentSong.uniqueIdentifier;
+		NSString *currentPersistentIdentifier = currentSong.persistentIdentifier;
 		int currentPlayCount = currentSong.playCount;
-		int cachedPlayCount = [[cachedDatabase objectForKey:currentUniqueIdentifier] intValue];
+		int cachedPlayCount = [[cachedDatabase objectForKey:currentPersistentIdentifier] intValue];
 		
 		if (currentPlayCount && cachedPlayCount) {
 			//if (!cachedPlayCount) cachedPlayCount = 0;
 			int difference = currentPlayCount - cachedPlayCount;
 			int extraPlays = difference - 1;
-			NSLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.uniqueIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
+			NSLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.persistentIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
 			if (!cachedPlayCount) NSLog(@"WARNING: cachedPlayCount == nil; Error in calculation will likely occur");
 			if (cachedPlayCount && extraPlays > 0) { // we need the first statement, because if the cache does not yet have the count, the extraPlays = currentPlayCount-1
 				currentSong.extraPlays = extraPlays;
@@ -44,8 +44,8 @@
 		
 		if (currentPlayCount) {
 			if (!currentPlayCount) NSLog(@"WARNING: currentPlayCount = nil; will cause crash with setObject:forKey;");
-			if (!currentUniqueIdentifier) NSLog(@"WARNING: currentUniqueIdentifier = nil; will cause crash with setObject:forKey;");
-			[cachedDatabase setObject:[NSNumber numberWithInt:currentPlayCount] forKey:currentUniqueIdentifier];
+			if (!currentPersistentIdentifier) NSLog(@"WARNING: currentPersistentIdentifier = nil; will cause crash with setObject:forKey;");
+			[cachedDatabase setObject:[NSNumber numberWithInt:currentPlayCount] forKey:currentPersistentIdentifier];
 		}
 			
 		// find extra plays

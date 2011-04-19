@@ -87,11 +87,12 @@
 		[NSNumber numberWithBool:YES],BGPref_Growl_ScrobbleFail,
 		[NSNumber numberWithBool:YES],BGPref_Growl_ScrobbleDecisionChanged,
 		[NSNumber numberWithBool:NO],BGPrefWantOldIcon,
-		[NSNumber numberWithBool:NO],BGPrefShouldDoMultiPlay,
+		[NSNumber numberWithBool:YES],BGPrefShouldDoMultiPlay,
 		[NSNumber numberWithBool:NO],BGPrefShouldUseAlbumArtist,
 		[NSNumber numberWithBool:NO],BGPrefShouldUseComposerInsteadOfArtist,
 		[NSNumber numberWithBool:NO],BGPrefShouldUseGroupingInTitle,
 		[NSNumber numberWithBool:NO],BGPrefLastScrobbledWithCorrectOffsetFromGMT,
+        [NSNumber numberWithBool:NO],BGPrefNewMultiplayDBFormat,
 		@"~/Music/iTunes/iTunes Music Library.xml",BGPrefXmlLocation,
 nil] ];
 
@@ -131,6 +132,12 @@ nil] ];
 	if (![self cacheFileExists]) {
 		[self primeSongPlayCache];
 	}
+    
+    if (![defaults boolForKey:BGPrefNewMultiplayDBFormat]) {
+		[self primeSongPlayCache];
+		[defaults setBool:YES forKey:BGPrefNewMultiplayDBFormat];
+    }
+
 	
 	NSString *storedDateString = [defaults valueForKey:BGPrefLastScrobbled];
 	
@@ -149,6 +156,7 @@ nil] ];
 		[defaults setBool:YES forKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT];
 		[defaults synchronize];
 	}
+    
 	
 	NSNotificationCenter *defaultNotificationCenter = [NSNotificationCenter defaultCenter];
 	[defaultNotificationCenter addObserver:self selector:@selector(podWatcherMountedPod:) name:BGNotificationPodMounted object:nil];
@@ -225,7 +233,7 @@ nil] ];
 	
 	BGLastFmSong *currentSong;
 	for (currentSong in allTracks) {
-		[primedCache setObject:[NSNumber numberWithInt:currentSong.playCount] forKey:currentSong.uniqueIdentifier];
+		[primedCache setObject:[NSNumber numberWithInt:currentSong.playCount] forKey:currentSong.persistentIdentifier];
 	}
 	
 	[primedCache writeToFile:[self pathForCachedDatabase] atomically:YES]; // DISABLE TEMPORARILY SO THAT WE ACTUALLY HAVE SOME EXTRA PLAYS
