@@ -553,7 +553,7 @@ nil] ];
 		//NSLog(@"Going to pop queue with params:%@",params);
 		BGLastFmWebServiceCaller *sc = [[BGLastFmWebServiceCaller alloc] init];
 			BGLastFmWebServiceResponse *resp = [sc callWithParameters:params usingPostMethod:YES usingAuthentication:YES];
-			NSLog(@"Got response: '%@'",[resp className]);
+//			NSLog(@"Got response: '%@'",[resp className]);
 			if (resp.wasOK) {
 				[apiQueue removeObject:params];
 				if (apiQueue.count > 0) [self performSelector:@selector(popApiQueue) withObject:nil afterDelay:1.0];
