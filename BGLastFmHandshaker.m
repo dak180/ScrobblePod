@@ -13,10 +13,8 @@
 @implementation BGLastFmHandshaker
 
 -(id)init {
-	self = [super init];
-	if (self != nil) {
-		
-	}
+	if (!(self = [super init]))
+		return nil;
 	
 	// URL Cache trick
 	NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
