@@ -126,7 +126,7 @@
 -(void)createTextAttributesDictionary {
 		NSShadow *myShadow;
 		myShadow = [[NSShadow alloc] init];
-		[myShadow setShadowColor:[NSColor whiteColor]];
+		[myShadow setShadowColor:[NSColor colorWithCalibratedHue:0.000 saturation:0.000 brightness:1.000 alpha:0.6]];
 		[myShadow setShadowBlurRadius:0.0];
 		[myShadow setShadowOffset:NSMakeSize(0,-1)];
 		
@@ -504,7 +504,7 @@
 	[blueImage unlockFocus];
 	[backgroundImage lockFocus];
 		
-		NSGradient *backgroundGradient = [[[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:0.75 green:0.75 blue:0.75 alpha:1.00] endingColor:[NSColor colorWithCalibratedRed:0.90 green:0.90 blue:0.90 alpha:1.00]] autorelease];
+		NSGradient *backgroundGradient = [[[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedRed:0.80 green:0.80 blue:0.80 alpha:1.00] endingColor:[NSColor colorWithCalibratedRed:0.90 green:0.90 blue:0.90 alpha:1.00]] autorelease];
 		[backgroundGradient drawInBezierPath:roundedPath angle:90];
 
 		if (self.active) [blueImage drawAtPoint:NSMakePoint(currentBlueOffset,0) fromRect:NSZeroRect operation:NSCompositeSourceAtop fraction:0.9];
