@@ -20,7 +20,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 +(iTunesWatcher *)sharedManager {
     @synchronized(self) {
         if (sharedTunesManager == nil) {
-            [[self alloc] init]; // Assignment not done here
+            sharedTunesManager = [[self alloc] init];
         }
     }
     return sharedTunesManager;

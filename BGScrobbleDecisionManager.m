@@ -18,7 +18,7 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 +(BGScrobbleDecisionManager *)sharedManager {
     @synchronized(self) {
         if (sharedDecisionManager == nil) {
-            [[self alloc] init]; // Assignment not done here
+            sharedDecisionManager = [[self alloc] init];
         }
     }
     return sharedDecisionManager;

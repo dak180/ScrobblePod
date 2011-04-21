@@ -16,7 +16,7 @@ static GrowlHub *sharedGrowlHub = nil;
 +(GrowlHub *)sharedManager {
     @synchronized(self) {
         if (sharedGrowlHub == nil) {
-            [[self alloc] init]; // Assignment not done here
+            sharedGrowlHub = [[self alloc] init];
         }
     }
     return sharedGrowlHub;
