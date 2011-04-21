@@ -115,11 +115,11 @@ static iTunesWatcher *sharedTunesManager = nil;
 	NSDictionary *playerInfo = [notification userInfo];
 
 	if ([[playerInfo objectForKey:@"Player State"] isEqualToString:@"Stopped"] || [[playerInfo objectForKey:@"Player State"] isEqualToString:@"Paused"]) {
-		NSLog(@"--SONG STOPPED");
+		NSLog(@"-- SONG STOPPED");
 		[self incrementDurationWatch];
 		[self currentSongStopped];
 	} else if ([[playerInfo objectForKey:@"Player State"] isEqualToString:@"Playing"]) {
-		NSLog(@"--SONG PLAYING");
+		NSLog(@"-- SONG PLAYING");
 		[self newSongStarted:playerInfo];
 	}
 }
@@ -165,7 +165,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 		self.currentSongAlreadyScrobbled = NO;
 		
 	} else {
-		NSLog(@"--CONTINUING SAME SONG");
+		NSLog(@"-- CONTINUING SAME SONG");
 	}
 	
 	NSLog(@"Artist: %@",currentSong.artist);
