@@ -56,7 +56,6 @@ static iPodWatcher *sharedPodWatcher = nil;
 
 -(void)dealloc {
 	[[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
-    [connectedDevices release];
 	[super dealloc];
 }
 
