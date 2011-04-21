@@ -13,7 +13,7 @@
 
 -(NSArray *)completeSongListForRecentTracks:(NSArray *)recentTracks sinceDate:(NSCalendarDate *)theDate {
 	NSMutableDictionary *cachedDatabase = [[NSDictionary dictionaryWithContentsOfFile:[self pathForCachedDatabase]] mutableCopy];
-	if (!cachedDatabase) cachedDatabase = [[NSMutableDictionary alloc] initWithCapacity:0]; // TODO: should BAIL if this is the case.
+	if (!cachedDatabase) cachedDatabase = [[NSMutableDictionary alloc] initWithCapacity:0]; // TODO: should BAIL if this is the case
 	
 	int lastScrobbleTime = [theDate timeIntervalSinceReferenceDate];
 	
