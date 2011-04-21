@@ -10,7 +10,7 @@
 
 
 @interface iPodWatcher : NSObject {
-
+    NSMutableArray *connectedDevices;
 }
 
 +(iPodWatcher *)sharedManager;
@@ -25,6 +25,7 @@
 
 -(void)applyForMobileDeviceNotifications;
 -(void)amdsDidConnect:(NSNotification*)note;
+-(void)amdsDisconnected:(NSNotification*)note;
 -(void)amdsDidSync:(NSNotification*)note;
 -(void)amdsDidFail:(NSNotification*)note;
 
@@ -34,5 +35,7 @@
 -(BOOL)iPodDisconnectedSinceDate:(NSDate *)testDate;
 -(void)updateLastSyncDateWithNotification:(BOOL)shouldNotify;
 -(void)setLastSynched:(NSDate *)aDate;
+
+@property (retain) NSMutableArray *connectedDevices;
 
 @end

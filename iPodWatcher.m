@@ -14,6 +14,7 @@
 @implementation iPodWatcher
 
 static iPodWatcher *sharedPodWatcher = nil;
+@synthesize connectedDevices;
 
 +(iPodWatcher *)sharedManager {
     @synchronized(self) {
@@ -56,7 +57,7 @@ static iPodWatcher *sharedPodWatcher = nil;
 
 -(void)dealloc {
 	[[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
-
+    [connectedDevices release];
 	[super dealloc];
 }
 
@@ -64,6 +65,7 @@ static iPodWatcher *sharedPodWatcher = nil;
 	if (!(self = [super init])) 
 		return nil;
     
+    connectedDevices = [[NSMutableArray alloc] init];
     sharedPodWatcher = self;
 	[self applyForiPodNotifications];
 	[self applyForMobileDeviceNotifications];
@@ -74,12 +76,18 @@ static iPodWatcher *sharedPodWatcher = nil;
 
 -(void)amdsDidConnect:(NSNotification*)note {
 	NSLog(@"iOS Device Connected: %@", [[note userInfo] objectForKey:@"product"]);
-	// [self updateLastSyncDateWithNotification:YES];
+    [connectedDevices addObject:[note object]];
 }
 
 -(void)amdsDisconnected:(NSNotification*)note {
+    
+    for (id object in connectedDevices) {
+        if ([object isEqual:[note object]]) {
+            [connectedDevices removeObject:object];
+        }
+    }
+    
 	NSLog(@"iOS Device Disconnected: %@", [[note userInfo] objectForKey:@"product"]);
-	// [self updateLastSyncDateWithNotification:YES];
 }
 
 -(void)amdsDidSync:(NSNotification*)note {
