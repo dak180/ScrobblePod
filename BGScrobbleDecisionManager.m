@@ -16,14 +16,22 @@
 static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 
 +(BGScrobbleDecisionManager *)sharedManager {
-	if (sharedDecisionManager == nil) {
-        sharedDecisionManager = [[super allocWithZone:NULL] init];
+    @synchronized(self) {
+        if (sharedDecisionManager == nil) {
+            [[self alloc] init]; // Assignment not done here
+        }
     }
     return sharedDecisionManager;
 }
 
 +(id)allocWithZone:(NSZone *)zone {
-	return [[self sharedManager] retain];
+    @synchronized(self) {
+        if (sharedDecisionManager == nil) {
+            sharedDecisionManager = [super allocWithZone:zone];
+            return sharedDecisionManager; // Assignment and return on first allocation
+        }
+    }
+	return nil; // On subsequent allocation attempts return nil
 }
 
 -(id)copyWithZone:(NSZone *)zone {
@@ -35,11 +43,11 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 }
 
 - (unsigned)retainCount {
-	return NSUIntegerMax;  //denotes an object that cannot be released
+	return NSUIntegerMax; // Denotes an object that cannot be released
 }
  
 -(void)release {
-	//do nothing
+	// Do nothing
 }
  
 -(id)autorelease {
@@ -47,14 +55,14 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 }
 
 -(id)init {
-	self = [super init];
-	if (self != nil) {
-		firstRefresh = YES;
-		self.isDecisionMadeAutomtically = YES;
-		self.usersManualChoice = NO;
-		[self shouldScrobble];
-		[self startRefreshTimer];
-	}
+	if (!(self = [super init])) 
+		return nil;
+		
+    firstRefresh = YES;
+    self.isDecisionMadeAutomtically = YES;
+    self.usersManualChoice = NO;
+    [self shouldScrobble];
+    [self startRefreshTimer];
 	return self;
 }
 
@@ -137,7 +145,7 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 	float hoursEntered = [[[NSUserDefaults standardUserDefaults] stringForKey:BGPrefPodFreshnessInterval] floatValue];
 	int secondsCalculated = (int)(hoursEntered*3600.0);
     // Adding extra 5 seconds here to prevent a endless loop which causes high processor usage
-    if (secondsCalculated == 0) secondsCalculated += 5;
+    if (secondsCalculated == 0) secondsCalculated += 60;
 	refreshTimer = [NSTimer scheduledTimerWithTimeInterval:secondsCalculated target:self selector:@selector(refreshFromTimer:) userInfo:nil repeats:YES];
 }
 

@@ -16,14 +16,22 @@
 static iPodWatcher *sharedPodWatcher = nil;
 
 +(iPodWatcher *)sharedManager {
-	if (sharedPodWatcher == nil) {
-        sharedPodWatcher = [[super allocWithZone:NULL] init];
+    @synchronized(self) {
+        if (sharedPodWatcher == nil) {
+            [[self alloc] init]; // Assignment not done here
+        }
     }
     return sharedPodWatcher;
 }
 
 +(id)allocWithZone:(NSZone *)zone {
-	return [[self sharedManager] retain];
+    @synchronized(self) {
+        if (sharedPodWatcher == nil) {
+            sharedPodWatcher = [super allocWithZone:zone];
+            return sharedPodWatcher; // Assignment and return on first allocation
+        }
+    }
+	return nil; // On subsequent allocation attempts return nil
 }
 
 -(id)copyWithZone:(NSZone *)zone {
@@ -35,11 +43,11 @@ static iPodWatcher *sharedPodWatcher = nil;
 }
 
 - (unsigned)retainCount {
-	return NSUIntegerMax;  //denotes an object that cannot be released
+	return NSUIntegerMax; // Denotes an object that cannot be released
 }
 
 -(void)release {
-	//do nothing
+	// Do nothing
 }
 
 -(id)autorelease {
@@ -55,7 +63,8 @@ static iPodWatcher *sharedPodWatcher = nil;
 -(id)init {
 	if (!(self = [super init])) 
 		return nil;
-
+    
+    sharedPodWatcher = self;
 	[self applyForiPodNotifications];
 	[self applyForMobileDeviceNotifications];
 	return self;
@@ -128,7 +137,7 @@ static iPodWatcher *sharedPodWatcher = nil;
 
 -(BOOL)iPodDisconnectedSinceDate:(NSDate *)testDate {
 	NSDate *lastDate = [[NSUserDefaults standardUserDefaults] objectForKey:BGLastSyncDate];
-	if (lastDate) return ([lastDate compare:testDate]==NSOrderedDescending);
+	if (lastDate) return ([lastDate compare:testDate] == NSOrderedDescending);
 	return NO;
 }
 

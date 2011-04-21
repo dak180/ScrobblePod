@@ -219,7 +219,7 @@ nil] ];
 }
 
 -(void)newSubmissionSessionKeyAcquired {
-//	[self detachNowPlayingThread];
+	[self detachNowPlayingThread];
 	[self detachScrobbleThreadWithoutConsideration:NO];
 	[self popApiQueue];
 }

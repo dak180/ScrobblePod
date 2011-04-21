@@ -18,15 +18,24 @@ static iTunesWatcher *sharedTunesManager = nil;
 @implementation iTunesWatcher
 
 +(iTunesWatcher *)sharedManager {
-	if (sharedTunesManager == nil) {
-        sharedTunesManager = [[super allocWithZone:NULL] init];
+    @synchronized(self) {
+        if (sharedTunesManager == nil) {
+            [[self alloc] init]; // Assignment not done here
+        }
     }
     return sharedTunesManager;
 }
 
 +(id)allocWithZone:(NSZone *)zone {
-	return [[self sharedManager] retain];
+    @synchronized(self) {
+        if (sharedTunesManager == nil) {
+            sharedTunesManager = [super allocWithZone:zone];
+            return sharedTunesManager;  // Assignment and return on first allocation
+        }
+    }
+	return nil; // On subsequent allocation attempts return nil
 }
+
 
 -(id)copyWithZone:(NSZone *)zone {
 	return self;
@@ -37,11 +46,11 @@ static iTunesWatcher *sharedTunesManager = nil;
 }
 
 - (unsigned)retainCount {
-	return NSUIntegerMax;  //denotes an object that cannot be released
+	return NSUIntegerMax;  // Denotes an object that cannot be released
 }
 
 -(void)release {
-	//do nothing
+	// Do nothing
 }
 
 -(id)autorelease {
@@ -49,13 +58,13 @@ static iTunesWatcher *sharedTunesManager = nil;
 }
 
 -(id)init {
-	self = [super init];
-	if (self != nil) {
-		iTunesIsPlaying = NO;
-		[self manuallyRetrieveCurrentSongInfo];
-		[self updateDelegateWithCurrentSong];
-		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(iTunesDidChangeState:) name:ITUNES_NOTIFICATION_KEY object:nil];
-	}
+	if (!(self = [super init])) 
+		return nil;
+    
+    iTunesIsPlaying = NO;
+    [self manuallyRetrieveCurrentSongInfo];
+    [self updateDelegateWithCurrentSong];
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(iTunesDidChangeState:) name:ITUNES_NOTIFICATION_KEY object:nil];
 	return self;
 }
 
