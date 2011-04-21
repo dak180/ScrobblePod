@@ -30,7 +30,7 @@ static iTunesWatcher *sharedTunesManager = nil;
     @synchronized(self) {
         if (sharedTunesManager == nil) {
             sharedTunesManager = [super allocWithZone:zone];
-            return sharedTunesManager;  // Assignment and return on first allocation
+            return sharedTunesManager; // Assignment and return on first allocation
         }
     }
 	return nil; // On subsequent allocation attempts return nil
@@ -46,7 +46,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 }
 
 - (unsigned)retainCount {
-	return NSUIntegerMax;  // Denotes an object that cannot be released
+	return NSUIntegerMax; // Denotes an object that cannot be released
 }
 
 -(void)release {
