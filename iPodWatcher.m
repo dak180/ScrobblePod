@@ -77,6 +77,11 @@ static iPodWatcher *sharedPodWatcher = nil;
 	// [self updateLastSyncDateWithNotification:YES];
 }
 
+-(void)amdsDisconnected:(NSNotification*)note {
+	NSLog(@"iOS Device Disconnected: %@", [[note userInfo] objectForKey:@"product"]);
+	// [self updateLastSyncDateWithNotification:YES];
+}
+
 -(void)amdsDidSync:(NSNotification*)note {
 	NSLog(@"iOS Device Sync Finished");
 	[self updateLastSyncDateWithNotification:YES];
@@ -95,6 +100,7 @@ static iPodWatcher *sharedPodWatcher = nil;
 	} else {		
 		NSLog(@"iOS Device Detection Enabled");
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidConnect:) name:@"org.bergstrand.amds.connect" object:nil];
+		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDisconnected:) name:@"org.bergstrand.amds.disconnect" object:nil];
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidSync:) name:@"org.bergstrand.amds.syncDidFinish" object:nil];
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidFail:) name:@"org.bergstrand.amds.intializeDidFail" object:nil];
 	}

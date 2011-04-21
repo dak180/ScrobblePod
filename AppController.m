@@ -331,7 +331,6 @@ nil] ];
 }
 
 -(void)amdsSyncCompleted:(NSNotification *)notification {
-	NSLog(@"Mobile Device finished syncing... Going to try to scrobble");
 	[self detachScrobbleThreadWithoutConsideration:NO];
 }
 
@@ -827,7 +826,7 @@ nil] ];
 	NSLog(@"-- Last Scrobbled Date: %@",lastScrobbleDateString);
 	NSCalendarDate *applescriptInputDateString = [NSCalendarDate dateWithString:lastScrobbleDateString calendarFormat:DATE_FORMAT_STRING];// descriptionWithCalendarFormat:DATE_FORMAT_STRING];
 
-	NSLog(@"Started collecting previously played tracks.");	
+	NSLog(@"Started collecting previously played tracks");	
 	BGTrackCollector *trackCollector = [[BGTrackCollector alloc] init];
 	NSArray *recentTracksSimple = [trackCollector collectTracksFromXMLFile:self.fullXmlPath
 	                                                        withCutoffDate:applescriptInputDateString

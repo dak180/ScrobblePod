@@ -61,6 +61,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 	if (!(self = [super init])) 
 		return nil;
     
+    sharedTunesManager = self;
     iTunesIsPlaying = NO;
     [self manuallyRetrieveCurrentSongInfo];
     [self updateDelegateWithCurrentSong];

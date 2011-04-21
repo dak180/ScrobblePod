@@ -11,14 +11,14 @@
 
 @interface BGScrobbleDecisionManager : NSObject {
 	BOOL cachedOverallDecision;
-	BOOL isDecisionMadeAutomtically;
+	BOOL isDecisionMadeAutomatically;
 	BOOL usersManualChoice;
 	BOOL firstRefresh;
 	NSTimer *refreshTimer;
 }
 
 @property (assign) BOOL cachedOverallDecision;
-@property (assign) BOOL isDecisionMadeAutomtically;
+@property (assign) BOOL isDecisionMadeAutomatically;
 @property (assign) BOOL usersManualChoice;
 
 +(BGScrobbleDecisionManager *)sharedManager;

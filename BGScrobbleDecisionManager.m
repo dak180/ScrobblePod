@@ -57,9 +57,10 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 -(id)init {
 	if (!(self = [super init])) 
 		return nil;
-		
+    
+    sharedDecisionManager = self;
     firstRefresh = YES;
-    self.isDecisionMadeAutomtically = YES;
+    self.isDecisionMadeAutomatically = YES;
     self.usersManualChoice = NO;
     [self shouldScrobble];
     [self startRefreshTimer];
@@ -77,7 +78,7 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 
 -(BOOL)shouldScrobble {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:BGPrefUsePodFreshnessInterval]) {
-		self.cachedOverallDecision = (self.isDecisionMadeAutomtically ? [self shouldScrobbleAuto] : self.usersManualChoice );
+		self.cachedOverallDecision = (self.isDecisionMadeAutomatically ? [self shouldScrobbleAuto] : self.usersManualChoice );
 	} else {
 		self.cachedOverallDecision = YES;
 	}
@@ -100,7 +101,7 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 #pragma mark Refreshing Cache
 
 @synthesize cachedOverallDecision;
-@synthesize isDecisionMadeAutomtically;
+@synthesize isDecisionMadeAutomatically;
 @synthesize usersManualChoice;
 
 -(void)refreshDecisionAndNotifyIfChanged:(BOOL)notify {

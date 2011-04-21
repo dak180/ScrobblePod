@@ -56,6 +56,7 @@ static GrowlHub *sharedGrowlHub = nil;
 	if (!(self = [super init])) 
 		return nil;
     
+    sharedGrowlHub = self;
     [GrowlApplicationBridge setGrowlDelegate:self];
 	return self;
 }

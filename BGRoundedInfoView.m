@@ -195,16 +195,16 @@
 		[self closeBlueMenu];
 		BGScrobbleDecisionManager *decisionMaker = [BGScrobbleDecisionManager sharedManager];
 		BOOL oldAutomaticScrobblingDecision = [decisionMaker shouldScrobbleAuto];
-		if (decisionMaker.isDecisionMadeAutomtically) { //Changing from auto to manual
-			decisionMaker.isDecisionMadeAutomtically = NO;
+		if (decisionMaker.isDecisionMadeAutomatically) { //Changing from auto to manual
+			decisionMaker.isDecisionMadeAutomatically = NO;
 			decisionMaker.usersManualChoice = !oldAutomaticScrobblingDecision;
 			[self setTemporaryHoverStringValue:(decisionMaker.usersManualChoice ? @"Scrobbling is now ON" : @"Scrobbling is now OFF")];
 		} else {
 			// If you want to see the logic that thse 2 lines replace, email me. Basically, they replace
 			// an inefficient series of "if" selectors, saving 10-15 lines of code.
 			decisionMaker.usersManualChoice = !decisionMaker.usersManualChoice;
-			decisionMaker.isDecisionMadeAutomtically = oldAutomaticScrobblingDecision ^ decisionMaker.usersManualChoice; //XOR
-			[self setTemporaryHoverStringValue:(decisionMaker.isDecisionMadeAutomtically ? @"Scrobbling is set automatically" : (decisionMaker.usersManualChoice ? @"Scrobbling is now ON" : @"Scrobbling is now OFF"))];
+			decisionMaker.isDecisionMadeAutomatically = oldAutomaticScrobblingDecision ^ decisionMaker.usersManualChoice; //XOR
+			[self setTemporaryHoverStringValue:(decisionMaker.isDecisionMadeAutomatically ? @"Scrobbling is set automatically" : (decisionMaker.usersManualChoice ? @"Scrobbling is now ON" : @"Scrobbling is now OFF"))];
 		}
 		[self generateStatusImage];
 		[self generateBackgroundImage];
@@ -566,7 +566,7 @@
 	NSImage *tempImage;
 	
 	BGScrobbleDecisionManager *decisionMaker = [BGScrobbleDecisionManager sharedManager];
-	if ([decisionMaker isDecisionMadeAutomtically]) {
+	if ([decisionMaker isDecisionMadeAutomatically]) {
 		tempImage = [decisionMaker shouldScrobble] ? [NSImage imageNamed:@"auto1"] : [NSImage imageNamed:@"auto0"];
 	} else {
 		tempImage = [decisionMaker shouldScrobble] ? [NSImage imageNamed:@"1"] : [NSImage imageNamed:@"0"];
