@@ -59,7 +59,6 @@
 
 		// Create Objects Needed Later On
 		[self createTextAttributesDictionary];
-		//gradientFill = [[CTGradient unifiedNormalGradient] retain];
 		[self setStringValue:@"BGRoundedView: Please set string"];
 		[self createIconSet];		
 		
