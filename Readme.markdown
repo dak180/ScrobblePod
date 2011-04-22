@@ -19,15 +19,23 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 
 ## Version History
 
+### 0.7
+#### 22 April 2011
+
+* If you listen to a song more than once, each play will be submitted to last.fm
+* Restores the ability to tag and share songs
+* Fixes high processor usage with auto submit interval set to 0 hours
+* Under the hood improvements
+
+[Download][0.7]
+
+[0.7]: http://mmrr.fi/scrobblepod/download/0.7
+
 ### 0.6.3
 #### 27 February 2011
 
 * Fixed issues with incorrect scrobble time
 * Fixed issues with opening Preferences window that some users have experienced
-
-[Download][0.6.3]
-
-[0.6.3]: http://mmrr.fi/scrobblepod/download/0.6.3
 
 ### 0.6.2
 #### 24 February 2011
