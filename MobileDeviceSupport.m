@@ -33,9 +33,12 @@ enum {
 	kProduct_iPhone = 4752,
     kProduct_iPhone3G = 4754,
 	kProduct_iPhone3GS = 4756,
-	kProduct_iPad = 4762,
 	kProduct_iPhone4 = 4759,
 	kProduct_iPhone4CDMA = 4764,
+	kProduct_iPad = 4762,
+	kProduct_iPad2WiFi = 4767,
+    kProduct_iPad2GSM = 4770,
+    kProduct_iPad2CDMA = 4771,
 };
 
 struct AMDevice
@@ -195,6 +198,9 @@ static void DeviceNotificationCallback_(struct AMDeviceCallbackInfo *info)
 		@"iPhone 4", [NSNumber numberWithUnsignedInt:kProduct_iPhone4],
 		@"iPhone 4", [NSNumber numberWithUnsignedInt:kProduct_iPhone4CDMA],
 		@"iPad", [NSNumber numberWithUnsignedInt:kProduct_iPad],
+        @"iPad 2", [NSNumber numberWithUnsignedInt:kProduct_iPad2WiFi],
+        @"iPad 2", [NSNumber numberWithUnsignedInt:kProduct_iPad2GSM],
+        @"iPad 2", [NSNumber numberWithUnsignedInt:kProduct_iPad2CDMA],
         nil];
     
     NSString *deviceName;
