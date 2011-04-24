@@ -145,8 +145,8 @@ static BGScrobbleDecisionManager *sharedDecisionManager = nil;
 	[self stopRefreshTimer];
 	float hoursEntered = [[[NSUserDefaults standardUserDefaults] stringForKey:BGPrefPodFreshnessInterval] floatValue];
 	int secondsCalculated = (int)(hoursEntered*3600.0);
-    // Adding extra 60 seconds here to prevent a endless loop which causes high processor usage
-    if (secondsCalculated == 0) secondsCalculated += 60;
+    // Adding extra 5 seconds here to prevent a endless loop which causes high processor usage
+    if (secondsCalculated == 0) secondsCalculated += 5;
 	refreshTimer = [NSTimer scheduledTimerWithTimeInterval:secondsCalculated target:self selector:@selector(refreshFromTimer:) userInfo:nil repeats:YES];
 }
 
