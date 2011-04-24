@@ -140,8 +140,14 @@ static iPodWatcher *sharedPodWatcher = nil;
 
 -(BOOL)iPodDisconnectedSinceDate:(NSDate *)testDate {
 	NSDate *lastDate = [[NSUserDefaults standardUserDefaults] objectForKey:BGLastSyncDate];
-	if (lastDate) return ([lastDate compare:testDate] == NSOrderedDescending);
-	return NO;
+	
+    if (!lastDate) return NO;
+    
+    // This ensures that tracks will be submitted after device is synced and the auto scrobbling interval is set to 0
+    if ([testDate timeIntervalSinceDate:lastDate] < 25)
+        return YES;
+    else
+        return ([lastDate compare:testDate] == NSOrderedDescending);
 }
 
 @end
