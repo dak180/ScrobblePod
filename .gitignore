@@ -11,5 +11,5 @@ build/
 *.mode1v3
 *.mode2v3
 
-ScrobblePod.xcodeproj/xcuserdata/*
-ScrobblePod.xcodeproj/project.xcworkspace/xcuserdata/*
+*.xcodeproj/xcuserdata/*
+*.xcodeproj/project.xcworkspace/xcuserdata/*
