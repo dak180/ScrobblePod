@@ -156,7 +156,6 @@ nil] ];
 		[defaults setBool:YES forKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT];
 		[defaults synchronize];
 	}
-    
 	
 	NSNotificationCenter *defaultNotificationCenter = [NSNotificationCenter defaultCenter];
 	[defaultNotificationCenter addObserver:self selector:@selector(podWatcherMountedPod:) name:BGNotificationPodMounted object:nil];
