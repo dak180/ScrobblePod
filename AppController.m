@@ -225,7 +225,7 @@ nil] ];
 
 -(void)primeSongPlayCache {
 	BGTrackCollector *collector = [[BGTrackCollector alloc] init];
-		NSArray *allTracks = [collector collectTracksFromXMLFile:self.fullXmlPath withCutoffDate:[[NSCalendarDate date] dateByAddingYears:-5 months:0 days:0 hours:0 minutes:0 seconds:0] includingPodcasts:YES includingVideo:YES ignoringComment:@"" ignoringGenre:nil withMinimumDuration:30];
+		NSArray *allTracks = [collector collectTracksFromXMLFile:self.fullXmlPath withCutoffDate:[[NSCalendarDate date] dateByAddingYears:-35 months:0 days:0 hours:0 minutes:0 seconds:0] includingPodcasts:YES includingVideo:YES ignoringComment:@"" ignoringGenre:nil withMinimumDuration:30];
 	[collector release];
 	
 	NSMutableDictionary *primedCache = [[NSMutableDictionary alloc] initWithCapacity:allTracks.count];
