@@ -69,6 +69,7 @@ static void loginItemsChanged(LSSharedFileListRef listRef, void *context);
 	}
 	[super showWindow:self];
 	[NSApp activateIgnoringOtherApps:YES];
+    [self.window makeKeyAndOrderFront:self];
 	[prefToolbar setVisible:YES];
 }
 
