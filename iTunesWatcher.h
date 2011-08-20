@@ -36,7 +36,7 @@
 
 - (id)init;
 
-@property (assign) id delegate;
+@property (nonatomic, assign) id delegate;
 
 -(void)manuallyRetrieveCurrentSongInfo;
 -(NSImage *)artworkForCurrentTrack;
@@ -61,7 +61,7 @@
 -(BGLastFmSong *)currentSong;
 -(int)currentUnixDate;
 
-@property (retain) BGLastFmSong *currentSong;
+@property (nonatomic, retain) BGLastFmSong *currentSong;
 @property (assign) int currentSongStarted;
 @property (copy) NSString *currentIdentifier;
 @property (assign) int durationPlayed;
