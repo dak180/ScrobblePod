@@ -30,15 +30,21 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 -(NSMutableArray *)collectTracksFromXMLFile:(NSString *)xmlPath withCutoffDate:(NSDate *)inputCutoffDate includingPodcasts:(BOOL)includePodcasts includingVideo:(BOOL)includeVideo ignoringComment:(NSString *)ignoreString ignoringGenre:(NSString *)genreString withMinimumDuration:(int)minimumDuration; 
 {
+    if (!xmlPath || ![[NSFileManager defaultManager] fileExistsAtPath:xmlPath]) 
+	{
+		xmlPath = [@"~/Music/iTunes/iTunes Music Library.xml" stringByExpandingTildeInPath];
+	}
+	
+	if (![[NSFileManager defaultManager] fileExistsAtPath:xmlPath])
+	{
+		NSLog(@"Can't find “iTunes Music Library.xml”. Please go to preferences and set the XML path");
+		return nil;
+	}
+	
 	double oldPriority = [NSThread threadPriority];
 	[NSThread setThreadPriority:0.0];
 	self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
 	NSTimeInterval startTimeReference = [NSDate timeIntervalSinceReferenceDate];
-	
-    if (!xmlPath || ![[NSFileManager defaultManager] fileExistsAtPath:xmlPath]) {
-		NSLog(@"Supplied XML path does not exist - Using default XML path");
-		xmlPath = [@"~/Music/iTunes/iTunes Music Library.xml" stringByExpandingTildeInPath];
-	}
     
 	self.currentKeyString = [NSString string];
     NSURL *url = [NSURL fileURLWithPath:xmlPath];
