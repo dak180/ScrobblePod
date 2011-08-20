@@ -41,6 +41,7 @@
 
 	BOOL isScrobbling;
 	BOOL isPostingNP;
+	BOOL wantsToQuit;
 	NSSound *scrobbleSound;
 	
 	PreferencesController *prefController;

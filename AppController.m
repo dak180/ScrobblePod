@@ -281,7 +281,11 @@ nil] ];
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
 	NSLog(@"Quit Decision - NP:%d\nSC:%d",isPostingNP,isScrobbling);
-	return (!isPostingNP && !isScrobbling);
+	
+	if (isPostingNP == YES || isScrobbling == YES)
+		return NSTerminateLater;
+	
+	return NSTerminateNow;
 }
 
 -(void)doFirstRun {
@@ -297,6 +301,8 @@ nil] ];
 
 -(IBAction)quit:(id)sender;
 {
+	wantsToQuit = YES;
+	[infoView setStringValue:@"Wating for operations to finish before quitting..." isActive:NO];
 	[NSApp terminate:self];
 }
 
@@ -351,6 +357,8 @@ nil] ];
 }
 
 -(void)iTunesWatcherDidDetectStartOfNewSongWithName:(NSString *)aName artist:(NSString *)anArtist artwork:(NSImage *)anArtwork {
+	if (wantsToQuit == YES) return;
+	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	NSImage *growlImage;
@@ -514,6 +522,9 @@ nil] ];
 #pragma mark Scrobbling Status Methods
 
 -(void)setAppropriateRoundedString {
+	
+	if (wantsToQuit == YES) return;
+	
 	iTunesWatcher *tunesWatcher = [iTunesWatcher sharedManager];
 	if ([tunesWatcher itunesIsRunning]) {
 		if (![tunesWatcher iTunesIsPlaying]) {
@@ -530,13 +541,25 @@ nil] ];
 	[self setIsScrobbling: [aNumber boolValue] ];
 }
 
--(void)setIsScrobbling:(BOOL)aBool {
+-(void)setIsScrobbling:(BOOL)aBool {	
 	isScrobbling = aBool;
+	
+	if (!isPostingNP && !isScrobbling && wantsToQuit == YES)
+		[NSApp replyToApplicationShouldTerminate:YES];
 }
 
--(void)setIsPostingNP:(BOOL)aBool {
+-(void)setIsPostingNP:(BOOL)aBool 
+{
 	isPostingNP = aBool;
+	
+	if (!isPostingNP && !isScrobbling && wantsToQuit == YES)
+		[NSApp replyToApplicationShouldTerminate:YES];
 }
+
+-(void)setWantsToQuit:(BOOL)aBool {
+	wantsToQuit = aBool;
+}
+
 
 #pragma mark Last.fm API Interaction
 
