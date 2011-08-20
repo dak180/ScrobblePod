@@ -21,7 +21,7 @@
 		self.lastFmCode = WS_RESP_GENERICFAILURE;
 		if (receivedData) {
 			self.lastFmCode = WS_RESP_NOFAILURE;
-			self.responseDocument = [[NSXMLDocument alloc] initWithData:receivedData options:NSXMLDocumentTidyXML error:nil];
+			self.responseDocument = [[[NSXMLDocument alloc] initWithData:receivedData options:NSXMLDocumentTidyXML error:nil] autorelease];
 			[self determineStatus];
 		} else NSLog(@"Init with 0-length data");
 	}
@@ -30,7 +30,7 @@
 
 -(void)dealloc {
 	self.responseDocument = nil;
-	//[[self responseDocument] release];
+	
 	[super dealloc];
 }
 

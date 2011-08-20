@@ -48,7 +48,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSURLRequest *theRequest = [NSURLRequest requestWithURL:url];
     rssConnection = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     context = xmlCreatePushParserCtxt(&simpleSAXHandlerStruct, self, NULL, 0, NULL);
-	self.playDateFormatter = [[NSDateFormatter alloc] init];
+	self.playDateFormatter = [[[NSDateFormatter alloc] init] autorelease];
 	[self.playDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
 	[self.playDateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 	self.cutOffDate = inputCutoffDate;
