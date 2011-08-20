@@ -261,17 +261,29 @@ song is being played from a shared library.
 	}
 }
 
--(NSImage *)artworkForCurrentTrack {
-	if (self.iTunesIsPlaying && currentIdentifier != nil) {
+-(NSImage *)artworkForCurrentTrack 
+{
+	if (self.iTunesIsPlaying && currentIdentifier != nil) 
+	{
 		iTunesApplication *iTunes = [SBApplication applicationWithBundleIdentifier:ITUNES_BUNDLE_IDENTIFIER];
 		iTunesTrack *currentTrack = [iTunes currentTrack];
-		if (self.iTunesIsPlaying) {
+		
+		if (self.iTunesIsPlaying) 
+		{
 			iTunesIsPlaying = YES;
-			NSArray *artworkArray = [currentTrack artworks];
-			if ([artworkArray count] > 0) return (NSImage *)[[artworkArray objectAtIndex:0] data];
+			NSArray *artworkArray = [[currentTrack artworks] get];
+			
+			if ([artworkArray count] > 0)
+			{
+				iTunesArtwork *artwork = [artworkArray objectAtIndex:0];
+				
+				if ([NSStringFromClass([[artwork data] class]) isEqualToString:@"NSImage"])
+					return [artwork data];
+			}
 		}
+		
 	}
-	return [NSImage imageNamed:@"iTunesSmall"];
+	return [NSImage imageNamed:@"iTunesSmall.png"];
 }
 
 @end
