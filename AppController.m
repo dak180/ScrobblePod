@@ -988,7 +988,7 @@ nil] ];
 				[request setTimeoutInterval:20.0];// timeout scrobble posting after 20 seconds
 				[request setHTTPBody:postData];
 
-				NSError *postingError;
+				NSError *postingError = nil;
 				NSData *npResponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&postingError];
 				
 				[request release];

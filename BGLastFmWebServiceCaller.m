@@ -12,7 +12,7 @@
 @implementation BGLastFmWebServiceCaller
 
 -(BGLastFmWebServiceResponse *)callWithParameters:(BGLastFmWebServiceParameterList *)parameterList usingPostMethod:(BOOL)postBool usingAuthentication:(BOOL)needAuthentication {
-	BGLastFmWebServiceResponse *responseObject;
+	BGLastFmWebServiceResponse *responseObject = nil;
 	BOOL callWasSent = NO;
 	if (!postBool || (postBool && [parameterList parameterForKey:@"sk"]!=nil && [parameterList parameterForKey:@"sk"].length>0)) {
 		NSString *postString = [NSString stringWithFormat:@"%@%@",
@@ -40,7 +40,7 @@
 		[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
 		[request setTimeoutInterval:10.00];// timeout scrobble posting after 20 seconds
 
-		NSError *postingError = [[NSError alloc] init];
+		NSError *postingError = nil;
 		NSHTTPURLResponse *response = nil;
 		NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&postingError];
 		
@@ -48,7 +48,7 @@
 		
 		int responseStatusCode = [response statusCode];
 				
-		if (responseData!=nil && [postingError code]!=-1001 && (responseStatusCode==200 || responseStatusCode==403) ) {
+		if (responseData != nil && [postingError code] != -1001 && (responseStatusCode == 200 || responseStatusCode == 403)) {
 			responseObject = [[BGLastFmWebServiceResponse alloc] initWithData:responseData];
 			callWasSent = YES;
 		} else {

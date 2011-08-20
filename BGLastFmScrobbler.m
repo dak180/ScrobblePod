@@ -108,8 +108,6 @@
 		} else {
 			[theResponse setWasSuccessful:NO];
 		}
-		
-		[postingError release];
 		songIndex = songIndex + efficientPostIndex;
 		
 	}
