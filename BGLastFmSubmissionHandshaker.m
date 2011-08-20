@@ -40,7 +40,6 @@
 		responseObject = [[BGLastFmSubmissionHandshakeResponse alloc] initWithData:nil];
 	}
 	
-	[postingError release];
 	return [responseObject autorelease];
 }
 
