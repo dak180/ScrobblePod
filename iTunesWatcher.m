@@ -277,6 +277,8 @@ song is being played from a shared library.
 			{
 				iTunesArtwork *artwork = [artworkArray objectAtIndex:0];
 				
+				// Sometimes iTunes returns NSAppleEventDescriptor instead of NSImage. This is dirty hack, but right now I'm not sure what else I can do. 
+				
 				if ([NSStringFromClass([[artwork data] class]) isEqualToString:@"NSImage"])
 					return [artwork data];
 			}
