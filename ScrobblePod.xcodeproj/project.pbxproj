@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A1295AD14005AF5005F7074 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1295AB14005AE4005F7074 /* Growl.framework */; };
-		3A1295AE14005C68005F7074 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3A1295AB14005AE4005F7074 /* Growl.framework */; };
+		3A1295AE14005C68005F7074 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1295AB14005AE4005F7074 /* Growl.framework */; };
+		3A1295C0140074A5005F7074 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3A1295AB14005AE4005F7074 /* Growl.framework */; };
 		3A46B4D11313C3A600BA9EE9 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 3A46B4D01313C3A600BA9EE9 /* dsa_pub.pem */; };
 		3A8E48D21313A0B600BA09D2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A8E48CE1313A0B600BA09D2 /* MainMenu.xib */; };
 		3A8E48D31313A0B600BA09D2 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A8E48D01313A0B600BA09D2 /* Preferences.xib */; };
@@ -114,7 +114,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				B56C42980EB8466A00D8B6C2 /* Sparkle.framework in CopyFiles */,
-				3A1295AE14005C68005F7074 /* Growl.framework in CopyFiles */,
+				3A1295C0140074A5005F7074 /* Growl.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +279,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				3A1295AD14005AF5005F7074 /* Growl.framework in Frameworks */,
 				B57A1A6E0BD6C7480085E05B /* libcrypto.dylib in Frameworks */,
 				B5F362140BE40210004DB2EF /* Security.framework in Frameworks */,
 				B5CEBAC00C21367500F025F0 /* ApplicationServices.framework in Frameworks */,
@@ -287,6 +286,7 @@
 				B53F9C040D67F09000CCC8F9 /* ScriptingBridge.framework in Frameworks */,
 				B5103FD80DB5877F00F2403A /* QuartzCore.framework in Frameworks */,
 				B56C42880EB845CB00D8B6C2 /* Sparkle.framework in Frameworks */,
+				3A1295AE14005C68005F7074 /* Growl.framework in Frameworks */,
 				3AA71D2B1306741500036233 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -843,11 +843,12 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_11)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_11 = "\"$(SRCROOT)\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"/Volumes/Growl 1.2.2 SDK/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -888,9 +889,10 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"/Volumes/Growl 1.2.2 SDK/Frameworks\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)\"";

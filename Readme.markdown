@@ -19,14 +19,19 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 
 ## Version History
 
+### 0.7.2
+#### 22 August 2011
+
+* Stability improvements
+
+[Download][0.7.2]
+
+[0.7.2]: http://mmrr.fi/scrobblepod/download/0.7.2
+
 ### 0.7.1
 #### 24 April 2011
 
 * Tracks will now be submitted to last.fm once device is synced if the auto scrobbling interval is set to 0 hours
-
-[Download][0.7.1]
-
-[0.7.1]: http://mmrr.fi/scrobblepod/download/0.7.1
 
 ### 0.7
 #### 22 April 2011
