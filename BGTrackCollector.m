@@ -328,7 +328,7 @@ static void	charactersFoundSAX(void *ctx, const xmlChar *ch, int len) {
 }
 
 static void errorEncounteredSAX(void *ctx, const char *msg, ...) {
-    NSCAssert(NO, @"Unhandled error encountered during SAX parse.");
+    NSLog(@"Could not parse iTunes XML. If this error persists, please contact the developer");
 }
 
 static xmlSAXHandler simpleSAXHandlerStruct = {
