@@ -115,11 +115,11 @@ static iTunesWatcher *sharedTunesManager = nil;
 	NSDictionary *playerInfo = [notification userInfo];
 
 	if ([[playerInfo objectForKey:@"Player State"] isEqualToString:@"Stopped"] || [[playerInfo objectForKey:@"Player State"] isEqualToString:@"Paused"]) {
-		NSLog(@"-- SONG STOPPED");
+		DLog(@"-- SONG STOPPED");
 		[self incrementDurationWatch];
 		[self currentSongStopped];
 	} else if ([[playerInfo objectForKey:@"Player State"] isEqualToString:@"Playing"]) {
-		NSLog(@"-- SONG PLAYING");
+		DLog(@"-- SONG PLAYING");
 		[self newSongStarted:playerInfo];
 	}
 }
@@ -128,11 +128,11 @@ static iTunesWatcher *sharedTunesManager = nil;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	self.iTunesIsPlaying = YES;
 	NSString *newIdentifier = [NSString stringWithFormat:@"%016llX", [[newSongDetails objectForKey:@"PersistentID"] unsignedLongLongValue]];
-	NSLog(@"Got new song Persistent ID: %@",newIdentifier);
+	DLog(@"Got new song Persistent ID: %@",newIdentifier);
 	
 	if ( [self songIsNew:newIdentifier] ) {
 
-		NSLog(@"Started new song");
+		DLog(@"Started new song");
 
 		self.currentIdentifier = newIdentifier;
 
@@ -165,10 +165,10 @@ static iTunesWatcher *sharedTunesManager = nil;
 		self.currentSongAlreadyScrobbled = NO;
 		
 	} else {
-		NSLog(@"-- CONTINUING SAME SONG");
+		DLog(@"-- CONTINUING SAME SONG");
 	}
 	
-	NSLog(@"Artist: %@",currentSong.artist);
+	DLog(@"Artist: %@",currentSong.artist);
 	
 	self.currentSongStarted = [self currentUnixDate];
 	
@@ -197,7 +197,7 @@ static iTunesWatcher *sharedTunesManager = nil;
 	if (currentIdentifier && [self currentSongPlayedProperly] && self.currentSongAlreadyScrobbled==NO) {
         // TODO: I don't think this added the song to the queue. If I want to implement scrobbling for half-played songs, this is the place to look. Would it be weird to scrobble half-played songs, but queue the rest? Probably.
 		// Add currentSong to queue
-		// NSLog(@"Adding current song to the scrobble queue: %@",currentSong.title);
+		// DLog(@"Adding current song to the scrobble queue: %@",currentSong.title);
 		self.currentSongAlreadyScrobbled = YES;
 	}
 }

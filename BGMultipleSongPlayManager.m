@@ -32,21 +32,21 @@
             if (!cachedPlayCount) cachedPlayCount = 0;
 			int difference = currentPlayCount - cachedPlayCount;
 			int extraPlays = difference - 1;
-			NSLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.persistentIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
+			DLog(@"PROCESSING SONG: '%@' (UID = %@) Cached:%d Current:%d CalculatedExtra:%d",currentSong.title,currentSong.persistentIdentifier, cachedPlayCount,currentPlayCount,extraPlays);
             if (extraPlays > 0) {
 				currentSong.extraPlays = extraPlays;
-				NSLog(@"EXTRA PLAYS: '%@' = %d",currentSong.title,currentSong.extraPlays);
+				DLog(@"EXTRA PLAYS: '%@' = %d",currentSong.title,currentSong.extraPlays);
 			}
 		
             if (!currentPersistentIdentifier) { 
-                NSLog(@"WARNING: currentPersistentIdentifier = nil; will cause crash with setObject:forKey;");
+                DLog(@"WARNING: currentPersistentIdentifier = nil; will cause crash with setObject:forKey;");
             }
             
             // Crashing is not an option, is it?
             if (currentPersistentIdentifier) [cachedDatabase setObject:[NSNumber numberWithInt:currentPlayCount] forKey:currentPersistentIdentifier];
             
 		} else {
-			NSLog(@"ASDBSDFSDFGSDAEWO! The song's play count is empty. Is it 2012 or what?");
+			DLog(@"ASDBSDFSDFGSDAEWO! The song's play count is empty. Is it 2012 or what?");
 		}
 
 			
@@ -58,7 +58,7 @@
 			BGTimelineGap *newGap = [[BGTimelineGap alloc] init];
 			newGap.startTime = completionTimeOfPreviousSong;
 			newGap.endTime = startTimeOfCurrentSong;
-			NSLog(@"FOUND GAP WITH DURATION: %d",newGap.duration);
+			DLog(@"FOUND GAP WITH DURATION: %d",newGap.duration);
 			[gapList addObject:newGap];
 			[newGap release];
 		}

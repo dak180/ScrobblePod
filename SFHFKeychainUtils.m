@@ -99,7 +99,7 @@
 	
 	const char *pass = [password cStringUsingEncoding: [NSString defaultCStringEncoding]];
 	
-	NSLog(@"changing password");
+	DLog(@"changing password");
 	
 	/*OSErr status = SecKeychainItemModifyAttributesAndData (
 		itemRef, // the item reference

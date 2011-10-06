@@ -37,15 +37,14 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 	
 	if (![[NSFileManager defaultManager] fileExistsAtPath:xmlPath])
 	{
-		NSLog(@"Can't find “iTunes Music Library.xml”. Please go to preferences and set the XML path");
+		DLog(@"Can't find “iTunes Music Library.xml”. Please go to preferences and set the XML path");
 		return nil;
 	}
 	
 	double oldPriority = [NSThread threadPriority];
 	[NSThread setThreadPriority:0.0];
 	self.downloadAndParsePool = [[NSAutoreleasePool alloc] init];
-	NSTimeInterval startTimeReference = [NSDate timeIntervalSinceReferenceDate];
-    
+	startTimeReference = [NSDate timeIntervalSinceReferenceDate];
 	self.currentKeyString = [NSString string];
     NSURL *url = [NSURL fileURLWithPath:xmlPath];
     done = NO;
@@ -86,8 +85,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     self.currentKeyString = nil;
     [downloadAndParsePool drain];
     self.downloadAndParsePool = nil;
-	NSTimeInterval duration = [NSDate timeIntervalSinceReferenceDate] - startTimeReference;	
-	NSLog(@"Collected previously played tracks in %f seconds", duration);
+	DLog(@"Collected previously played tracks in %f seconds", [NSDate timeIntervalSinceReferenceDate] - startTimeReference);
 	[NSThread setThreadPriority:oldPriority];
     return wantedTracks;
 }
@@ -328,7 +326,7 @@ static void	charactersFoundSAX(void *ctx, const xmlChar *ch, int len) {
 }
 
 static void errorEncounteredSAX(void *ctx, const char *msg, ...) {
-    NSLog(@"Could not parse iTunes XML. If this error persists, please contact the developer");
+    DLog(@"Could not parse iTunes XML. If this error persists, please contact the developer");
 }
 
 static xmlSAXHandler simpleSAXHandlerStruct = {

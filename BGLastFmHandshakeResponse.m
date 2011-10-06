@@ -42,7 +42,7 @@
 		} else if ([statusLine rangeOfString:@"FAILED"].length > 0) {
 			responseType = 5;
 		}
-		responseComponents = [[self parseResponse] retain];
+		responseComponents = [[self parseResponse] mutableCopy];
 	}
 	return self;
 }

@@ -111,6 +111,7 @@
 -(IBAction)performTagSong:(id)sender;
 -(NSArray *)popularTagsForCurrentSong;
 -(void)showArrowWindowForView:(NSView *)theView;
+-(void)showArrowWindow;
 -(void)updateFriendsList;
 -(NSArray *)friendsForUser;
 -(IBAction)performRecommendSong:(id)sender;

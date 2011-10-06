@@ -72,30 +72,30 @@ static iPodWatcher *sharedPodWatcher = nil;
 #pragma mark iOS Methods
 
 -(void)amdsDidConnect:(NSNotification*)note {
-	NSLog(@"iOS Device Connected: %@", [[note userInfo] objectForKey:@"product"]);
+	DLog(@"iOS Device Connected: %@", [[note userInfo] objectForKey:@"product"]);
 }
 
 -(void)amdsDisconnected:(NSNotification*)note {    
-	NSLog(@"iOS Device Disconnected: %@", [[note userInfo] objectForKey:@"product"]);
+	DLog(@"iOS Device Disconnected: %@", [[note userInfo] objectForKey:@"product"]);
 }
 
 -(void)amdsDidSync:(NSNotification*)note {
-	NSLog(@"iOS Device Sync Finished");
+	DLog(@"iOS Device Sync Finished");
 	[self updateLastSyncDateWithNotification:YES];
 	[[NSNotificationCenter defaultCenter] postNotificationName:AMDSSyncComplete object:nil];
 }
 
 -(void)amdsDidFail:(NSNotification*)note {
-    NSLog(@"iOS Device Detection Initialization Error");
+    DLog(@"iOS Device Detection Initialization Error");
 }
 
 -(void)applyForMobileDeviceNotifications {
 	char *path = "/System/Library/PrivateFrameworks/MobileDevice.framework/MobileDevice";
 	int err;
 	if (0 != (err = IntializeMobileDeviceSupport(path, NULL))) {
-		NSLog(@"iOS Device Detection Initialization Error");
+		DLog(@"iOS Device Detection Initialization Error");
 	} else {		
-		NSLog(@"iOS Device Detection Enabled");
+		DLog(@"iOS Device Detection Enabled");
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidConnect:) name:@"org.bergstrand.amds.connect" object:nil];
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDisconnected:) name:@"org.bergstrand.amds.disconnect" object:nil];
 		[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(amdsDidSync:) name:@"org.bergstrand.amds.syncDidFinish" object:nil];
@@ -114,7 +114,7 @@ static iPodWatcher *sharedPodWatcher = nil;
 -(void)volumeDidMount:(NSNotification *)notification { 
 	NSString *mountedDevicePath = [[notification userInfo] objectForKey:@"NSDevicePath"];
 	if ([self isPodAtPath:mountedDevicePath]) {
-		NSLog(@"MOUNTED iPod: %@",mountedDevicePath);
+		DLog(@"MOUNTED iPod: %@",mountedDevicePath);
 		[self updateLastSyncDateWithNotification:YES];
 	}
 }

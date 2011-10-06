@@ -45,15 +45,15 @@
 		}
 	} else {
 		#if __LP64__
-			NSLog(@"Invalid Token Received: %@ (length is %ld)", newToken,newToken.length);
+			DLog(@"Invalid Token Received: %@ (length is %ld)", newToken,newToken.length);
 		#else
-		NSLog(@"Invalid Token Received: %@ (length is %d)", newToken,newToken.length);
+		DLog(@"Invalid Token Received: %@ (length is %d)", newToken,newToken.length);
 		#endif
 	}
 }
 
 -(void)newSessionKeyAcquired {
-	NSLog(@"Got Username:%@ and Session:%@",self.username,self.webServiceSessionKey);
+	DLog(@"Got Username:%@ and Session:%@",self.username,self.webServiceSessionKey);
 	SEL theSelector = @selector(newWebServiceSessionKeyAcquired);
 	if ([delegate respondsToSelector:theSelector]) [delegate performSelector:theSelector];
 }
@@ -78,7 +78,7 @@
 	if (submissionSessionKey == nil) 
 		return;
 	
-	NSLog(@"Got Submission Key: %@",submissionSessionKey);
+	DLog(@"Got Submission Key: %@",submissionSessionKey);
 	[[NSUserDefaults standardUserDefaults] setObject:submissionSessionKey forKey:BGSubmissionSessionKey];
 	[[NSUserDefaults standardUserDefaults] setObject:response.nowPlayingURL forKey:BGNowPlayingSubmissionURL];
 	[[NSUserDefaults standardUserDefaults] setObject:response.postURL forKey:BGScrobblingSubmissionURL];

@@ -21,7 +21,7 @@
 @implementation BGLastFmWebServiceHandshaker (Private)
 
 -(NSString *)sessionKeyFromToken:(NSString *)theToken {
-	NSLog(@"SESSION FROM TOKEN %@",theToken);
+	DLog(@"SESSION FROM TOKEN %@",theToken);
 	if (theToken) {
 		BGLastFmWebServiceParameterList *sessionParams = [[BGLastFmWebServiceParameterList alloc] initWithMethod:@"auth.getSession" andSessionKey:nil];
 			[sessionParams setParameter:theToken forKey:@"token"];
@@ -31,7 +31,7 @@
 			[sessionCaller release];
 		[sessionParams release];
 		
-		NSLog(@"%@",response.responseDocument);
+		DLog(@"%@",response.responseDocument);
 		
 		if (response.wasOK) {
 			NSString *username = [response stringValueForXPath:@"/lfm/session/name"];
@@ -44,7 +44,7 @@
 				return session;
 			}
 		} else {
-			NSLog(@"Unable to fetch Session Key: response.lastFmCode = %d",response.lastFmCode);
+			DLog(@"Unable to fetch Session Key: response.lastFmCode = %d",response.lastFmCode);
 		}
 
 	}

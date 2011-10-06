@@ -45,7 +45,7 @@
     NSUInteger sillyCounter;
     NSUInteger countOfParsedSongs;
     NSAutoreleasePool *downloadAndParsePool;
-	
+	NSTimeInterval startTimeReference;
 }
 
 //@property (nonatomic, retain) NSMutableArray *parsedSongs;

@@ -102,7 +102,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
                                 kNilOptions, &subscription );
     if( err != noErr )
     {
-        NSLog( @"UKFNSubscribeFileWatcher addPath: %@ failed due to error ID=%ld.", path, err );
+        DLog( @"UKFNSubscribeFileWatcher addPath: %@ failed due to error ID=%ld.", path, err );
         return;
     }
     
@@ -152,7 +152,7 @@ void    UKFileSubscriptionProc(FNMessage message, OptionBits flags, void *refcon
 															userInfo: [NSDictionary dictionaryWithObjectsAndKeys: path, @"path", nil]];
 	
     [delegate watcher: self receivedNotification: UKFileWatcherWriteNotification forPath: path];
-    //NSLog( @"UKFNSubscribeFileWatcher noticed change to %@", path );	// DEBUG ONLY!
+    //DLog( @"UKFNSubscribeFileWatcher noticed change to %@", path );	// DEBUG ONLY!
 }
 
 
@@ -197,5 +197,5 @@ void    UKFileSubscriptionProc( FNMessage message, OptionBits flags, void *refco
     if( message == kFNDirectoryModifiedMessage )    // No others exist as of 10.4
         [obj sendDelegateMessage: message forSubscription: subscription];
     else
-        NSLog( @"UKFileSubscriptionProc: Unknown message %d", message );
+        DLog( @"UKFileSubscriptionProc: Unknown message %d", message );
 }

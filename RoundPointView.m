@@ -16,7 +16,7 @@
         self.triangleCenter = frame.size.width/2;
 		self.triangleHeight = 15.0;
 		self.cornerRadius = 8.0;
-		self.triangleWidth = 25.0;
+		self.triangleWidth = 30.0;
     }
     return self;
 }

@@ -27,7 +27,7 @@
 @synthesize xmlFileIsLocal;
 
 -(void)xmlLocationChanged:(NSNotification *)notification {
-	NSLog(@"XML Location Changed: %@",[self fullXmlPath]);
+	DLog(@"XML Location Changed: %@",[self fullXmlPath]);
 	[self stopWatchingXMLFile];
 	[self updateLocationFlag];
 	[self startWatchingXMLFile];
@@ -44,26 +44,26 @@
 	BOOL unmountable;
 	[[NSWorkspace sharedWorkspace] getFileSystemInfoForPath:[self fullXmlPath] isRemovable:&removable isWritable:&writable isUnmountable:&unmountable description:NULL type:NULL];
 	self.xmlFileIsLocal = (!removable && !unmountable);
-	NSLog(@"The XML file is %@stored on the startup drive. Removable=%d Unmountable=%d", (self.xmlFileIsLocal ? @"" : @"not "), removable, unmountable);
+	DLog(@"The XML file is %@stored on the startup drive. Removable=%d Unmountable=%d", (self.xmlFileIsLocal ? @"" : @"not "), removable, unmountable);
 }
 
 -(void)postXMLChangeMessage {
-//	NSLog(@"Detected XML Change");
+//	DLog(@"Detected XML Change");
 	[[NSNotificationCenter defaultCenter] postNotificationName:XMLChangedNotification object:nil];
 }
 
 -(void)startWatchingXMLFile {
 	if (self.xmlFileIsLocal) {
-		NSLog(@"Starting to watch XML file using Event-Based method");
+		DLog(@"Starting to watch XML file using Event-Based method");
 		[self applyForXmlChangeNotification];
 	} else {
-		NSLog(@"Starting to watch XML file using Poll-Based method");
+		DLog(@"Starting to watch XML file using Poll-Based method");
 		[self startPollTimer];
 	}
 }
 
 -(void)stopWatchingXMLFile {
-	NSLog(@"Stopping watch of XML file");
+	DLog(@"Stopping watch of XML file");
 	if (self.xmlFileIsLocal) {
 		[self stopEventBasedMonitoring];
 	} else {
@@ -78,16 +78,16 @@
 -(void)startPollTimer {
 	[self stopPollTimer];
 	pollTimer = [[NSTimer scheduledTimerWithTimeInterval:POLL_INTERVAL target:self selector:@selector(pollXMLFile:) userInfo:nil repeats:YES] retain];
-	NSLog(@"Starting XML poll timer");
+	DLog(@"Starting XML poll timer");
 }
 
 -(void)stopPollTimer {
 	if (pollTimer!=nil) [pollTimer invalidate];
-	NSLog(@"Stopping XML poll timer");
+	DLog(@"Stopping XML poll timer");
 }
 
 -(void)pollXMLFile:(NSTimer *)timer {
-	NSLog(@"Polling XML File");
+	DLog(@"Polling XML File");
 //	NSDictionary *fileAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[self fullXmlPath] traverseLink:YES];
     NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[self fullXmlPath] error:NULL];
 	NSDate *newModDate = [fileAttributes objectForKey:NSFileModificationDate];
@@ -97,25 +97,25 @@
 			[self postXMLChangeMessage];
 		}
 	} else {
-		NSLog(@"Couldn't get XML file modification date");
+		DLog(@"Couldn't get XML file modification date");
 	}
 }
 
 #pragma mark UKKQueue-Related Methods
 
 -(void)applyForXmlChangeNotification {
-	//NSLog(@"Applying for KQueue Notification");
+	//DLog(@"Applying for KQueue Notification");
 	[[UKKQueue sharedFileWatcher] setDelegate:self];
 	[[UKKQueue sharedFileWatcher] addPathToQueue:[self fullXmlPath] notifyingAbout:UKKQueueNotifyAboutDelete];
 }
 
 -(void)stopEventBasedMonitoring {
-	//NSLog(@"Deregistering from KQueue Notification");
+	//DLog(@"Deregistering from KQueue Notification");
 	[[UKKQueue sharedFileWatcher] removePathFromQueue:[self fullXmlPath]];
 }
 
 -(void)watcher:(id<UKFileWatcher>)watcher receivedNotification:(NSString *)notification forPath:(NSString *)path {
-	//NSLog(@"Got KQueue Notification");
+	//DLog(@"Got KQueue Notification");
 	[self postXMLChangeMessage];
 	[self stopEventBasedMonitoring];
 	[self applyForXmlChangeNotification];

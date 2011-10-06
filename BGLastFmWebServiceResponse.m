@@ -23,7 +23,7 @@
 			self.lastFmCode = WS_RESP_NOFAILURE;
 			self.responseDocument = [[[NSXMLDocument alloc] initWithData:receivedData options:NSXMLDocumentTidyXML error:nil] autorelease];
 			[self determineStatus];
-		} else NSLog(@"Init with 0-length data");
+		} else DLog(@"Init with 0-length data");
 	}
 	return self;
 }
@@ -41,7 +41,7 @@
 -(void)determineStatus {
 	if (self.responseDocument != nil) {
 		self.wasOK = [[self stringValueForXPath:@"/lfm/@status"] isEqualToString:@"ok"];
-		NSLog(@"Status: %@",(self.wasOK ? @"OK" : @"FAILED"));
+		DLog(@"Status: %@",(self.wasOK ? @"OK" : @"FAILED"));
 		
 		if (!self.wasOK) {
 			[self determineErrorCode];
@@ -52,7 +52,7 @@
 -(void)determineErrorCode {
 	if (self.responseDocument != nil) {
 		self.lastFmCode = [[self stringValueForXPath:@"/lfm/error/@code"] intValue];
-		if (self.lastFmCode>0) NSLog(@"Error Code: %d",self.lastFmCode);
+		if (self.lastFmCode>0) DLog(@"Error Code: %d",self.lastFmCode);
 	}
 }
 

@@ -133,7 +133,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 {
     AT_SYNCHRONIZED(self)
     {
-        //NSLog(@"%@ (%d)", self, [self retainCount]);
+        //DLog(@"%@ (%d)", self, [self retainCount]);
         if( [self retainCount] == 2 && keepThreadRunning )
             keepThreadRunning = NO;
     }
@@ -163,7 +163,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 	while( (fdNum = [enny nextObject]) )
 	{
     	if( close( [fdNum intValue] ) == -1 )
-            NSLog(@"dealloc: Couldn't close file descriptor (%d)", errno);
+            DLog(@"dealloc: Couldn't close file descriptor (%d)", errno);
     }
 	
 	[watchedPaths release];
@@ -173,7 +173,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 	
 	[super dealloc];
     
-    //NSLog(@"kqueue released.");
+    //DLog(@"kqueue released.");
 }
 
 
@@ -286,7 +286,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
     }
 	
 	if( close( fd ) == -1 )
-        NSLog(@"removePathFromQueue: Couldn't close file descriptor (%d)", errno);
+        DLog(@"removePathFromQueue: Couldn't close file descriptor (%d)", errno);
 }
 
 
@@ -355,10 +355,10 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 					if( ev.fflags )
 					{
 						NSString*		fpath = [[(NSString *)ev.udata retain] autorelease];    // In case one of the notified folks removes the path.
-						//NSLog(@"UKKQueue: Detected file change: %@", fpath);
+						//DLog(@"UKKQueue: Detected file change: %@", fpath);
 						[[NSWorkspace sharedWorkspace] noteFileSystemChanged: fpath];
 						
-						//NSLog(@"ev.flags = %u",ev.fflags);	// DEBUG ONLY!
+						//DLog(@"ev.flags = %u",ev.fflags);	// DEBUG ONLY!
 						
 						if( (ev.fflags & NOTE_RENAME) == NOTE_RENAME )
 							[self postNotification: UKFileWatcherRenameNotification forFile: fpath];
@@ -378,7 +378,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 				}
 			}
 		NS_HANDLER
-			NSLog(@"Error in UKKQueue watcherThread: %@",localException);
+			DLog(@"Error in UKKQueue watcherThread: %@",localException);
 		NS_ENDHANDLER
 		
 		[pool drain];
@@ -386,9 +386,9 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
     
 	// Close our kqueue's file descriptor:
 	if( close( theFD ) == -1 )
-		NSLog(@"release: Couldn't close main kqueue (%d)", errno);
+		DLog(@"release: Couldn't close main kqueue (%d)", errno);
 	
-    //NSLog(@"exiting kqueue watcher thread.");
+    //DLog(@"exiting kqueue watcher thread.");
 }
 
 
@@ -463,7 +463,7 @@ static UKKQueue * gUKKQueueSharedQueueSingleton = nil;
 // -----------------------------------------------------------------------------
 //	description:
 //		This method can be used to help in debugging. It provides the value
-//      used by NSLog & co. when you request to print this object using the
+//      used by DLog & co. when you request to print this object using the
 //      %@ format specifier.
 //
 //	REVISIONS:

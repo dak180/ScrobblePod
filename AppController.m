@@ -96,8 +96,8 @@
 		@"~/Music/iTunes/iTunes Music Library.xml",BGPrefXmlLocation,
 nil] ];
 
-	NSLog(@"Last iPod Sync Date: %@",[defaults objectForKey:BGLastSyncDate]);
-	NSLog(@"Last Scrobbled: %@",[defaults objectForKey:BGPrefLastScrobbled]);
+	//	DLog(@"Last iPod Sync Date: %@",[defaults objectForKey:BGLastSyncDate]);
+	//  DLog(@"Last Scrobbled: %@",[defaults objectForKey:BGPrefLastScrobbled]);
 
 	statusItem = nil;
 	if ([defaults boolForKey:BGPrefWantStatusItem])  {
@@ -151,8 +151,8 @@ nil] ];
 	if (![defaults boolForKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT])
 	{
 		[defaults setValue:[[NSCalendarDate dateWithTimeIntervalSinceReferenceDate:([[NSCalendarDate dateWithString:storedDateString calendarFormat:DATE_FORMAT_STRING] timeIntervalSinceReferenceDate] - [[NSTimeZone localTimeZone] secondsFromGMT] + 7200.00)] descriptionWithCalendarFormat:DATE_FORMAT_STRING] forKey:BGPrefLastScrobbled];
-		NSLog(@"Changing Last Scrobbled date to correct offset from GMT");
-		NSLog(@"Last Scrobbled: %@",[defaults objectForKey:BGPrefLastScrobbled]);
+		DLog(@"Changing Last Scrobbled date to correct offset from GMT");
+		DLog(@"Last Scrobbled: %@",[defaults objectForKey:BGPrefLastScrobbled]);
 		[defaults setBool:YES forKey:BGPrefLastScrobbledWithCorrectOffsetFromGMT];
 		[defaults synchronize];
 	}
@@ -174,7 +174,7 @@ nil] ];
 	
 	xmlWatcher = [[FileWatcher alloc] init];
 	[xmlWatcher startWatchingXMLFile];
-//	NSLog(@"XML Path: %@",[xmlWatcher fullXmlPath]);
+//	DLog(@"XML Path: %@",[xmlWatcher fullXmlPath]);
 	 
 	 apiQueue = [NSMutableArray new];
 }
@@ -199,7 +199,7 @@ nil] ];
 
 		uuid = [NSString stringWithFormat:@"%s", str];
 
-		NSLog(@"Generated UUID %@", uuid);        
+		DLog(@"Generated UUID %@", uuid);        
 
 		[[NSUserDefaults standardUserDefaults] setValue:uuid forKey:INSTALLATIONID];
 	}
@@ -280,7 +280,7 @@ nil] ];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
-	NSLog(@"Quit Decision - NP:%d\nSC:%d",isPostingNP,isScrobbling);
+	DLog(@"Quit Decision - NP:%d\nSC:%d",isPostingNP,isScrobbling);
 	
 	if (isPostingNP == YES || isScrobbling == YES)
 		return NSTerminateLater;
@@ -340,7 +340,7 @@ nil] ];
 }
 
 -(void)xmlFileChanged:(NSNotification *)notification {
-	NSLog(@"OMG! XML change!");
+	DLog(@"OMG! XML change!");
 	[self detachScrobbleThreadWithoutConsideration:NO];
 }
 
@@ -459,7 +459,7 @@ nil] ];
 	if (tagList.count > 0) {
 		self.tagAutocompleteList = tagList;
 	} else {
-		self.tagAutocompleteList = [NSArray arrayWithObjects:@"Tags", @"Could", @"Not", @"Be", @"Loaded",nil];
+		self.tagAutocompleteList = [NSArray arrayWithObjects:@"Common", @"Tags", @"Could", @"Not", @"Be", @"Loaded",nil];
 	}
 
 	[commonTagsField setObjectValue:self.tagAutocompleteList];
@@ -571,10 +571,10 @@ nil] ];
 -(void)popApiQueue {
 	if (apiQueue.count > 0) {
 		BGLastFmWebServiceParameterList *params = [apiQueue objectAtIndex:0];
-		//NSLog(@"Going to pop queue with params:%@",params);
+		//DLog(@"Going to pop queue with params:%@",params);
 		BGLastFmWebServiceCaller *sc = [[BGLastFmWebServiceCaller alloc] init];
 			BGLastFmWebServiceResponse *resp = [sc callWithParameters:params usingPostMethod:YES usingAuthentication:YES];
-//			NSLog(@"Got response: '%@'",[resp className]);
+//			DLog(@"Got response: '%@'",[resp className]);
 			if (resp.wasOK) {
 				[apiQueue removeObject:params];
 				if (apiQueue.count > 0) [self performSelector:@selector(popApiQueue) withObject:nil afterDelay:1.0];
@@ -685,9 +685,8 @@ nil] ];
 
 -(IBAction)recommendSong:(id)sender {
 	[self showArrowWindowForView:recommendationEntryView];
-//	[self updateTagLabel:self];
-	[self updateFriendsList];
-	[arrowWindow makeFirstResponder:tagEntryField];
+	//	[self updateFriendsList];
+	//[arrowWindow makeFirstResponder:tagEntryField];
 }
 
 -(IBAction)performRecommendSong:(id)sender {
@@ -782,7 +781,6 @@ nil] ];
 	[arrowWindow setFrame:theView.frame display:YES];
 	[arrowWindow setContentView:theView];
 	[arrowWindow positionAtMenuBarForHorizontalValue:xVal-(theView.frame.size.width/2)+(statusItem.view.frame.size.width/2) andVerticalValue:yVal-theView.frame.size.height+2];
-	[arrowWindow setInitialFirstResponder:tagEntryField];
 	[self performSelector:@selector(showArrowWindow) withObject:nil afterDelay:0.15];
 }
 
@@ -845,10 +843,10 @@ nil] ];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 	NSString *lastScrobbleDateString = 	[defaults valueForKey:BGPrefLastScrobbled];
-	NSLog(@"-- Last Scrobbled Date: %@",lastScrobbleDateString);
+	DLog(@"-- Last Scrobbled Date: %@",lastScrobbleDateString);
 	NSCalendarDate *applescriptInputDateString = [NSCalendarDate dateWithString:lastScrobbleDateString calendarFormat:DATE_FORMAT_STRING];// descriptionWithCalendarFormat:DATE_FORMAT_STRING];
 
-	NSLog(@"Started collecting previously played tracks");	
+	DLog(@"Started collecting previously played tracks");	
 	BGTrackCollector *trackCollector = [[BGTrackCollector alloc] init];
 	NSArray *recentTracksSimple = [trackCollector collectTracksFromXMLFile:self.fullXmlPath
 	                                                        withCutoffDate:applescriptInputDateString
@@ -858,7 +856,7 @@ nil] ];
 	                                                         ignoringGenre:([defaults boolForKey:BGPrefShouldIgnoreGenre] ? [defaults stringForKey:BGPrefIgnoreGenreString] : nil)
 	                                                   withMinimumDuration:[defaults integerForKey:BGPrefIgnoreShortLength]];//![defaults boolForKey:BGPrefShouldIgnorePodcasts]
 	[trackCollector release];
-	NSLog(@"Assigning song list to variable");
+	DLog(@"Assigning song list to variable");
 	NSArray *allRecentTracks = nil;
 	// Calculate extra plays, and insert them into recent songs array
 	if ([defaults boolForKey:BGPrefShouldDoMultiPlay]) {
@@ -871,8 +869,8 @@ nil] ];
 		recentTracksSimple = nil;
 	}
 		
-	NSLog(@"Using multi-play: %@",([defaults boolForKey:BGPrefShouldDoMultiPlay] ? @"Yes" : @"No"));
-	NSLog(@"Got all recent tracks:\n%@",allRecentTracks);
+	DLog(@"Using multi-play: %@",([defaults boolForKey:BGPrefShouldDoMultiPlay] ? @"Yes" : @"No"));
+	DLog(@"Got all recent tracks:\n%@",allRecentTracks);
 	
 	int recentTracksCount = allRecentTracks.count;
 	
@@ -914,11 +912,11 @@ nil] ];
 				} else {
 					[prefController addHistoryWithSuccess:YES andDate:[NSDate date] andDescription:[NSString stringWithFormat:@"Scrobbled %d song%@",recentTracksCount,(recentTracksCount==1?@"":@"s")]];
 					NSCalendarDate *returnedDate = [scrobbleResponse lastScrobbleDate];
-					NSLog(@"-- After Scrobbling Date Returned: %@",returnedDate);
+					DLog(@"-- After Scrobbling Date Returned: %@",returnedDate);
 					if (returnedDate!=nil) {
 						NSString *updatedDateString = [returnedDate descriptionWithCalendarFormat:DATE_FORMAT_STRING];
 						[defaults setValue:updatedDateString forKey:BGPrefLastScrobbled];
-						NSLog(@"-- Setting Last Scrobbling Date To: %@",updatedDateString);
+						DLog(@"-- Setting Last Scrobbling Date To: %@",updatedDateString);
 						[defaults synchronize];
 					}
 					[defaults setObject: [NSNumber numberWithInt: [[NSUserDefaults standardUserDefaults] integerForKey:BGTracksScrobbledTotal]+recentTracksCount ] forKey:BGTracksScrobbledTotal];
@@ -932,7 +930,7 @@ nil] ];
 				[theScrobbler release];
 
 			} else {
-				NSLog(@"Scrobbling didn't work because not all values set:\n  Key:'%@'\n  URL:%@",theSessionKey,thePostAddress);
+				DLog(@"Scrobbling didn't work because not all values set:\n  Key:'%@'\n  URL:%@",theSessionKey,thePostAddress);
 				[prefController addHistoryWithSuccess:NO andDate:[NSDate date] andDescription:@"Handshake Failed"];
 			}//end if handshake worked
 			scrobbleAttempts++;
@@ -990,7 +988,7 @@ nil] ];
 
 -(void)postNowPlayingNotificationForSong:(BGLastFmSong *)nowPlayingSong {
 	NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
-	NSLog(@"Posting now playing notification");	
+	DLog(@"Posting now playing notification");	
 	[self setIsPostingNP:YES];
 	if (nowPlayingSong) {
 		int notifyAttempts = 0;
@@ -1031,7 +1029,7 @@ nil] ];
 					[npResponseString release];
 				}
 				
-			} else NSLog(@"Now playing didn't work because not all values set:\n  Key:'%@'\n  URL:%@", theSessionKey, thePostAddress);
+			} else DLog(@"Now playing didn't work because not all values set:\n  Key:'%@'\n  URL:%@", theSessionKey, thePostAddress);
 			
 			notifyAttempts++;
 		}	

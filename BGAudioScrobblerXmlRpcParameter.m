@@ -42,7 +42,7 @@
 	}
 	
 	// Otherwise
-	NSLog(@"BGAudioScrobblerXmlRpcParameter: Unexpected Parameter Type: %@",[parameter className]);
+	DLog(@"BGAudioScrobblerXmlRpcParameter: Unexpected Parameter Type: %@",[parameter className]);
 	return @"ERROR";
 }
 

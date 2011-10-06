@@ -91,9 +91,9 @@
 		[request release];
 		
 		if (response) {
-			NSLog(@"STATUS CODE: %ld",(long)[response statusCode]);
+			DLog(@"STATUS CODE: %ld",(long)[response statusCode]);
 		} else if (postingError) {
-			NSLog(@"ERROR CODE: %ld",(long)[postingError code]);
+			DLog(@"ERROR CODE: %ld",(long)[postingError code]);
 		}
 		
 		if (scrobbleResponseData != nil/* && [postingError code]!=-1001 && [response statusCode]==200*/) {

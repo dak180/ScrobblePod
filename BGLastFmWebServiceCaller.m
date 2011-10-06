@@ -52,15 +52,15 @@
 			responseObject = [[BGLastFmWebServiceResponse alloc] initWithData:responseData];
 			callWasSent = YES;
 		} else {
-			NSLog(@"Got HTTP Status Code %d and did not continue.",responseStatusCode);
+			DLog(@"Got HTTP Status Code %d and did not continue.",responseStatusCode);
 		}
 		[postingError release];
 	} else {
-		NSLog(@"Could not complete API POST request: no session key provided");
+		DLog(@"Could not complete API POST request: no session key provided");
 	}
 	
 	if (callWasSent == NO) {
-		NSLog(@"-- Completed API call but nothing returned");
+		DLog(@"-- Completed API call but nothing returned");
 		responseObject = [[BGLastFmWebServiceResponse alloc] initWithData:nil];
 	}
 	return [responseObject autorelease];
