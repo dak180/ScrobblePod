@@ -19,14 +19,20 @@ You can also control exactly when your songs are scrobbled. Switch scrobbling on
 
 ## Version History
 
+### 0.7.3
+#### 6 October 2011
+
+* Fixes for several crashes
+* Significantly reduced logging
+
+[Download][0.7.3]
+
+[0.7.3]: http://mmrr.fi/scrobblepod/download/0.7.3
+
 ### 0.7.2
 #### 22 August 2011
 
 * Stability improvements
-
-[Download][0.7.2]
-
-[0.7.2]: http://mmrr.fi/scrobblepod/download/0.7.2
 
 ### 0.7.1
 #### 24 April 2011
