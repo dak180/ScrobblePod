@@ -276,11 +276,15 @@ song is being played from a shared library.
 			if ([artworkArray count] > 0)
 			{
 				iTunesArtwork *artwork = [artworkArray objectAtIndex:0];
-				
-				// Sometimes iTunes returns NSAppleEventDescriptor instead of NSImage. This is dirty hack, but right now I'm not sure what else I can do. 
-				
-				if ([NSStringFromClass([[artwork data] class]) isEqualToString:@"NSImage"])
+                
+                // If iTunes returns NSAppleEventDescriptor instead of NSImage, use rawData from NSData to create image.
+				if ([NSStringFromClass([[artwork data] class]) isEqualToString:@"NSImage"]) {
 					return [artwork data];
+                } else {
+                    NSImage* image = [[NSImage alloc] initWithData:[artwork rawData]];
+                    [image autorelease];
+                    return image;
+                }
 			}
 		}
 		
