@@ -203,6 +203,7 @@ typedef enum {
 @property (readonly) BOOL downloaded;  // was this artwork downloaded by iTunes?
 @property (copy, readonly) NSNumber *format;  // the data format for this piece of artwork
 @property NSInteger kind;  // kind or purpose of this piece of artwork
+@property (copy) NSData *rawData;  // data for this artwork, in original format
 
 
 @end
