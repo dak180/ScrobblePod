@@ -3,8 +3,8 @@
 
 // Format: #define ConstantName @"TheValue"
 
-#define API_KEY @"7346eb9b6e5cf1128fd6a39c887a3dd7"
-#define API_SECRET @"6d6c1480d629c1a4f87e14faddf006e4"
+#define API_KEY @"a43d92e2022e09d91fe7ca6b66bf1ccc"
+#define API_SECRET @"b685d04f7bc8349c514e6ecafff281fe"
 
 #define BGWebServiceSessionKey @"WebServiceSessionKey"
 #define BGSubmissionSessionKey @"SubmissionSessionKey"
